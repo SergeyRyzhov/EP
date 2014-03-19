@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace PlaceModel
+﻿namespace PlaceModel
 {
     /// <summary>
     /// Интерфейс алгоритмов глобального размещения компонентов интегральной схемы
