@@ -72,6 +72,7 @@ namespace PlaceModel
     /// <summary>
     /// Решение задачи глобального размещения (вещественные координаты)
     /// </summary>
+    [Serializable]
     public class PlacementGlobal : Placement<double>
     {
         public PlacementGlobal(Design design) : base(design) { } 
@@ -80,6 +81,7 @@ namespace PlaceModel
     /// <summary>
     /// Решение задачи детального размещения (целочисленные координаты)
     /// </summary>
+    [Serializable]
     public class PlacementDetail : Placement<int>
     {
         public PlacementDetail(Design design) : base(design) { }

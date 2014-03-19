@@ -3,10 +3,15 @@ using PlaceModel;
 
 namespace ChipSynthesys
 {
+    public interface IGenerator
+    {
+        Design Generate();
+    }
+
     /// <summary>
     /// Генератор тестовых примеров интегральных схем
     /// </summary>
-    public class Generator
+    public class RandomGenerator : IGenerator
     {
         /// <summary>
         /// Случайная генерация (равномерный закон распределения)
@@ -41,6 +46,12 @@ namespace ChipSynthesys
                 }
             }
             return new Design(new Field(0, 0, cells, cells), c, n);
+        }
+
+        public Design Generate()
+        {
+            //todo аргументы через свойства класса.. возможны изменения
+            return Random(1, 2, 3);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using PlaceModel;
+﻿using System;
+using ChipSynthesys.Statistic;
+using PlaceModel;
 
 namespace ChipSynthesys
 {
@@ -7,8 +9,20 @@ namespace ChipSynthesys
         static void Main(string[] args)
         {
             Test.tests.run();
+
+            Design design = RandomGenerator.Random(10, 10, 50);
+            IStatistic<double, double> statistic = new CommonStatistic();
+            IStatisticResult<double> designResult;
+            IStatisticResult<double> placementResult;
+            statistic.DesignStatistic(design, out designResult);
             
-            Design.Save(Generator.Random(10, 10, 50), "test.xml");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Статистика схемы");
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(designResult);
+
+            Design.Save(RandomGenerator.Random(10, 10, 50), "test.xml");
         }
     }
 }
