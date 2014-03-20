@@ -4,7 +4,7 @@ namespace Test
 {
     public partial class tests
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             run();
         }
@@ -14,14 +14,14 @@ namespace Test
             run_PlaceModel();
         }
 
-        static void log(string text)
+        private static void log(string text)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write(text);
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
-        static void test(string name, bool result)
+        private static void test(string name, bool result)
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write("\n{0}\t", name);

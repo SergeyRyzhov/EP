@@ -39,12 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IStatistic.cs" />
-    <Compile Include="IStatisticResult.cs" />
+    <Compile Include="Rows\ComponentAmountRow.cs" />
+    <Compile Include="Interfaces\ISatisticRow.cs" />
+    <Compile Include="Interfaces\IStatistic.cs" />
+    <Compile Include="Interfaces\IStatisticResult.cs" />
+    <Compile Include="Rows\PlacedRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CommonStatistic.cs" />
-    <Compile Include="StatisticKeys.cs" />
-    <Compile Include="StatisticResult.cs" />
+    <Compile Include="Statistics\CommonStatistic.cs" />
+    <Compile Include="Common\StatisticKeys.cs" />
+    <Compile Include="Results\StatisticResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlaceModel\PlaceModel.csproj">

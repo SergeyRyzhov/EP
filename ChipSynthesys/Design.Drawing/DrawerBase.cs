@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using PlaceModel;
+﻿using PlaceModel;
+using System.Drawing;
 
 namespace ChipSynthesys.Draw
 {

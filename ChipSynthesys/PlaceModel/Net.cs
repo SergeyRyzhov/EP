@@ -29,7 +29,6 @@ namespace PlaceModel
             return string.Format("Net id={0} items={1}", id, items.Length);
         }
 
-
         /// <summary>
         /// Фабрика для создания цепей интегральной схемы
         /// </summary>
@@ -40,6 +39,5 @@ namespace PlaceModel
                 this.Add(new Net(next_id(), items));
             }
         }
-
     }
 }

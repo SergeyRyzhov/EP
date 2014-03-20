@@ -8,7 +8,7 @@ namespace PlaceModel
     public class Placement<T>
     {
         /// <summary>
-        /// Вектор значений 
+        /// Вектор значений
         /// </summary>
         public class Values<R>
         {
@@ -21,7 +21,7 @@ namespace PlaceModel
                 this.vals = new R[count];
             }
 
-            public R this[Component c] 
+            public R this[Component c]
             {
                 get { return vals[c.id]; }
                 set
@@ -75,7 +75,10 @@ namespace PlaceModel
     [Serializable]
     public class PlacementGlobal : Placement<double>
     {
-        public PlacementGlobal(Design design) : base(design) { } 
+        public PlacementGlobal(Design design)
+            : base(design)
+        {
+        }
     }
 
     /// <summary>
@@ -84,7 +87,9 @@ namespace PlaceModel
     [Serializable]
     public class PlacementDetail : Placement<int>
     {
-        public PlacementDetail(Design design) : base(design) { }
+        public PlacementDetail(Design design)
+            : base(design)
+        {
+        }
     }
-
 }

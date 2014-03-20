@@ -1,6 +1,6 @@
 ﻿namespace ChipSynthesys.Draw
 {
-    interface IDrawer: IGlobalDrawer, IDetailDrawer
+    internal interface IDrawer : IGlobalDrawer, IDetailDrawer
     {
     }
 }

@@ -1,12 +1,13 @@
-﻿using System;
-using ChipSynthesys.Statistic;
+﻿using ChipSynthesys.Statistic.Interfaces;
+using ChipSynthesys.Statistic.Statistics;
 using PlaceModel;
+using System;
 
 namespace ChipSynthesys
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Test.tests.run();
 
@@ -15,9 +16,9 @@ namespace ChipSynthesys
             IStatisticResult<double> designResult;
             IStatisticResult<double> placementResult;
             statistic.DesignStatistic(design, out designResult);
-            
+
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Статистика схемы");
+            Console.WriteLine(CommonStatistic.Name);
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(designResult);

@@ -7,7 +7,10 @@ namespace PlaceModel
     {
         private List<T> items = new List<T>();
 
-        protected int next_id() { return items.Count; }
+        protected int next_id()
+        {
+            return items.Count;
+        }
 
         protected void Add(T obj)
         {

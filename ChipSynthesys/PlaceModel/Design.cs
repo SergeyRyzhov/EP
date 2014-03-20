@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Soap;
 
 namespace PlaceModel
@@ -16,19 +16,19 @@ namespace PlaceModel
         /// Параметры монтажного простанства
         /// </summary>
         public readonly Field field;
-        
+
         /// <summary>
         /// Перечень компонентов
         /// </summary>
         public readonly Component[] components;
-        
+
         /// <summary>
         /// Перечень цепей
         /// </summary>
         public readonly Net[] nets;
 
         /// <summary>
-        /// Описание интегральной схемы, из которого получено исходное описание 
+        /// Описание интегральной схемы, из которого получено исходное описание
         /// </summary>
         [NonSerialized()]
         public readonly Design parent;

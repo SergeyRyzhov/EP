@@ -1,5 +1,5 @@
-﻿using System;
-using PlaceModel;
+﻿using PlaceModel;
+using System;
 
 namespace ChipSynthesys
 {

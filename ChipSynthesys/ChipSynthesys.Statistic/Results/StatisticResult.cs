@@ -1,17 +1,29 @@
-﻿using System;
+﻿using ChipSynthesys.Statistic.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ChipSynthesys.Statistic
+namespace ChipSynthesys.Statistic.Results
 {
-    class StatisticResult : IStatisticResult<double>
+    internal class StatisticResult : IStatisticResult<double>
     {
         internal StatisticResult()
         {
             Results = new Dictionary<string, double>();
         }
 
-        internal void Add(string statisticRow, double value)
+        internal void Add(ISatisticRow<double> row)
+        {
+            Add(row.Key, row.Compute());
+        }
+
+        internal double this[string row]
+        {
+            get { return Results.ContainsKey(row) ? Results[row] : 0; }
+            set { Add(row, value); }
+        }
+
+        protected void Add(string statisticRow, double value)
         {
             if (Results.ContainsKey(statisticRow))
             {
@@ -21,12 +33,6 @@ namespace ChipSynthesys.Statistic
             {
                 Results.Add(statisticRow, value);
             }
-        }
-
-        internal double this[string row]
-        {
-            get { return Results.ContainsKey(row) ? Results[row] : 0; }
-            set { Add(row, value); }
         }
 
         public Dictionary<string, double> Results { get; private set; }

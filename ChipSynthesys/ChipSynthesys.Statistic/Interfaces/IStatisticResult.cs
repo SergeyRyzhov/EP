@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace ChipSynthesys.Statistic
+namespace ChipSynthesys.Statistic.Interfaces
 {
-    public interface IStatisticResult <T>
+    public interface IStatisticResult<T>
     {
         Dictionary<string, T> Results { get; }
 

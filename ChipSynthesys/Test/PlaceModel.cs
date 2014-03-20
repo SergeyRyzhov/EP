@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using PlaceModel;
+﻿using PlaceModel;
+using System.Linq;
 
 namespace Test
 {
@@ -14,12 +14,12 @@ namespace Test
             log("\nPlaceModel tests final\n");
         }
 
-        static bool DesignNetsComponent()
+        private static bool DesignNetsComponent()
         {
             return microCheck(micro());
         }
 
-        static Design micro()
+        private static Design micro()
         {
             Field f = new Field(0, 0, 10, 10);
             Component.Pool c = new Component.Pool();
@@ -33,7 +33,7 @@ namespace Test
             return new Design(f, c, n);
         }
 
-        static bool microCheck(Design d)
+        private static bool microCheck(Design d)
         {
             Component[] c = d.components;
             Net[] n = d.nets;
@@ -49,13 +49,13 @@ namespace Test
             return true;
         }
 
-        static bool DesignSaveLoad()
+        private static bool DesignSaveLoad()
         {
             Design.Save(micro(), "micro.xml");
             return microCheck(Design.Load("micro.xml"));
         }
 
-        static bool Placement()
+        private static bool Placement()
         {
             Design d0 = micro();
             PlacementGlobal p = new PlacementGlobal(d0);

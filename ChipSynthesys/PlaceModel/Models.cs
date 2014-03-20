@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="design">Описание интегральной схемы</param>
         /// <param name="result">Результат - вектор глобального размещения (действительные координаты)</param>
-        void Place(Design design, PlacementGlobal result); 
+        void Place(Design design, PlacementGlobal result);
     }
 
     /// <summary>

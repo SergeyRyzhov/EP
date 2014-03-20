@@ -1,9 +1,9 @@
-﻿using System.Drawing;
-using PlaceModel;
+﻿using PlaceModel;
+using System.Drawing;
 
 namespace ChipSynthesys.Draw
 {
-    interface IDetailDrawer
+    internal interface IDetailDrawer
     {
         void Draw(Design design, PlacementDetail placement, Graphics canvas);
     }
