@@ -58,10 +58,10 @@ namespace PlaceModel
 
         public Placement(Design design)
         {
-            int count = design.top.components.Length;
+            var count = design.top.components.Length;
             ids = 0;
             editable = new int[count];
-            for (int i = 0; i < count; i++) editable[i] = ids;
+            for (var i = 0; i < count; i++) editable[i] = ids;
             Editable(design);
             x = new Values<T>(this, count);
             y = new Values<T>(this, count);

@@ -59,7 +59,7 @@ namespace PlaceModel
 
         private void initComponentNets()
         {
-            SortedList<int, List<Net>> cNets = new SortedList<int, List<Net>>();
+            var cNets = new SortedList<int, List<Net>>();
             foreach (var n in nets)
                 foreach (var c in n.items)
                 {
@@ -96,8 +96,8 @@ namespace PlaceModel
             this.parent = parent;
             this.field = subfield;
             this.components = components.ToArray<Component>();
-            bool[] present = new bool[this.top.nets.Length];
-            for (int i = 0; i < present.Length; i++) present[i] = false;
+            var present = new bool[this.top.nets.Length];
+            for (var i = 0; i < present.Length; i++) present[i] = false;
             foreach (var c in components)
                 foreach (var n in this.top.Nets(c))
                     present[n.id] = true;
@@ -107,7 +107,7 @@ namespace PlaceModel
         public static void Save(Design design, string fname)
         {
             Stream stream = File.Open(fname, FileMode.Create);
-            SoapFormatter formatter = new SoapFormatter();
+            var formatter = new SoapFormatter();
             formatter.Serialize(stream, design);
             stream.Close();
         }
@@ -115,8 +115,8 @@ namespace PlaceModel
         public static Design Load(string fname)
         {
             Stream stream = File.Open(fname, FileMode.Open);
-            SoapFormatter formatter = new SoapFormatter();
-            Design design = (Design)formatter.Deserialize(stream);
+            var formatter = new SoapFormatter();
+            var design = (Design)formatter.Deserialize(stream);
             stream.Close();
             return design;
         }

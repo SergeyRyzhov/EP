@@ -3,55 +3,52 @@ using System;
 
 namespace ChipSynthesys
 {
-    public interface IGenerator
-    {
-        Design Generate();
-    }
-
     /// <summary>
     /// Генератор тестовых примеров интегральных схем
     /// </summary>
     public class RandomGenerator : IGenerator
     {
-        /// <summary>
-        /// Случайная генерация (равномерный закон распределения)
-        /// </summary>
-        /// <param name="components">Число компонент</param>
-        /// <param name="nets">Число сетей</param>
-        /// <param name="percent">Процент заполненности (0,100)</param>
-        /// <returns></returns>
-        static public Design Random(int components, int nets, int percent)
+        public void NextDesign(int components, int nets, int maxNetSize, int percent, int maxSizeX, int maxSizeY, out Design design)
         {
-            int maxsizex = 9;   //максимальная ширина элемента
-            int maxsizey = 3;   //максимальная высота элемента
-            int maxnetsize = 7; //максимальное число компонент в цепи
 
-            int fullness = 0;
-            Random rnd = new Random();
-            Component.Pool c = new Component.Pool();
-            for (int i = 0; i < components; i++)
+            var fullness = 0;
+            var rnd = new Random();
+            var c = new Component.Pool();
+            for (var i = 0; i < components; i++)
             {
-                c.Add(rnd.Next(maxsizex) + 1, rnd.Next(maxsizey));
+                c.Add(rnd.Next(maxSizeX) + 1, rnd.Next(maxSizeY));
                 fullness += c[i].sizex * c[i].sizey;
             }
-            int cells = (int)Math.Ceiling(Math.Sqrt(fullness * (100.0 / percent)));
-            Net.Pool n = new Net.Pool();
-            for (int j = 0; j < nets; j++)
+            var cells = (int)Math.Ceiling(Math.Sqrt(fullness * (100.0 / percent)));
+            var n = new Net.Pool();
+            for (var j = 0; j < nets; j++)
             {
-                n.Add(new Component[rnd.Next(maxnetsize - 1) + 2]);
-                for (int i = 0; i < n[j].items.Length; i++)
+                n.Add(new Component[rnd.Next(maxNetSize - 1) + 2]);
+                for (var i = 0; i < n[j].items.Length; i++)
                 {
-                    int q = rnd.Next(components);
+                    var q = rnd.Next(components);
                     n[j].items[i] = c[q];
                 }
             }
-            return new Design(new Field(0, 0, cells, cells), c, n);
+            design = new Design(new Field(0, 0, cells, cells), c, n);
         }
 
-        public Design Generate()
+        public void NextDesign(int components, IRandom<int> nets, IRandom<int> maxNetSize, int percent, IRandom<int> maxSizeX, IRandom<int> maxSizeY,
+            out Design design)
         {
-            //todo аргументы через свойства класса.. возможны изменения
-            return Random(1, 2, 3);
+            throw new NotImplementedException();
+        }
+
+        public void NextDesignWithPlacement(int components, int nets, int maxNetSize, int percent, int maxSizeX, int maxSizeY,
+            out Design design, out PlacementDetail placement)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NextDesignWithPlacement(int components, int nets, IRandom<int> maxNetSize, int percent, IRandom<int> maxSizeX,
+            IRandom<int> maxSizeY, out Design design, out PlacementDetail placement)
+        {
+            throw new NotImplementedException();
         }
     }
 }

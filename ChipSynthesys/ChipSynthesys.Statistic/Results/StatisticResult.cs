@@ -40,7 +40,7 @@ namespace ChipSynthesys.Statistic.Results
         public override string ToString()
         {
             var output = new StringBuilder();
-            foreach (KeyValuePair<string, double> variable in Results)
+            foreach (var variable in Results)
             {
                 var statisticLine = string.Format("{0}: {1};{2}", variable.Key, variable.Value,
                     Environment.NewLine);

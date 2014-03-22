@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Test
 {
-    public partial class tests
+    public partial class Tests
     {
         static public void run_PlaceModel()
         {
@@ -16,27 +16,27 @@ namespace Test
 
         private static bool DesignNetsComponent()
         {
-            return microCheck(micro());
+            return MicroCheck(Micro());
         }
 
-        private static Design micro()
+        private static Design Micro()
         {
-            Field f = new Field(0, 0, 10, 10);
-            Component.Pool c = new Component.Pool();
+            var f = new Field(0, 0, 10, 10);
+            var c = new Component.Pool();
             c.Add(1, 3);
             c.Add(2, 2);
             c.Add(3, 1);
-            Net.Pool n = new Net.Pool();
+            var n = new Net.Pool();
             n.Add(new Component[] { c[0], c[1] });
             n.Add(new Component[] { c[1], c[2] });
             n.Add(new Component[] { c[2], c[0] });
             return new Design(f, c, n);
         }
 
-        private static bool microCheck(Design d)
+        private static bool MicroCheck(Design d)
         {
-            Component[] c = d.components;
-            Net[] n = d.nets;
+            var c = d.components;
+            var n = d.nets;
             if (d.Nets(c[0]).Length != 2) return false;
             if (d.Nets(c[1]).Length != 2) return false;
             if (d.Nets(c[2]).Length != 2) return false;
@@ -51,21 +51,21 @@ namespace Test
 
         private static bool DesignSaveLoad()
         {
-            Design.Save(micro(), "micro.xml");
-            return microCheck(Design.Load("micro.xml"));
+            Design.Save(Micro(), "micro.xml");
+            return MicroCheck(Design.Load("micro.xml"));
         }
 
         private static bool Placement()
         {
-            Design d0 = micro();
-            PlacementGlobal p = new PlacementGlobal(d0);
+            var d0 = Micro();
+            var p = new PlacementGlobal(d0);
             p.x[d0.components[0]] = 1;
             p.y[d0.components[0]] = 1;
             p.x[d0.components[1]] = 2;
             p.y[d0.components[1]] = 2;
             p.x[d0.components[2]] = 2;
             p.y[d0.components[2]] = 2;
-            Design d1 = new Design(d0, new Field(1, 1, 2, 2), d0.components.Where(c => p.x[c] == 2 && p.y[c] == 2));
+            var d1 = new Design(d0, new Field(1, 1, 2, 2), d0.components.Where(c => p.x[c] == 2 && p.y[c] == 2));
             if (d1.components.Length != 2) return false;
             if (d1.nets.Length != 3) return false;
             p.Editable(d1);

@@ -2,7 +2,7 @@
 
 namespace Test
 {
-    public partial class tests
+    public partial class Tests
     {
         private static void Main(string[] args)
         {

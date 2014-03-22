@@ -15,15 +15,15 @@ namespace PlaceModel
         /// <returns></returns>
         static public double Manhattan(Design d, PlacementGlobal p)
         {
-            double res = 0.0;
+            var res = 0.0;
             foreach (var n in d.nets)
             {
-                Component c = n.items[0];
-                double l = p.x[c];
-                double r = p.x[c] + c.sizex;
-                double t = p.y[c];
-                double b = p.y[c] + c.sizey;
-                for (int i = 1; i < n.items.Length; i++)
+                var c = n.items[0];
+                var l = p.x[c];
+                var r = p.x[c] + c.sizex;
+                var t = p.y[c];
+                var b = p.y[c] + c.sizey;
+                for (var i = 1; i < n.items.Length; i++)
                 {
                     c = n.items[i];
                     l = Math.Min(l, p.x[c]);
@@ -44,15 +44,15 @@ namespace PlaceModel
         /// <returns></returns>
         static public int Manhattan(Design d, PlacementDetail p)
         {
-            int res = 0;
+            var res = 0;
             foreach (var n in d.nets)
             {
-                Component c = n.items[0];
-                int l = p.x[c];
-                int r = p.x[c] + c.sizex;
-                int t = p.y[c];
-                int b = p.y[c] + c.sizey;
-                for (int i = 1; i < n.items.Length; i++)
+                var c = n.items[0];
+                var l = p.x[c];
+                var r = p.x[c] + c.sizex;
+                var t = p.y[c];
+                var b = p.y[c] + c.sizey;
+                for (var i = 1; i < n.items.Length; i++)
                 {
                     c = n.items[i];
                     l = Math.Min(l, p.x[c]);
