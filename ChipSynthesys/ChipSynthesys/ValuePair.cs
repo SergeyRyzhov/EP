@@ -33,7 +33,7 @@ namespace ChipSynthesys
         }
 
         /// <summary>
-        /// Тоже самое что и A.
+        /// Тоже самое, что и A.
         /// </summary>
         public T X
         {
@@ -42,7 +42,7 @@ namespace ChipSynthesys
         }
 
         /// <summary>
-        /// Тоже самое что и B.
+        /// Тоже самое, что и B.
         /// </summary>
         public T Y
         {
@@ -51,7 +51,7 @@ namespace ChipSynthesys
         }
 
         /// <summary>
-        /// Тоже самое что и A.
+        /// Тоже самое, что и A.
         /// </summary>
         public T Left
         {
@@ -60,7 +60,7 @@ namespace ChipSynthesys
         }
 
         /// <summary>
-        /// Тоже самое что и B.
+        /// Тоже самое, что и B.
         /// </summary>
         public T Right
         {
