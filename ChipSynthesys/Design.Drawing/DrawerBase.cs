@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace ChipSynthesys.Draw
 {
-    internal abstract class DrawerBase : IDrawer
+    public abstract class DrawerBase : IDrawer
     {
         public abstract void Draw(Design design, PlacementGlobal placement, Graphics canvas);
 

@@ -39,6 +39,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,6 +62,10 @@
     <ProjectReference Include="..\ChipSynthesys.Statistic\ChipSynthesys.Statistic.csproj">
       <Project>{e7cb46c5-95f5-4037-b853-fb5847d5c737}</Project>
       <Name>ChipSynthesys.Statistic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Design.Drawing\ChipSynthesys.Draw.csproj">
+      <Project>{4d455b69-7f69-4661-90e9-d9aed4f7c27c}</Project>
+      <Name>ChipSynthesys.Draw</Name>
     </ProjectReference>
     <ProjectReference Include="..\PlaceModel\PlaceModel.csproj">
       <Project>{B772B461-D744-48CF-9578-754175A549D1}</Project>

@@ -126,6 +126,7 @@ namespace ChipSynthesys
             {
                 placement.x[com] = xCoord[ind].A;
                 placement.y[com] = yCoord[ind].A;
+                placement.placed[com] = true;
                 ind++;
             }
         }

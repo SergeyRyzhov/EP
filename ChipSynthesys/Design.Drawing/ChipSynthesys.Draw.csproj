@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DrawerBase.cs" />
+    <Compile Include="DrawerImpl.cs" />
     <Compile Include="IDetailDrawer.cs" />
     <Compile Include="IDrawer.cs" />
     <Compile Include="IGlobalDrawer.cs" />

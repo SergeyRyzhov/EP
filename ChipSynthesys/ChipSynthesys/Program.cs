@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using ChipSynthesys.Draw;
 using ChipSynthesys.Statistic.Interfaces;
 using ChipSynthesys.Statistic.Statistics;
 using PlaceModel;
@@ -84,6 +85,9 @@ namespace ChipSynthesys
                 }
                 Console.WriteLine(s.ToString());
             }
+
+            DrawerImpl dr = new DrawerImpl();
+            dr.Draw(d,p,null);
 
         }
 
