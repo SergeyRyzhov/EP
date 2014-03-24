@@ -9,14 +9,14 @@ namespace ChipSynthesys
 {
     class TableGenerator: IGenerator
     {
-        public void NextDesign(int components, int nets, int maxNetSize, int percent, int maxSizeX, int maxSizeY, out PlaceModel.Design design)
+        public void NextDesign(int components, int nets, int maxNetSize, int percent, int maxSizeX, int maxSizeY, out Design design)
         {
             throw new NotImplementedException();
         }
 
-        public void NextDesign(int components, IRandom<int> nets, IRandom<int> maxNetSize, int percent, IRandom<int> maxSizeX, IRandom<int> maxSizeY, out PlaceModel.Design design)
+        public void NextDesign(int components, IRandom<int> nets, IRandom<int> maxNetSize, int percent, IRandom<int> maxSizeX, IRandom<int> maxSizeY, out Design design)
         {
-            var fullnes = 0;
+            int fullness = 0;
             var r= new Random();
             var c = new Component.Pool();
 
@@ -42,12 +42,12 @@ namespace ChipSynthesys
             design = new Design(new Field(0, 0, cells, cells), c, n);
         }
 
-        public void NextDesignWithPlacement(int components, int nets, int maxNetSize, int percent, int maxSizeX, int maxSizeY, out PlaceModel.Design design, out PlaceModel.PlacementDetail placement)
+        public void NextDesignWithPlacement(int components, int nets, int maxNetSize, int percent, int maxSizeX, int maxSizeY, out Design design, out PlacementDetail placement)
         {
             throw new NotImplementedException();
         }
 
-        public void NextDesignWithPlacement(int components, int nets, IRandom<int> maxNetSize, int percent, IRandom<int> maxSizeX, IRandom<int> maxSizeY, out PlaceModel.Design design, out PlaceModel.PlacementDetail placement)
+        public void NextDesignWithPlacement(int components, int nets, IRandom<int> maxNetSize, int percent, IRandom<int> maxSizeX, IRandom<int> maxSizeY, out Design design, out PlacementDetail placement)
         {
             throw new NotImplementedException();
         }
