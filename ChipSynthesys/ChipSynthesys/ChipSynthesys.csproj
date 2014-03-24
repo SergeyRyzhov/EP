@@ -54,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomGeneratorWithPlacement.cs" />
     <Compile Include="RangeRandom.cs" />
+    <Compile Include="SquareGenerator.cs" />
     <Compile Include="TableGenerator.cs" />
     <Compile Include="TableRandom.cs" />
     <Compile Include="ValuePair.cs" />
