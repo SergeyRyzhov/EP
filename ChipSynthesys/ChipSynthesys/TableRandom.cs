@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ChipSynthesys
 {
@@ -14,7 +15,8 @@ namespace ChipSynthesys
         private readonly Random m_random;
         private int m_pointsSum;
 
-        public TableRandom():this(new Random())
+        public TableRandom()
+            : this(new Random())
         {
         }
 
@@ -29,7 +31,7 @@ namespace ChipSynthesys
         {
             m_values.Add(value);
             var old = m_pointsSum;
-            m_pointRanges.Add(new ValuePair<int> {A = old, B = m_pointsSum += pointsProbability});
+            m_pointRanges.Add(new ValuePair<int> { A = old, B = m_pointsSum += pointsProbability });
         }
 
         public T Next()
@@ -37,6 +39,20 @@ namespace ChipSynthesys
             var points = m_random.Next(m_pointsSum);
             var index = m_pointRanges.FindIndex(a => a.Left <= points && a.Right > points);
             return m_values[index];
+        }
+
+        public double? MathematicalExpectation()
+        {
+            if (!m_values.Any())
+                return null;
+            try
+            {
+                return m_values.Select((t, i) => Convert.ToDouble(t) * m_pointRanges[i].Length / m_pointsSum).Sum();
+            }
+            catch (InvalidCastException)
+            {
+                return null;
+            }
         }
     }
 }

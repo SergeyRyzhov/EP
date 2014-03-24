@@ -90,8 +90,8 @@ namespace ChipSynthesys
         private static void RandomTest()
         {
             var low = new TableRandom<int>();
-            low.Add(2, 7);
-            low.Add(1, 3);
+            low.Add(2, 25);
+            low.Add(1, 25);
             var counters = new ValuePair<int>();
             for (var i = 0; i < 10000; i++)
             {
@@ -105,6 +105,8 @@ namespace ChipSynthesys
                 }
             }
             Console.WriteLine("Результат теста генератора с табличным распределением (1 - 30%, 2 -70%), 10000 испытаний: {0}.", counters);
+
+            Console.WriteLine("Математическое ожидание: {0}.", low.MathematicalExpectation());
         }
     }
 }

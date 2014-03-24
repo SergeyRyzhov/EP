@@ -1,3 +1,5 @@
+using System;
+
 namespace ChipSynthesys
 {
     //todo вынести в общую сборку
@@ -30,6 +32,21 @@ namespace ChipSynthesys
         {
             get { return m_pair[1]; }
             set { m_pair[1] = value; }
+        }
+
+        public double? Length
+        {
+            get
+            {
+                try
+                {
+                    return Convert.ToDouble(B) - Convert.ToDouble(A);
+                }
+                catch (InvalidCastException)
+                {
+                    return null;
+                }
+            }
         }
 
         /// <summary>

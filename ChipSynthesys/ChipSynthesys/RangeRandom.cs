@@ -26,5 +26,10 @@ namespace ChipSynthesys
         {
             return m_random.Next(m_min, m_max);
         }
+
+        public double? MathematicalExpectation()
+        {
+            return (m_min + m_max)/2;
+        }
     }
 }
