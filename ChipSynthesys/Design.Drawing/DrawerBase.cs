@@ -5,8 +5,8 @@ namespace ChipSynthesys.Draw
 {
     public abstract class DrawerBase : IDrawer
     {
-        public abstract void Draw(Design design, PlacementGlobal placement, Graphics canvas);
+        public abstract void Draw(Design design, PlacementGlobal placement, Size size, Graphics canvas);
 
-        public abstract void Draw(Design design, PlacementDetail placement, Graphics canvas);
+        public abstract void Draw(Design design, PlacementDetail placement, Size size, Graphics canvas);
     }
 }

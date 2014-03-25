@@ -24,32 +24,32 @@ namespace ChipSynthesys.Common.Randoms
 
         public TableRandom(Random random)
         {
-            this.m_random = random;
-            this.m_values = new List<T>();
-            this.m_pointRanges = new List<ValuePair<int>>();
+            m_random = random;
+            m_values = new List<T>();
+            m_pointRanges = new List<ValuePair<int>>();
         }
 
         public void Add(T value, int pointsProbability)
         {
-            this.m_values.Add(value);
-            var old = this.m_pointsSum;
-            this.m_pointRanges.Add(new ValuePair<int> { A = old, B = this.m_pointsSum += pointsProbability });
+            m_values.Add(value);
+            var old = m_pointsSum;
+            m_pointRanges.Add(new ValuePair<int> { A = old, B = m_pointsSum += pointsProbability });
         }
 
         public T Next()
         {
-            var points = this.m_random.Next(this.m_pointsSum);
-            var index = this.m_pointRanges.FindIndex(a => a.Left <= points && a.Right > points);
-            return this.m_values[index];
+            var points = m_random.Next(m_pointsSum);
+            var index = m_pointRanges.FindIndex(a => a.Left <= points && a.Right > points);
+            return m_values[index];
         }
 
         public double? MathematicalExpectation()
         {
-            if (!this.m_values.Any())
+            if (!m_values.Any())
                 return null;
             try
             {
-                return this.m_values.Select((t, i) => Convert.ToDouble(t) * this.m_pointRanges[i].Length / this.m_pointsSum).Sum();
+                return m_values.Select((t, i) => Convert.ToDouble(t) * m_pointRanges[i].Length / m_pointsSum).Sum();
             }
             catch (InvalidCastException)
             {

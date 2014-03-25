@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Text;
 
 using ChipSynthesys.Common.Classes;
@@ -43,10 +44,10 @@ namespace ChipSynthesys.UnitTests.Custom
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Случайный с размещением");
 
-            var g = new RandomGeneratorWithPlacement();
+            var g = new RandomGenerator();
             Design d;
             PlacementDetail p;
-            g.NextDesignWithPlacement(2, 1, 2, 50, 3, 3, out d, out p);
+            g.NextDesignWithPlacement(2, 1, 2, 50, 3, 3,6,6, out d, out p);
 
             IStatistic<double, double> statistic = new CommonStatistic();
             IStatisticResult<double> designResult;
@@ -90,7 +91,7 @@ namespace ChipSynthesys.UnitTests.Custom
             }
 
             DrawerImpl dr = new DrawerImpl();
-            dr.Draw(d, p, null);
+            dr.Draw(d, p, new Size(10,10),null);
 
         }
 

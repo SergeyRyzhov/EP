@@ -84,7 +84,7 @@ namespace PlaceModel
             this.field = field;
             this.components = components.Extract();
             this.nets = nets.Extract();
-            this.parent = null;
+            parent = null;
         }
 
         /// <summary>
@@ -94,14 +94,14 @@ namespace PlaceModel
         {
             if (parent == null) throw new Exception("Для подобласти обязательно должен быть определен родительский объект!");
             this.parent = parent;
-            this.field = subfield;
+            field = subfield;
             this.components = components.ToArray<Component>();
-            var present = new bool[this.top.nets.Length];
+            var present = new bool[top.nets.Length];
             for (var i = 0; i < present.Length; i++) present[i] = false;
             foreach (var c in components)
-                foreach (var n in this.top.Nets(c))
+                foreach (var n in top.Nets(c))
                     present[n.id] = true;
-            this.nets = this.top.nets.Where(n => present[n.id]).ToArray();
+            nets = top.nets.Where(n => present[n.id]).ToArray();
         }
 
         public static void Save(Design design, string fname)

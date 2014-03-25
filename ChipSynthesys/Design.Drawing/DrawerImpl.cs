@@ -9,12 +9,12 @@ namespace ChipSynthesys.Draw
     {
         // bitmap создан здесь для тестов
         internal Bitmap b1;
-        private const short scale = 50;
+        private const short scale = 20;
         private const short otstup = 20;
         private static ushort NumberOfPictres = 0;
         private short PenThickness = 3;
 
-        public override void Draw(Design design, PlacementGlobal placement, Graphics canvas)
+        public override void Draw(Design design, PlacementGlobal placement, Size size, Graphics canvas)
         {
             Random r = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
             int countNets = design.nets.Length;                                              // для каждой сети свой цвет
@@ -63,7 +63,7 @@ namespace ChipSynthesys.Draw
             b1.Save("test" + file + ".png");
         }
 
-        public override void Draw(Design design, PlacementDetail placement, Graphics canvas)
+        public override void Draw(Design design, PlacementDetail placement, Size size, Graphics canvas)
         {
             Random r = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
             int countNets = design.nets.Length;                                              // для каждой сети свой цвет
@@ -71,7 +71,7 @@ namespace ChipSynthesys.Draw
             Brush br = new SolidBrush(Color.Gold);
 
             // перенести сюда объявление bitmap
-            b1 = new Bitmap(design.field.cellsx * 50 + 1, design.field.cellsy * 50 + 1);
+            //b1 = new Bitmap(design.field.cellsx * 50 + 1, design.field.cellsy * 50 + 1);
 
 
 
@@ -81,8 +81,8 @@ namespace ChipSynthesys.Draw
             }
 
 
-            using (canvas = Graphics.FromImage(b1))
-            {
+            //using (canvas = Graphics.FromImage(b1))
+            //{
                 // рисуем границу
                 canvas.DrawRectangle(new Pen(Color.Black, 1), 0, 0, design.field.cellsx * 50, design.field.cellsy * 50);
 
@@ -105,11 +105,11 @@ namespace ChipSynthesys.Draw
                             c.sizey * scale - 2 * design.Nets(c).Length * PenThickness);
                     }
                 }
-            }
+            //}
 
             // сохраняем файл
-            var file = string.Format("{0}", NumberOfPictres++);
-            b1.Save("test" + file + ".bmp");
+            //var file = string.Format("{0}", NumberOfPictres++);
+            //b1.Save("test" + file + ".bmp");
         }
     }
 }

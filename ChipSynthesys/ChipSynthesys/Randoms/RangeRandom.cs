@@ -18,19 +18,19 @@ namespace ChipSynthesys.Common.Randoms
 
         public RangeRandom(int min, int max, Random random)
         {
-            this.m_min = min;
-            this.m_max = max;
-            this.m_random = random;
+            m_min = min;
+            m_max = max;
+            m_random = random;
         }
 
         public int Next()
         {
-            return this.m_random.Next(this.m_min, this.m_max);
+            return m_random.Next(m_min, m_max);
         }
 
         public double? MathematicalExpectation()
         {
-            return (double)(this.m_min + this.m_max) / 2;
+            return (double)(m_min + m_max) / 2;
         }
     }
 }

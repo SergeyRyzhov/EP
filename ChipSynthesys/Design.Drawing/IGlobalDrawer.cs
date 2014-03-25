@@ -3,8 +3,8 @@ using System.Drawing;
 
 namespace ChipSynthesys.Draw
 {
-    internal interface IGlobalDrawer
+    public interface IGlobalDrawer
     {
-        void Draw(Design design, PlacementGlobal placement, Graphics canvas);
+        void Draw(Design design, PlacementGlobal placement, Size size, Graphics canvas);
     }
 }

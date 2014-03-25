@@ -2,7 +2,6 @@ using System;
 
 namespace ChipSynthesys.Common.Classes
 {
-    //todo вынести в общую сборку
     /// <summary>
     /// Вспомогательный класс для хранения пары элементов. Например, координаты, границы диапазона или размеры прямоугольника
     /// </summary>
@@ -13,7 +12,7 @@ namespace ChipSynthesys.Common.Classes
 
         public ValuePair()
         {
-            this.m_pair = new T[2];
+            m_pair = new T[2];
         }
 
         /// <summary>
@@ -21,8 +20,8 @@ namespace ChipSynthesys.Common.Classes
         /// </summary>
         public T A
         {
-            get { return this.m_pair[0]; }
-            set { this.m_pair[0] = value; }
+            get { return m_pair[0]; }
+            set { m_pair[0] = value; }
         }
 
         /// <summary>
@@ -30,8 +29,8 @@ namespace ChipSynthesys.Common.Classes
         /// </summary>
         public T B
         {
-            get { return this.m_pair[1]; }
-            set { this.m_pair[1] = value; }
+            get { return m_pair[1]; }
+            set { m_pair[1] = value; }
         }
 
         public double? Length
@@ -40,7 +39,7 @@ namespace ChipSynthesys.Common.Classes
             {
                 try
                 {
-                    return Convert.ToDouble(this.B) - Convert.ToDouble(this.A);
+                    return Convert.ToDouble(B) - Convert.ToDouble(A);
                 }
                 catch (InvalidCastException)
                 {
@@ -54,8 +53,8 @@ namespace ChipSynthesys.Common.Classes
         /// </summary>
         public T X
         {
-            get { return this.A; }
-            set { this.A = value; }
+            get { return A; }
+            set { A = value; }
         }
 
         /// <summary>
@@ -63,8 +62,8 @@ namespace ChipSynthesys.Common.Classes
         /// </summary>
         public T Y
         {
-            get { return this.B; }
-            set { this.B = value; }
+            get { return B; }
+            set { B = value; }
         }
 
         /// <summary>
@@ -72,8 +71,8 @@ namespace ChipSynthesys.Common.Classes
         /// </summary>
         public T Left
         {
-            get { return this.A; }
-            set { this.A = value; }
+            get { return A; }
+            set { A = value; }
         }
 
         /// <summary>
@@ -81,13 +80,13 @@ namespace ChipSynthesys.Common.Classes
         /// </summary>
         public T Right
         {
-            get { return this.B; }
-            set { this.B = value; }
+            get { return B; }
+            set { B = value; }
         }
 
         public override string ToString()
         {
-            return string.Format("({0}, {1})", this.A, this.B);
+            return string.Format("({0}, {1})", A, B);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace PlaceModel
         {
             public void Add(Component[] items)
             {
-                this.Add(new Net(next_id(), items));
+                Add(new Net(next_id(), items));
             }
         }
     }

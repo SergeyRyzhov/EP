@@ -48,10 +48,8 @@
     <Compile Include="Randoms\IRandom.cs" />
     <Compile Include="Generators\RandomGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Generators\RandomGeneratorWithPlacement.cs" />
     <Compile Include="Randoms\RangeRandom.cs" />
     <Compile Include="Generators\SquareGenerator.cs" />
-    <Compile Include="Generators\TableGenerator.cs" />
     <Compile Include="Randoms\TableRandom.cs" />
     <Compile Include="Classes\ValuePair.cs" />
   </ItemGroup>

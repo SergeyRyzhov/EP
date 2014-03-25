@@ -43,7 +43,7 @@ namespace PlaceModel
         {
             public void Add(int sizex, int sizey)
             {
-                this.Add(new Component(next_id(), sizex, sizey));
+                Add(new Component(next_id(), sizex, sizey));
             }
         }
     }

@@ -18,7 +18,7 @@ namespace PlaceModel
             public Values(Placement<T> owner, int count)
             {
                 this.owner = owner;
-                this.vals = new R[count];
+                vals = new R[count];
             }
 
             public R this[Component c]
