@@ -89,10 +89,6 @@ namespace ChipSynthesys.UnitTests.Custom
                 }
                 Console.WriteLine(s.ToString());
             }
-
-            DrawerImpl dr = new DrawerImpl();
-            dr.Draw(d, p, new Size(10,10),null);
-
         }
 
         [TestMethod]
