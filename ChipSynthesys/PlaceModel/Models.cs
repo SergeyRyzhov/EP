@@ -24,6 +24,6 @@
         /// <param name="design">Описание интегральной схемы</param>
         /// <param name="approximate">Некоторое начальное размещения (действительные координаты)</param>
         /// <param name="result">Результат - вектор детального размещения (целочисленные координаты)</param>
-        void Place(Design design, PlacementGlobal approximate, PlacementDetail result);
+        void Place(Design design, PlacementGlobal approximate, out PlacementDetail result);
     }
 }
