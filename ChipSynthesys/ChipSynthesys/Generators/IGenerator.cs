@@ -1,6 +1,8 @@
+using ChipSynthesys.Common.Randoms;
+
 using PlaceModel;
 
-namespace ChipSynthesys
+namespace ChipSynthesys.Common.Generators
 {
     /// <summary>
     /// Интерфейс генератора Схемы и Размещения

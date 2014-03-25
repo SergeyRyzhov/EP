@@ -1,7 +1,10 @@
-﻿using PlaceModel;
-using System;
+﻿using System;
 
-namespace ChipSynthesys
+using ChipSynthesys.Common.Randoms;
+
+using PlaceModel;
+
+namespace ChipSynthesys.Common.Generators
 {
     /// <summary>
     /// Генератор тестовых примеров интегральных схем
