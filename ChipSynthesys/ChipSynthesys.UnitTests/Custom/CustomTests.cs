@@ -29,10 +29,8 @@ namespace ChipSynthesys.UnitTests.Custom
             IStatisticResult<double> placementResult;
             statistic.DesignStatistic(design, out designResult);
 
-            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(CommonStatistic.Name);
 
-            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(designResult);
 
             Design.Save(design, "test.xml");
@@ -41,7 +39,6 @@ namespace ChipSynthesys.UnitTests.Custom
         [TestMethod]
         public void RandomStatisticTest()
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Случайный с размещением");
 
             var g = new RandomGenerator();
@@ -55,27 +52,21 @@ namespace ChipSynthesys.UnitTests.Custom
             statistic.DesignStatistic(d, out designResult);
             statistic.PlacementStatistic(d, p, out placementResult);
 
-            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(CommonStatistic.Name);
 
-            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(designResult);
             Console.WriteLine(placementResult);
 
-            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Размещение");
 
-            Console.ForegroundColor = ConsoleColor.White;
             foreach (var c in d.components)
             {
                 string s = string.Format("{0} [{3}x{4}] - ({1},{2})", c.id, p.x[c], p.y[c], c.sizex, c.sizey);
                 Console.WriteLine(s);
             }
 
-            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Цепи");
 
-            Console.ForegroundColor = ConsoleColor.White;
             foreach (var net in d.nets)
             {
                 var s = new StringBuilder();
