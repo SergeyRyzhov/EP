@@ -63,7 +63,7 @@ namespace DetailPlacer.Algorithm
             if (hasPosition)
             {
                 var perm = new int[x.Length];
-                m_positionsSorter.SortPositions(design, approximate, result, x, y, ref perm);
+                m_positionsSorter.SortPositions(design, approximate, result, current, x, y, ref perm);
                 
                 ReorderArray(perm, ref x);
                 ReorderArray(perm, ref y);

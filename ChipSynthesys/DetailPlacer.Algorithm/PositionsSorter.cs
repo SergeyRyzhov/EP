@@ -11,7 +11,7 @@ namespace DetailPlacer.Algorithm
             m_positionComparer = positionComparer;
         }
 
-        public void SortPositions(Design design, PlacementGlobal approximate, PlacementDetail result, int[] x, int[] y, ref int[] perm)
+        public void SortPositions(Design design, PlacementGlobal approximate, PlacementDetail result, Component current, int[] x, int[] y, ref int[] perm)
         {
             int length = x.Length;
             var mask = new int[length];
@@ -24,7 +24,7 @@ namespace DetailPlacer.Algorithm
                     if (mask[j] == 1)
                         continue;
 
-                    if (m_positionComparer.Better(design, result, x[j], y[j], x[best], y[best]))
+                    if (m_positionComparer.Better(design, result, current, x[j], y[j], x[best], y[best]))
                         best = j;
                 }
                 perm[i] = best;
