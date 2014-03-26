@@ -27,5 +27,25 @@ namespace ChipSynthesys.UnitTests.Common
             Console.WriteLine(actual);
             Assert.AreEqual(1.7, actual);
         }
+
+        [TestMethod]
+        public void MathEpectationForOrdinalTest()
+        {
+            IRandom<int> random;
+
+            {
+                var tableRandom = new TableRandom<int>();
+                tableRandom.Add(1, 25);
+                tableRandom.Add(2, 25);
+                tableRandom.Add(3, 25);
+                tableRandom.Add(4, 25);
+                random = tableRandom;
+            }
+
+            var actual = random.MathematicalExpectation();
+
+            Console.WriteLine(actual);
+            Assert.AreEqual(2.5, actual);
+        }
     }
 }
