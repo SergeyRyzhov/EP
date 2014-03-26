@@ -17,103 +17,116 @@ namespace DetailPlacer.Algorithm
     /// </summary>
     public abstract class DetailPlacerBase : PlacerBase, IDetailPlacer
     {
-        private Random m_rnd;
+        private readonly ICompontsOrderer m_compontsOrderer;
+        private readonly IPositionSearcher m_positionSearcher;
+        private readonly IPositionsSorter m_positionsSorter;
 
-        protected DetailPlacerBase()
+        protected DetailPlacerBase(ICompontsOrderer compontsOrderer, IPositionSearcher positionSearcher, IPositionsSorter positionsSorter)
         {
-
-            m_rnd = new Random();
+            m_compontsOrderer = compontsOrderer;
+            m_positionSearcher = positionSearcher;
+            m_positionsSorter = positionsSorter;
         }
 
         public void Place(Design design, PlacementGlobal approximate, out PlacementDetail result)
         {
-            IEnumerable<Component> workItems;
-            GetUnplacedComponents(design, approximate, out workItems);
-
             result = new PlacementDetail(design);
-
-            SortComponents(design, approximate, result, workItems, out workItems);
-
-            var components = workItems as Component[] ?? workItems.ToArray();
-            foreach (Component current in components)
+            var notPalced = new List<Component>();
+            Component[] unplacedComponents;
+            do
             {
-                IEnumerable<Pair<int>> positions;
-                GetAvailablePositions(design, approximate, result, components, out positions);
+                UpdatePlaced(design, approximate, result, notPalced, out unplacedComponents);
+                if (unplacedComponents.Length == 0)
+                    break;
+                var perm = new int[unplacedComponents.Length];
+                m_compontsOrderer.SortComponents(design, approximate, result, unplacedComponents, ref perm);
 
-                SortPositions(design, approximate, result, components, positions, out positions);
-                //place one 
+                ReorderArray(perm, ref unplacedComponents);
 
-                var resultPosition = positions.FirstOrDefault();
-                if (resultPosition != null)
+                var current = unplacedComponents.FirstOrDefault();
+                
+                bool placed;
+                PlaceComponent(design, approximate, current, result, out placed);
+
+                if(!placed)
+                    notPalced.Add(current);
+            } while (unplacedComponents.Length > 0);
+        }
+
+        protected virtual void PlaceComponent(Design design, PlacementGlobal approximate, Component current, PlacementDetail result, out bool placed)
+        {
+            int[] x;
+            int[] y;
+            bool hasPosition;
+
+            m_positionSearcher.AlvailablePositions(design, approximate, result, current, out x, out y, out hasPosition);
+            if (hasPosition)
+            {
+                var perm = new int[x.Length];
+                m_positionsSorter.SortPositions(design, approximate, result, x, y, ref perm);
+                
+                ReorderArray(perm, ref x);
+                ReorderArray(perm, ref y);
+
+                result.x[current] = x[0];
+                result.y[current] = y[0];
+                result.placed[current] = true;
+                placed = true;
+            }
+            else
+            {
+                result.placed[current] = false;
+                placed = false;
+            }
+        }
+
+
+        /// <summary>
+        /// Перепаковка компонент согласно перестановке
+        /// </summary>
+        /// <param name="perm"></param>
+        /// <param name="unplacedComponents"></param>
+        protected virtual void ReorderArray<T>(int[] perm, ref T[] unplacedComponents)
+        {
+            var reorderd = new T[perm.Length];
+            for (int i = 0; i < perm.Length; i++)
+            {
+                var index = perm[i];
+                reorderd[i] = unplacedComponents[index];
+            }
+            unplacedComponents = reorderd;
+        }
+
+        /// <summary>
+        /// Фиксирование уже размещённых компонентов
+        /// </summary>
+        protected virtual void UpdatePlaced(Design design, PlacementGlobal approximate, PlacementDetail current, List<Component> notPalced, out Component[] unplacedComponents)
+        {
+            var unplaced = new List<Component>();
+            foreach (Component component in design.components)
+            {
+                if (approximate.placed[component])
                 {
-                    //var element = components.FirstOrDefault();
-                    //if (element != null)
-                    {
-                        result.x[current] = resultPosition.X;
-                        result.y[current] = resultPosition.Y;
-                        result.placed[current] = true;
-                    }
+                    current.placed[component] = true;
+                }
+                else
+                {
+                    if (!notPalced.Contains(component) && !current.placed[component])
+                        unplaced.Add(component);
                 }
             }
-
-        }
-
-        public void GetUnplacedComponents(Design design, PlacementGlobal current, out IEnumerable<Component> unplaced)
-        {
-            unplaced = design.components.Where(component => !current.placed[component]);
-        }
-
-        public virtual void SortComponents(Design design, PlacementGlobal current, PlacementDetail result, IEnumerable<Component> components, out IEnumerable<Component> sortedComponents)
-        {
-            sortedComponents = components;
-        }
-
-        public virtual void GetAvailablePositions(Design design, PlacementGlobal current, PlacementDetail result,
-            IEnumerable<Component> components, out IEnumerable<Pair<int>> positions)
-        {
-            var x = m_rnd.Next(design.field.cellsx);
-            var y = m_rnd.Next(design.field.cellsy);
-            positions = new[] { new Pair<int> { X = 0, Y = 0 }, new Pair<int> { X = x, Y = y } };
-        }
-
-        public virtual void SortPositions(Design design, PlacementGlobal current, PlacementDetail result,
-            IEnumerable<Component> components, IEnumerable<Pair<int>> positions,
-            out IEnumerable<Pair<int>> sortedPositions)
-        {
-            var sorted = new List<Pair<int>>();
-            var enumerable = positions as Pair<int>[] ?? positions.ToArray();
-
-            foreach (Pair<int> first in enumerable)
-            {
-                Pair<int> tmp = first;
-                foreach (Pair<int> second in enumerable)
-                {
-                    if (!Better(tmp, second))
-                    {
-                        tmp = second;
-                    }
-                }
-                sorted.Add(tmp);
-            }
-            sortedPositions = sorted;
-
-
-        }
-
-        public virtual bool Better(Pair<int> first, Pair<int> second)
-        {
-            return false;
+            unplacedComponents = unplaced.ToArray();
         }
     }
 
     public class DetailPlacerImpl : DetailPlacerBase
     {
-    }
+        public DetailPlacerImpl() : base(new CompontsOrderer(), new PositionSearcher(), new PositionsSorter(new PositionComparer()))
+        {
+        }
 
-    //use values class from placemodel
-    public class Pair<T>
-    {
-        public T X { get; set; }
-        public T Y { get; set; }
+        public DetailPlacerImpl(ICompontsOrderer compontsOrderer, IPositionSearcher positionSearcher, IPositionsSorter positionsSorter) : base(compontsOrderer, positionSearcher, positionsSorter)
+        {
+        }
     }
 }

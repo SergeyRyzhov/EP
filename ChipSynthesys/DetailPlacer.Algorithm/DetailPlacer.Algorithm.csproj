@@ -34,9 +34,17 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompontsOrderer.cs" />
     <Compile Include="DetailPlacerBase.cs" />
     <Compile Include="GlobalPlacerBase.cs" />
+    <Compile Include="ICompontsOrderer.cs" />
+    <Compile Include="IPositionComparer.cs" />
+    <Compile Include="IPositionSearcher.cs" />
+    <Compile Include="IPositionsSorter.cs" />
     <Compile Include="PlacerBase.cs" />
+    <Compile Include="PositionComparer.cs" />
+    <Compile Include="PositionSearcher.cs" />
+    <Compile Include="PositionsSorter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
