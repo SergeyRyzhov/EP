@@ -57,6 +57,7 @@
     <Compile Include="Custom\CustomTests.cs" />
     <Compile Include="Draw\DrawerTests.cs" />
     <Compile Include="PlaceModel\PlaceModelTests.cs" />
+    <Compile Include="PlaceModel\SortCompTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
