@@ -12,12 +12,12 @@ namespace DetailPlacer.Algorithm
         public void SortComponents(Design design, PlacementGlobal approximate, PlacementDetail result, Component[] unplacedComponents, ref int[] perm)
         {            
             var n = unplacedComponents.Count();
-            var Cols = new List<int>();
-            var RawIndex = new List<int>();
+            var cols = new List<int>();
+            var rowIndex = new List<int>();
             var indx = 0;
 
             var degMas = new int[n];
-            RawIndex.Add(0);
+            rowIndex.Add(0);
 
             for (var i = 0; i < n; i++)
             {
@@ -34,15 +34,15 @@ namespace DetailPlacer.Algorithm
                     var y2 = approximate.y[r2];
                     if (x1 + r1.sizex <= x2 || x2 + r2.sizex <= x1
                         || y1 + r1.sizey <= y2 || y2 + r2.sizey <= y1) continue;
-                    Cols.Add(j);
+                    cols.Add(j);
                     indx++;
                     deg++;
                 }
 
-                RawIndex.Add(indx);
+                rowIndex.Add(indx);
                 degMas[i] = deg;
             }
-            RawIndex.Add(Cols.Count());
+            rowIndex.Add(cols.Count());
 
             var colors = new int[n];
             for (var i = 0; i < n; i++) colors[i] = -1;
@@ -55,12 +55,12 @@ namespace DetailPlacer.Algorithm
                 {
                     if (degMas[i] != maxDeg) continue;
                     var color = 0;
-                    for (var j = RawIndex[i]; j < RawIndex[i + 1]; j++)
+                    for (var j = rowIndex[i]; j < rowIndex[i + 1]; j++)
                     {
-                        if (colors[Cols[j]] == color)
+                        if (colors[cols[j]] == color)
                         {
                             color++;
-                            j = RawIndex[i];
+                            j = rowIndex[i];
                         }
                     }
                     colors[i] = color;

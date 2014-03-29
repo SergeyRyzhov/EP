@@ -77,7 +77,8 @@ namespace ChipSynthesys.Draw
 
             foreach (var net in design.nets)
             {
-                penMap.Add(net.id, new Pen(Color.FromArgb(r.Next(255), r.Next(255), r.Next(255), r.Next(255)), PenThickness)); // толщина была 8
+                //penMap.Add(net.id, new Pen(Color.FromArgb(r.Next(255), r.Next(255), r.Next(255), r.Next(255)), PenThickness)); // толщина была 8
+                penMap.Add(net.id, new Pen(Color.Red, 1)); // толщина была 8
             }
 
 
@@ -92,6 +93,7 @@ namespace ChipSynthesys.Draw
                     {
                         // проходим в цикле по полученному списку сетей 
                         // и получаем по id каждой сети перо их penMap
+                        
                         for (int i = 0; i < design.Nets(c).Length; i++)
                         {
                             canvas.DrawRectangle(penMap[design.Nets(c)[i].id], (int)placement.x[c] * scale + i * PenThickness,
@@ -99,10 +101,10 @@ namespace ChipSynthesys.Draw
                         }
 
                         canvas.FillRectangle(br,
-                            (int)placement.x[c] * scale + design.Nets(c).Length * PenThickness,
-                            (int)placement.y[c] * scale + design.Nets(c).Length * PenThickness,
-                            c.sizex * scale - 2 * design.Nets(c).Length * PenThickness,
-                            c.sizey * scale - 2 * design.Nets(c).Length * PenThickness);
+                            (int)placement.x[c] * scale + design.Nets(c).Length * PenThickness+1,
+                            (int)placement.y[c] * scale + design.Nets(c).Length * PenThickness+1,
+                            c.sizex * scale - 2 * design.Nets(c).Length * PenThickness-1,
+                            c.sizey * scale - 2 * design.Nets(c).Length * PenThickness-1);
                     }
                 }
             //}

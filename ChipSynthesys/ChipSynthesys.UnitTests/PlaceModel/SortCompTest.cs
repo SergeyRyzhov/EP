@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DetailPlacer.Algorithm;
+﻿using DetailPlacer.Algorithm;
 using PlaceModel;
 
 
@@ -11,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ChipSynthesys.UnitTests.PlaceModel
 {
     [TestClass]
-   public class SortCompTest
+    public class SortCompTest
     {
         [TestMethod]
         public void SortTests()
@@ -45,7 +40,7 @@ namespace ChipSynthesys.UnitTests.PlaceModel
            
             
             order.SortComponents(design,placement,new PlacementDetail(design),design.components,ref perm);
-            var res = new int[] { 1, 3, 5, 0, 2, 4 };
+            var res = new[] { 1, 3, 5, 0, 2, 4 };
             for (var i = 0; i < 6; i++)
             {
                 Assert.AreEqual(res[i], perm[i]);
