@@ -27,7 +27,7 @@ namespace ChipSynthesys.UnitTests.Draw
                 drawer.Draw(design, placement, size, canvas);
             }
 
-            bitmap.Save("..\\..\\test.png");
+            bitmap.Save(TestFile("BitmapDrawingTest"));
         }
 
         [TestMethod]
@@ -46,7 +46,7 @@ namespace ChipSynthesys.UnitTests.Draw
                 drawer.Draw(design, placement, size, canvas);
             }
 
-            bitmap.Save("..\\..\\NetTest.png");
+            bitmap.Save(TestFile("BitmapDrawingNetTest"));
         }
 
         [TestMethod]
@@ -65,7 +65,7 @@ namespace ChipSynthesys.UnitTests.Draw
                 drawer.Draw(design, placement, size, canvas);
             }
 
-            bitmap.Save("0. before.png");
+            bitmap.Save(TestFile("0. before.png"));
 
             IDetailPlacer placer = new DetailPlacerImpl();
             var gp = new PlacementGlobal(design);
@@ -85,11 +85,11 @@ namespace ChipSynthesys.UnitTests.Draw
                 drawer.Draw(design, placement, size, canvas);
             }
 
-            bitmap.Save("1. after.png");
+            bitmap.Save(TestFile("1. after.png"));
         }
 
 
-        private void GenerateTestDesign(out Design design, out PlacementDetail placement, out Size size, out Bitmap bitmap)
+        private static void GenerateTestDesign(out Design design, out PlacementDetail placement, out Size size, out Bitmap bitmap)
         {
             IGenerator generator = new RandomGenerator();
 
@@ -110,6 +110,11 @@ namespace ChipSynthesys.UnitTests.Draw
             int imageSide = side*scale + 2*scale; //2 для переферии
             size = new Size(imageSide, imageSide);
             bitmap = new Bitmap(size.Width, size.Height);
+        }
+
+        private static string TestFile(string name)
+        {
+            return string.Format("..\\..\\{0}.png", name);
         }
     }
 }

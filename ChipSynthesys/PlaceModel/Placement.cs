@@ -1,15 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Soap;
+using System.Xml.Serialization;
 
 namespace PlaceModel
 {
     /// <summary>
     /// Координаты размещения компонентов
     /// </summary>
+    [Serializable]
     public class Placement<T>
     {
         /// <summary>
         /// Вектор значений
         /// </summary>
+        [Serializable]
         public class Values<R>
         {
             private Placement<T> owner;
@@ -90,6 +96,32 @@ namespace PlaceModel
         public PlacementDetail(Design design)
             : base(design)
         {
+        }
+    }
+
+
+    internal class StorageHelper<T> where T : class
+    {
+        private readonly SoapFormatter m_serializer;
+        public StorageHelper()
+        {
+            m_serializer= new SoapFormatter();
+        }
+
+        public void Store(string fileName, T obj)
+        {
+            using (var fs = File.Open(fileName, FileMode.Create))
+            {
+                m_serializer.Serialize(fs, obj);
+            }
+        }
+
+        public T Load(string fileName)
+        {
+            using (var fs = File.Open(fileName, FileMode.Open))
+            {
+                return m_serializer.Deserialize(fs) as T;
+            }
         }
     }
 }

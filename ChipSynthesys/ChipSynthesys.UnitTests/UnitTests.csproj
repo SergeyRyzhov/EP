@@ -58,6 +58,7 @@
     <Compile Include="Draw\DrawerTests.cs" />
     <Compile Include="PlaceModel\PlaceModelTests.cs" />
     <Compile Include="PlaceModel\SortCompTest.cs" />
+    <Compile Include="PlaceModel\StorageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
