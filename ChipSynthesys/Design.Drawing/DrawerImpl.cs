@@ -11,7 +11,7 @@ namespace ChipSynthesys.Draw
 
         public override void Draw(Design design, PlacementGlobal placement, Size size, Graphics canvas)
         {
-            int scaling = size.Width / design.field.cellsx > size.Height / design.field.cellsy ? size.Width / design.field.cellsx : size.Height / design.field.cellsy;
+            int scaling = size.Width / design.field.cellsx < size.Height / design.field.cellsy ? size.Width / design.field.cellsx : size.Height / design.field.cellsy;
             Brush br = new SolidBrush(Color.LightGray);
             Pen pen = new Pen(Color.Red, PenThickness);
             Brush brBlack = new SolidBrush(Color.Black);
@@ -43,7 +43,7 @@ namespace ChipSynthesys.Draw
 
         public override void Draw(Design design, PlacementDetail placement, Size size, Graphics canvas)
         {
-            int scaling = size.Width / design.field.cellsx > size.Height / design.field.cellsy ? size.Width / design.field.cellsx : size.Height / design.field.cellsy;
+            int scaling = size.Width / design.field.cellsx < size.Height / design.field.cellsy ? size.Width / design.field.cellsx : size.Height / design.field.cellsy;
             Brush br = new SolidBrush(Color.LightGray);
             Pen pen = new Pen(Color.Red, PenThickness);
             Brush brBlack = new SolidBrush(Color.Black);

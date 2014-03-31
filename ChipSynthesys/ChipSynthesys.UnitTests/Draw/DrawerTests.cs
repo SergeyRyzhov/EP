@@ -1,6 +1,5 @@
 ﻿using ChipSynthesys.Common.Generators;
 using ChipSynthesys.Draw;
-using DetailPlacer.Algorithm;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlaceModel;
 using System;
@@ -48,46 +47,6 @@ namespace ChipSynthesys.UnitTests.Draw
 
             bitmap.Save(TestFile("BitmapDrawingNetTest"));
         }
-
-        [TestMethod]
-        public void PlacerTest()
-        {
-            Design design;
-            PlacementDetail placement;
-            Size size;
-            Bitmap bitmap;
-            GenerateTestDesign(out design, out placement, out size, out bitmap);
-
-            using (Graphics canvas = Graphics.FromImage(bitmap))
-            {
-                IDrawer drawer = new DrawerImpl();
-
-                drawer.Draw(design, placement, size, canvas);
-            }
-
-            bitmap.Save(TestFile("0. before.png"));
-
-            IDetailPlacer placer = new DetailPlacerImpl();
-            var gp = new PlacementGlobal(design);
-
-            foreach (var component in design.components)
-            {
-                gp.x[component] = placement.x[component];
-                gp.y[component] = placement.y[component];
-            }
-
-            placer.Place(design, gp, out placement);
-            using (Graphics canvas = Graphics.FromImage(bitmap))
-            {
-                canvas.Clear(Color.FromArgb(255,255,255,255));
-                IDrawer drawer = new DrawerImpl();
-
-                drawer.Draw(design, placement, size, canvas);
-            }
-
-            bitmap.Save(TestFile("1. after.png"));
-        }
-
 
         private static void GenerateTestDesign(out Design design, out PlacementDetail placement, out Size size, out Bitmap bitmap)
         {

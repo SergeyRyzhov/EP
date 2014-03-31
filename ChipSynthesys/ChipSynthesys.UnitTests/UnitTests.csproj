@@ -52,10 +52,12 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Common\RangeRandomTests.cs" />
+    <Compile Include="Common\SquareGeneratorTests.cs" />
     <Compile Include="Common\TableRandomTests.cs" />
     <Compile Include="Common\ValuePairTests.cs" />
     <Compile Include="Custom\CustomTests.cs" />
     <Compile Include="Draw\DrawerTests.cs" />
+    <Compile Include="Placement\PlacerTests.cs" />
     <Compile Include="PlaceModel\PlaceModelTests.cs" />
     <Compile Include="PlaceModel\SortCompTest.cs" />
     <Compile Include="PlaceModel\StorageTests.cs" />
