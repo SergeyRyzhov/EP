@@ -6,11 +6,11 @@ namespace DetailPlacer.Algorithm
 {
     public class PositionSearcher : IPositionSearcher
     {
-        private Random m_rnd;
+        private readonly int m_maxCount;
 
-        public PositionSearcher()
+        public PositionSearcher(int maxCount)
         {
-            m_rnd = new Random();
+            m_maxCount = maxCount;
         }
 
         public void AlvailablePositions(Design design, PlacementGlobal approximate, PlacementDetail result, Component current, out int[] x, out int[] y, out bool hasPosition)
@@ -56,8 +56,18 @@ namespace DetailPlacer.Algorithm
             //перебор позиций
             for (int i = 0; i < n; i++)
             {
+                if (lx.Count == m_maxCount)
+                {
+                    break;
+                }
+
                 for (int j = 0; j < m; j++)
                 {
+                    if (lx.Count == m_maxCount)
+                    {
+                        break;
+                    }
+
                     if (mask[i, j] == 0)
                     {
                         bool may = true;
@@ -90,6 +100,11 @@ namespace DetailPlacer.Algorithm
                         {
                             lx.Add(i);
                             ly.Add(j);
+
+                            if (lx.Count == m_maxCount)
+                            {
+                                break;
+                            }
                         }
                     }
                 }
