@@ -19,7 +19,7 @@ namespace DetailPlacer.Algorithm
             for (int i = 0; i < length; i++)
             {
                 int best = i;
-                for (int j = i; j < length; j++)
+                for (int j = i+1; j < length; j++)
                 {
                     if (mask[j] == 1)
                         continue;

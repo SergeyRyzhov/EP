@@ -15,7 +15,7 @@ namespace ChipSynthesys.Draw
         public override void Draw(PlaceModel.Design design, PlacementGlobal placement, Size size,
             System.Drawing.Graphics canvas)
         {
-            int scaling = size.Width / design.field.cellsx > size.Height / design.field.cellsy
+            int scaling = size.Width / design.field.cellsx < size.Height / design.field.cellsy
                               ? size.Width / design.field.cellsx
                               : size.Height / design.field.cellsy;
 
@@ -102,7 +102,7 @@ namespace ChipSynthesys.Draw
         public override void Draw(PlaceModel.Design design, PlacementDetail placement, Size size,
                                   System.Drawing.Graphics canvas)
         {
-            int scaling = size.Width / design.field.cellsx > size.Height / design.field.cellsy
+            int scaling = size.Width / design.field.cellsx < size.Height / design.field.cellsy
                               ? size.Width / design.field.cellsx
                               : size.Height / design.field.cellsy;
 

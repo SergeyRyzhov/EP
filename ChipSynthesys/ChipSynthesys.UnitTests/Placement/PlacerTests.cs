@@ -77,8 +77,8 @@ namespace ChipSynthesys.UnitTests.Placement
             IGenerator generator = new RandomGenerator();
 
             const int n = 15;
-            const int maxx = 4;
-            const int maxy = 4;
+            const int maxx = 8;
+            const int maxy = 8;
             const int p = 70;
 
             const int mx = maxx / 2; //мат.ожидание
@@ -87,7 +87,7 @@ namespace ChipSynthesys.UnitTests.Placement
             const double volume = n * mx * my * (100.0 / p);
             int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume)));
 
-            generator.NextDesignWithPlacement(n, 15, 4, p, maxx, maxy, side, side, out design, out placement);
+            generator.NextDesignWithPlacement(n, 50, 4, p, maxx, maxy, side, side, out design, out placement);
 
             const int scale = 20; //масштаб здесь, внутри должен быть рассчитан по исходным данным
             int imageSide = side * scale + 2 * scale; //2 для переферии
@@ -110,7 +110,7 @@ namespace ChipSynthesys.UnitTests.Placement
             const double volume = n * mx * my * (100.0 / p);
             int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume)));
 
-            generator.NextDesignWithPlacement(n, 15, 4, p, maxx, maxy, side, side, out design, out placement);
+            generator.NextDesignWithPlacement(n, 50, 4, p, maxx, maxy, side, side, out design, out placement);
 
             const int scale = 20; //масштаб здесь, внутри должен быть рассчитан по исходным данным
             int imageSide = side * scale + 2 * scale; //2 для переферии
