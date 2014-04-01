@@ -64,7 +64,7 @@ namespace ChipSynthesys.Common.Generators
         }
 
         public void NextDesignWithPlacement(int components, int nets, int maxNetSize, int percent,
-            int maxSizeX, int maxSizeY, int width, int height, out Design design, out PlacementDetail placement)
+            int maxSizeX, int maxSizeY, int width, int height, out Design design, out PlacementGlobal placement)
         {
             var xCoord = new List<ValuePair<int>>();
             var yCoord = new List<ValuePair<int>>();
@@ -107,7 +107,7 @@ namespace ChipSynthesys.Common.Generators
                 }
             }
             design = new Design(new Field(0, 0, width, height), c, n);
-            placement = new PlacementDetail(design);
+            placement = new PlacementGlobal(design);
 
             int ind = 0;
             foreach (Component com in design.components)
@@ -120,7 +120,7 @@ namespace ChipSynthesys.Common.Generators
         }
 
         public void NextDesignWithPlacement(int components, int nets, IRandom<int> maxNetSize, int percent, IRandom<int> maxSizeX,
-            IRandom<int> maxSizeY, int width, int height, out Design design, out PlacementDetail placement)
+            IRandom<int> maxSizeY, int width, int height, out Design design, out PlacementGlobal placement)
         {
             throw new NotImplementedException();
         }

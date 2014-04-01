@@ -9,7 +9,9 @@ namespace ChipSynthesys.Statistic.Rows
     {
         public Design Design { get; set; }
 
-        public PlacementDetail Placement { get; set; }
+        public PlacementDetail DetailPlacement { get; set; }
+        
+        public PlacementGlobal GlobalPlacement { get; set; }
 
         public static string Key { get { return StatisticKeys.Placed; } }
 
@@ -20,7 +22,11 @@ namespace ChipSynthesys.Statistic.Rows
 
         public double Compute()
         {
-            return Design.components.Count(component => Placement.placed[component]);
+            if (DetailPlacement != null)
+            {
+                return Design.components.Count(component => DetailPlacement.placed[component]);
+            }
+            return Design.components.Count(component => GlobalPlacement.placed[component]);
         }
     }
 }

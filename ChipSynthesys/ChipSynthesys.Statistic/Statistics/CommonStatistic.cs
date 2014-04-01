@@ -18,11 +18,20 @@ namespace ChipSynthesys.Statistic.Statistics
             get { return Name; }
         }
 
+        public void PlacementStatistic(Design design, PlacementGlobal placement, out IStatisticResult<double> result)
+        {
+            var statisticResult = new StatisticResult();
+
+            statisticResult.Add(new PlacedRow { Design = design, GlobalPlacement = placement });
+
+            result = statisticResult;
+        }
+
         public void PlacementStatistic(Design design, PlacementDetail placement, out IStatisticResult<double> result)
         {
             var statisticResult = new StatisticResult();
 
-            statisticResult.Add(new PlacedRow { Design = design, Placement = placement });
+            statisticResult.Add(new PlacedRow { Design = design, DetailPlacement = placement });
 
             result = statisticResult;
         }

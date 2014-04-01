@@ -43,7 +43,7 @@ namespace ChipSynthesys.UnitTests.Custom
 
             var g = new RandomGenerator();
             Design d;
-            PlacementDetail p;
+            PlacementGlobal p;
             g.NextDesignWithPlacement(2, 1, 2, 50, 3, 3,6,6, out d, out p);
 
             IStatistic<double, double> statistic = new CommonStatistic();

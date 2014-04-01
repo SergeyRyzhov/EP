@@ -35,9 +35,9 @@ namespace ChipSynthesys.Common.Generators
             IRandom<int> maxSizeX, IRandom<int> maxSizeY, out Design design);
 
         void NextDesignWithPlacement(int components, int nets, int maxNetSize, int percent, int maxSizeX,
-            int maxSizeY, int width, int height, out Design design, out PlacementDetail placement);
+            int maxSizeY, int width, int height, out Design design, out PlacementGlobal placement);
 
         void NextDesignWithPlacement(int components, int nets, IRandom<int> maxNetSize, int percent,
-            IRandom<int> maxSizeX, IRandom<int> maxSizeY, int width, int height, out Design design, out PlacementDetail placement);
+            IRandom<int> maxSizeX, IRandom<int> maxSizeY, int width, int height, out Design design, out PlacementGlobal placement);
     }
 }

@@ -17,12 +17,12 @@ namespace ChipSynthesys.Common.Generators
             throw new NotImplementedException();
         }
 
-        public void NextDesignWithPlacement(int components, int nets, IRandom<int> maxNetSize, int percent, IRandom<int> maxSizeX, IRandom<int> maxSizeY, int width, int height, out Design design, out PlacementDetail placement)
+        public void NextDesignWithPlacement(int components, int nets, IRandom<int> maxNetSize, int percent, IRandom<int> maxSizeX, IRandom<int> maxSizeY, int width, int height, out Design design, out PlacementGlobal placement)
         {
             throw new NotImplementedException();
         }
 
-        public void NextDesignWithPlacement(int components, int nets, int maxNetSize, int percent, int maxSizeX, int maxSizeY, int width, int height, out Design design, out PlacementDetail placement)
+        public void NextDesignWithPlacement(int components, int nets, int maxNetSize, int percent, int maxSizeX, int maxSizeY, int width, int height, out Design design, out PlacementGlobal placement)
         {
            
             var Parts = new List<int>();
@@ -59,8 +59,8 @@ namespace ChipSynthesys.Common.Generators
             SizeX = w;
             SizeY = h;
             var n = new Net.Pool();
-            design = new Design(new Field(0, 0, SizeX, SizeY), c, n); 
-            placement = new PlacementDetail(design);
+            design = new Design(new Field(0, 0, SizeX, SizeY), c, n);
+            placement = new PlacementGlobal(design);
             var l=0;
             foreach( var com in design.components)
             {

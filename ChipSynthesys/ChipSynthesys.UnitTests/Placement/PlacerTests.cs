@@ -15,7 +15,7 @@ namespace ChipSynthesys.UnitTests.Placement
         public void DetailPlacerImplTest()
         {
             Design design;
-            PlacementDetail placement;
+            PlacementGlobal placement;
             Size size;
             Bitmap bitmap;
             GenerateTestDesign(out design, out placement, out size, out bitmap);
@@ -29,7 +29,7 @@ namespace ChipSynthesys.UnitTests.Placement
         public void DetailPlacerImplOnSquareTest()
         {
             Design design;
-            PlacementDetail placement;
+            PlacementGlobal placement;
             Size size;
             Bitmap bitmap;
             GenerateTestSquareDesign(out design, out placement, out size, out bitmap);
@@ -39,7 +39,7 @@ namespace ChipSynthesys.UnitTests.Placement
             PlaceAndDraw(bitmap, design, placement, size, name, placer);
         }
 
-        private static void PlaceAndDraw(Bitmap bitmap, Design design, PlacementDetail placement, Size size, string name,
+        private static void PlaceAndDraw(Bitmap bitmap, Design design, PlacementGlobal placement, Size size, string name,
             IDetailPlacer placer)
         {
             using (Graphics canvas = Graphics.FromImage(bitmap))
@@ -51,28 +51,28 @@ namespace ChipSynthesys.UnitTests.Placement
 
             bitmap.Save(TestFile(name + " 0. before"));
 
-            var gp = new PlacementGlobal(design);
+            var approximate = new PlacementGlobal(design);
 
             foreach (var component in design.components)
             {
-                gp.x[component] = placement.x[component];
-                gp.y[component] = placement.y[component];
+                approximate.x[component] = placement.x[component];
+                approximate.y[component] = placement.y[component];
             }
-
-            placer.Place(design, gp, out placement);
+            PlacementDetail detail;
+            placer.Place(design, approximate, out detail);
             using (Graphics canvas = Graphics.FromImage(bitmap))
             {
                 canvas.Clear(Color.FromArgb(255, 255, 255, 255));
                 IDrawer drawer = new DrawerImpl();
 
-                drawer.Draw(design, placement, size, canvas);
+                drawer.Draw(design, detail, size, canvas);
             }
 
             bitmap.Save(TestFile(name + " 1. after"));
         }
 
 
-        private static void GenerateTestDesign(out Design design, out PlacementDetail placement, out Size size, out Bitmap bitmap)
+        private static void GenerateTestDesign(out Design design, out PlacementGlobal placement, out Size size, out Bitmap bitmap)
         {
             IGenerator generator = new RandomGenerator();
 
@@ -85,7 +85,7 @@ namespace ChipSynthesys.UnitTests.Placement
             const int my = maxy / 2;
 
             const double volume = n * mx * my * (100.0 / p);
-            int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume)));
+            int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume)))/2;
 
             generator.NextDesignWithPlacement(n, 500, 4, p, maxx, maxy, side, side, out design, out placement);
 
@@ -95,11 +95,11 @@ namespace ChipSynthesys.UnitTests.Placement
             bitmap = new Bitmap(size.Width, size.Height);
         }
 
-        private static void GenerateTestSquareDesign(out Design design, out PlacementDetail placement, out Size size, out Bitmap bitmap)
+        private static void GenerateTestSquareDesign(out Design design, out PlacementGlobal placement, out Size size, out Bitmap bitmap)
         {
             IGenerator generator = new SquareGenerator();
 
-            const int n = 15;
+            const int n = 150;
             const int maxx = 4;
             const int maxy = 6;
             const int p = 70;

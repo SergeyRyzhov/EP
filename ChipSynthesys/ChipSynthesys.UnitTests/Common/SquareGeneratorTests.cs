@@ -15,7 +15,7 @@ namespace ChipSynthesys.UnitTests.Common
         {
             IGenerator generator = new SquareGenerator();
             
-            const int n = 15;
+            const int n = 150;
             const int maxx = 4;
             const int maxy = 3;
             const int p = 70;
@@ -28,7 +28,7 @@ namespace ChipSynthesys.UnitTests.Common
             side = Math.Max(n * maxx, n * maxy);
            
             Design design;
-            PlacementDetail placement;
+            PlacementGlobal placement;
 
             generator.NextDesignWithPlacement(n, 15, 4, p, maxx, maxy, side, side, out design, out placement);
 
@@ -36,26 +36,11 @@ namespace ChipSynthesys.UnitTests.Common
             int imageSide = side * scale + 2 * scale; //2 для переферии
             var size = new Size(imageSide, imageSide);
             var bitmap = new Bitmap(size.Width, size.Height);
-            /*
-            foreach (var item in design.components)
-            {
-                placement.placed[item] = false;
-            }
-            foreach (var item in design.components)
-            {
-                var name = string.Format("component {0}.png", item.id);
-                placement.placed[item] = true;
-                DrawDisign(design, placement, size, bitmap, name);
-                placement.placed[item] = false;
-            }
-            foreach (var item in design.components)
-            {
-                placement.placed[item] = true;
-            }*/
+            
             DrawDisign(design, placement, size, bitmap, "Test_square_gen.png");
         }
 
-        private void DrawDisign(Design design, PlacementDetail placement, Size size, Bitmap bitmap, string fileName)
+        private void DrawDisign(Design design, PlacementGlobal placement, Size size, Bitmap bitmap, string fileName)
         {
             using (Graphics canvas = Graphics.FromImage(bitmap))
             {

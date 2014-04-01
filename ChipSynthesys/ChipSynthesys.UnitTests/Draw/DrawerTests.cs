@@ -14,7 +14,7 @@ namespace ChipSynthesys.UnitTests.Draw
         public void BitmapDrawingTest()
         {
             Design design;
-            PlacementDetail placement;
+            PlacementGlobal placement;
             Size size;
             Bitmap bitmap;
             GenerateTestDesign(out design, out placement, out size, out bitmap);
@@ -33,7 +33,7 @@ namespace ChipSynthesys.UnitTests.Draw
         public void BitmapDrawingNetTest()
         {
             Design design;
-            PlacementDetail placement;
+            PlacementGlobal placement;
             Size size;
             Bitmap bitmap;
             GenerateTestDesign(out design, out placement, out size, out bitmap);
@@ -48,7 +48,7 @@ namespace ChipSynthesys.UnitTests.Draw
             bitmap.Save(TestFile("BitmapDrawingNetTest"));
         }
 
-        private static void GenerateTestDesign(out Design design, out PlacementDetail placement, out Size size, out Bitmap bitmap)
+        private static void GenerateTestDesign(out Design design, out PlacementGlobal placement, out Size size, out Bitmap bitmap)
         {
             IGenerator generator = new RandomGenerator();
 
