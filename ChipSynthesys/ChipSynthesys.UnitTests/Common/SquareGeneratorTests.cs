@@ -15,7 +15,7 @@ namespace ChipSynthesys.UnitTests.Common
         {
             IGenerator generator = new SquareGenerator();
             
-            const int n = 20;
+            const int n = 25;
             const int maxx = 3;
             const int maxy = 3;
             const int p = 70;

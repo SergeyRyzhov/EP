@@ -49,7 +49,15 @@ namespace ChipSynthesys.Common.Generators
                     num = num + 1;
                     if (components == num)
                         break;
-                }      
+                }
+            if (sum != SizeX * SizeY)
+            {
+                Parts.Clear();
+                Coordinate.Clear();
+                X_Coord.Clear();
+                Y_Coord.Clear();
+                NextDesignWithPlacement(components, nets, maxNetSize, percent, maxSizeX, maxSizeY, width, height, out design, out placement);
+            }
             sum = ((100 - percent) * sum) / percent;
             Add_Square(SizeX, SizeY, sum, out SizeX,out SizeY);            
             var n = new Net.Pool();
