@@ -49,9 +49,29 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ChipSynthesys.Statistic\Statistic.csproj">
+      <Project>{e7cb46c5-95f5-4037-b853-fb5847d5c737}</Project>
+      <Name>Statistic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ChipSynthesys.UnitTests\UnitTests.csproj">
+      <Project>{cd9a6231-527f-4fe8-82c2-7344f23a860d}</Project>
+      <Name>UnitTests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ChipSynthesys\Common.csproj">
       <Project>{0019C9DD-A444-41C9-A4FA-1970F25C5141}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Design.Drawing\Draw.csproj">
+      <Project>{4d455b69-7f69-4661-90e9-d9aed4f7c27c}</Project>
+      <Name>Draw</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Design.Viewer\View.csproj">
+      <Project>{e27fdf24-abfb-47bb-b824-f6ca0cd9eaa8}</Project>
+      <Name>View</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DetailPlacer.Algorithm\DetailPlacer.Algorithm.csproj">
+      <Project>{351f8c6c-ac7c-4196-8bcc-ecd67ee71043}</Project>
+      <Name>DetailPlacer.Algorithm</Name>
     </ProjectReference>
     <ProjectReference Include="..\PlaceModel\PlaceModel.csproj">
       <Project>{B772B461-D744-48CF-9578-754175A549D1}</Project>
