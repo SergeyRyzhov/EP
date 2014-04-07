@@ -8,6 +8,10 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
     {
         private readonly int m_maxCount;
 
+        public PositionSearcher() : this(16)
+        {
+        }
+
         public PositionSearcher(int maxCount)
         {
             m_maxCount = maxCount;

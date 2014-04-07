@@ -125,7 +125,7 @@ namespace DetailPlacer.Algorithm
 
     public class DetailPlacerImpl : DetailPlacerBase
     {
-        public DetailPlacerImpl() : base(new CompontsOrderer.Impl.CompontsOrderer(), new PositionSearcher.Impl.PositionSearcher(16), new PositionsSorter(new NetsPositionComparer()))
+        public DetailPlacerImpl() : base(new CompontsOrderer.Impl.CompontsOrderer(), new PositionSearcher.Impl.PositionSearcher(), new PositionsSorter(new NetsPositionComparer()))
         {
         }
 
