@@ -24,7 +24,7 @@ namespace ChipSynthesys.Common.Classes
             }
         }
 
-        public new static ChipTask Load(string fileName)
+        public new static ChipTaskResult Load(string fileName)
         {
             using (var file = File.Open(fileName, FileMode.Open))
             {

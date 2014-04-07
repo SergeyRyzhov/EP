@@ -6,44 +6,56 @@ using PlaceModel;
 namespace ChipSynthesys.UnitTests.PlaceModel
 {
     [TestClass]
-    public class StorageTests
+    public class StorageTests : TestsBase
     {
         [TestMethod]
-        public void StoreLoadGlobalPlacement()
+        public void SaveAndLoadChipTask()
         {
-            {
-                var d = GetDesign();
-                var gp = new PlacementGlobal(d);
+            var path = TestFilePath("SaveAndLoadChipTask.bin");
 
-                Component component = d.components.First();
-                gp.x[component] = 1.0;
-                gp.y[component] = 2.0;
-                var task = new ChipTask(d, gp);
-                task.Save("test.bin");
-            }
-            {
-                var loadedTask = ChipTask.Load("test.bin");
+            var design = TestDesign();
+            var placementGlobal = new PlacementGlobal(design);
 
-                var loadedComponent = loadedTask.Design.components.First();
+            Component component = design.components.First();
+            placementGlobal.x[component] = 1.0;
+            placementGlobal.y[component] = 2.0;
+            var task = new ChipTask(design, placementGlobal);
+            task.Save(path);
 
-                Assert.AreEqual(loadedTask.Approximate.x[loadedComponent], 1.0);
-                Assert.AreEqual(loadedTask.Approximate.y[loadedComponent], 2.0);
-            }
-
+            var loadedTask = ChipTask.Load(path);
+            var loadedComponent = loadedTask.Design.components.First();
+            Assert.AreEqual(loadedTask.Approximate.x[loadedComponent], 1.0);
+            Assert.AreEqual(loadedTask.Approximate.y[loadedComponent], 2.0);
         }
 
-        private static Design GetDesign()
+
+        [TestMethod]
+        public void SaveAndLoadChipTaskResult()
         {
-            var p = new Component.Pool();
-            p.Add(3, 3);
-            p.Add(3, 3);
-            p.Add(5, 3);
-            p.Add(2, 3);
-            p.Add(3, 2);
-            p.Add(2, 2);
-            var n = new Net.Pool();
-            var design = new Design(new Field(0, 0, 20, 20), p, n);
-            return design;
+            var path = TestFilePath("SaveAndLoadChipTaskResult.bin");
+
+            var design = TestDesign();
+            var placementGlobal = new PlacementGlobal(design);
+            var placementDetail = new PlacementDetail(design);
+
+            Component component = design.components.First();
+            placementGlobal.x[component] = 1.0;
+            placementGlobal.y[component] = 2.0;
+
+            placementDetail.x[component] = 2;
+            placementDetail.y[component] = 1;
+
+
+            var task = new ChipTaskResult(design, placementGlobal, placementDetail);
+            task.Save(path);
+
+            var loadedTask = ChipTaskResult.Load(path);
+            var loadedComponent = loadedTask.Design.components.First();
+            Assert.AreEqual(loadedTask.Approximate.x[loadedComponent], 1.0);
+            Assert.AreEqual(loadedTask.Approximate.y[loadedComponent], 2.0);
+
+            Assert.AreEqual(loadedTask.Detail.x[loadedComponent], 2);
+            Assert.AreEqual(loadedTask.Detail.y[loadedComponent], 1);
         }
     }
 }
