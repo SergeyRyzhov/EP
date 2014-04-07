@@ -1,6 +1,7 @@
-﻿using PlaceModel;
+﻿using DetailPlacer.Algorithm.PositionSorter.PositionComparer;
+using PlaceModel;
 
-namespace DetailPlacer.Algorithm
+namespace DetailPlacer.Algorithm.PositionSorter.Impl
 {
     public class PositionsSorter : IPositionsSorter
     {

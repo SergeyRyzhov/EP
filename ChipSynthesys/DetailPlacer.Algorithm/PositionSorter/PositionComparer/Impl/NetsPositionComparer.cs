@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using PlaceModel;
 
-namespace DetailPlacer.Algorithm
+namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
 {
     public class NetsPositionComparer : IPositionComparer
     {

@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DetailPlacer.Algorithm.CompontsOrderer;
+using DetailPlacer.Algorithm.PositionSearcher;
+using DetailPlacer.Algorithm.PositionSorter;
+using DetailPlacer.Algorithm.PositionSorter.Impl;
+using DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl;
 using PlaceModel;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,7 +125,7 @@ namespace DetailPlacer.Algorithm
 
     public class DetailPlacerImpl : DetailPlacerBase
     {
-        public DetailPlacerImpl() : base(new CompontsOrderer(), new PositionSearcher(16), new PositionsSorter(new NetsPositionComparer()))
+        public DetailPlacerImpl() : base(new CompontsOrderer.Impl.CompontsOrderer(), new PositionSearcher.Impl.PositionSearcher(16), new PositionsSorter(new NetsPositionComparer()))
         {
         }
 

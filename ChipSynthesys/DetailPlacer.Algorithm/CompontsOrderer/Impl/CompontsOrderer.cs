@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using PlaceModel;
 
-
-
-namespace DetailPlacer.Algorithm
+namespace DetailPlacer.Algorithm.CompontsOrderer.Impl
 {
     public class CompontsOrderer : ICompontsOrderer
     {

@@ -1,4 +1,5 @@
 ﻿using DetailPlacer.Algorithm;
+using DetailPlacer.Algorithm.CompontsOrderer.Impl;
 using PlaceModel;
 
 

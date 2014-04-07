@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using PlaceModel;
 
-namespace DetailPlacer.Algorithm
+namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
     public class PositionSearcher : IPositionSearcher
     {
