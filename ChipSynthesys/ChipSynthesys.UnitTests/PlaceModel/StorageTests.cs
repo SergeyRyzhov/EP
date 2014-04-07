@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using ChipSynthesys.Common.Classes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlaceModel;
 
@@ -11,27 +8,31 @@ namespace ChipSynthesys.UnitTests.PlaceModel
     [TestClass]
     public class StorageTests
     {
-        [Ignore]
         [TestMethod]
         public void StoreLoadGlobalPlacement()
         {
-            var d = GetDesign();
-            var gp = new PlacementDetail(d);
+            {
+                var d = GetDesign();
+                var gp = new PlacementGlobal(d);
 
-            Component component = d.components.First();
-            gp.x[component] = 1;
-            gp.y[component] = 2;
+                Component component = d.components.First();
+                gp.x[component] = 1.0;
+                gp.y[component] = 2.0;
+                var task = new ChipTask(d, gp);
+                task.Save("test.bin");
+            }
+            {
+                var loadedTask = ChipTask.Load("test.bin");
 
-            const string testXml = "GlobalPlacement_test.xml";
-            //gp.Save(testXml);
+                var loadedComponent = loadedTask.Design.components.First();
 
-            //var copy = PlacementGlobal.Load(testXml);
+                Assert.AreEqual(loadedTask.Approximate.x[loadedComponent], 1.0);
+                Assert.AreEqual(loadedTask.Approximate.y[loadedComponent], 2.0);
+            }
 
-            //Assert.AreEqual(copy.x[component], 1);
-            //Assert.AreEqual(copy.y[component], 2);
         }
 
-        private Design GetDesign()
+        private static Design GetDesign()
         {
             var p = new Component.Pool();
             p.Add(3, 3);

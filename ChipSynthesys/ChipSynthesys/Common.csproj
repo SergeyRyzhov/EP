@@ -42,9 +42,13 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ChipTask.cs" />
+    <Compile Include="Classes\ChipTaskResult.cs" />
+    <Compile Include="Classes\StorageHelper.cs" />
     <Compile Include="Generators\IGenerator.cs" />
     <Compile Include="Randoms\IRandom.cs" />
     <Compile Include="Generators\RandomGenerator.cs" />
