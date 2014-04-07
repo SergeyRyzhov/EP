@@ -18,6 +18,10 @@ namespace ChipSynthesys.Common.Classes
             Approximate = approximate;
         }
 
+        public int Width { get; set; }
+
+        public int Height { get; set; }
+
         public Design Design { get; internal set; }
 
         public PlacementGlobal Approximate { get; internal set; }
