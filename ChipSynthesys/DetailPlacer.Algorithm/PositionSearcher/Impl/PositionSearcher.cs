@@ -6,9 +6,14 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
     public class PositionSearcher : IPositionSearcher
     {
+        public override string ToString()
+        {
+            return "Линейный перебор доступных позиций";
+        }
+
         private readonly int m_maxCount;
 
-        public PositionSearcher() : this(16)
+        public PositionSearcher() : this(64)
         {
         }
 

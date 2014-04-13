@@ -6,6 +6,11 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
 {
     public class NetsPositionComparer : IPositionComparer
     {
+        public override string ToString()
+        {
+            return "Сравнение позиций согласно суммарной Манхеттенской метрики";
+        }
+
         public bool Better(Design design, PlacementDetail placement, Component current, int firstX, int firstY, int secondX,
             int secondY)
         {

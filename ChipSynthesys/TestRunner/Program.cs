@@ -25,7 +25,7 @@ namespace TestRunner
         {
             using (Graphics canvas = Graphics.FromImage(bitmap))
             {
-                IDrawer drawer = new DrawerImpl();
+                IDrawer drawer = new DrawerImplNets();
                 canvas.Clear(Color.Empty);
                 drawer.Draw(design, resultPlacement, size, canvas);
             }
@@ -60,8 +60,8 @@ namespace TestRunner
             }
         }
 
-        private static void SaveTestInfo(string path, int testNum, Type compOrder, Type posComparer, Type posSearcher,
-            Type posSorter)
+        private static void SaveTestInfo(string path, int testNum, object compOrder, object posComparer, object posSearcher,
+            object posSorter)
         {
             using (StreamWriter sw = File.CreateText(path + "testInfo " + testNum + ".txt"))
             {
@@ -159,8 +159,8 @@ namespace TestRunner
                                                 (new Object[] {posComparer}) as IPositionsSorter;
                                             var placer = new DetailPlacerImpl(compOrder, posSearcher, posSorter);
                                             testCount++;
-                                            SaveTestInfo(resultDerectory, testCount, comOrderType, posCompType,
-                                                posSerchType, posSortType);
+                                            SaveTestInfo(resultDerectory, testCount, compOrder, posSearcher,
+                                                posComparer, posSorter);
 
                                             for (int i = 0; i < design.Length; i++)
                                             {

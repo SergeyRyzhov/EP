@@ -5,6 +5,11 @@ namespace DetailPlacer.Algorithm.PositionSorter.Impl
 {
     public class PositionsSorter : IPositionsSorter
     {
+        public override string ToString()
+        {
+            return "Сортировка пузырьком всех позиций";
+        }
+
         private readonly IPositionComparer m_positionComparer;
 
         public PositionsSorter(IPositionComparer positionComparer)

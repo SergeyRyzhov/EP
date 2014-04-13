@@ -6,6 +6,11 @@ namespace DetailPlacer.Algorithm.CompontsOrderer.Impl
 {
     public class CompontsOrderer : ICompontsOrderer
     {
+        public override string ToString()
+        {
+            return "Упорядочение компонент согласно раскраске графа";
+        }
+
         public void SortComponents(Design design, PlacementGlobal approximate, PlacementDetail result, Component[] unplacedComponents, ref int[] perm)
         {            
             var n = unplacedComponents.Count();
