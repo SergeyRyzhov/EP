@@ -30,9 +30,12 @@ namespace TestRunner
                 drawer.Draw(design, resultPlacement, size, canvas);
             }
 
-            bitmap.Save(string.Format("{0}design{2}.exp{1}.png", path, testNum, designNum));
+            bitmap.Save(string.Format("{0}Result for design {2} on exp {1}.png", path, testNum, designNum));
 
-            using (StreamWriter sw = File.CreateText(path + "placememtStatistics " + testNum + " " + designNum + ".txt")
+            using (
+                StreamWriter sw =
+                    File.CreateText(string.Format("{0}PlacememtStatistics on design {2} in {1} test.txt", path, testNum,
+                        designNum))
                 )
             {
                 sw.WriteLine(placementStatistic.ToString());
@@ -49,21 +52,22 @@ namespace TestRunner
                 drawer.Draw(design, resultPlacement, size, canvas);
             }
 
-            bitmap.Save(string.Format("{0}design{2}.exp{1}.png", path, testNum, designNum));
+            bitmap.Save(string.Format("{0}Result for design {2} on exp {1}.png", path, testNum, designNum));
         }
 
         private static void SaveDesignsInfo(string path, int designNum, IStatisticResult<double> designStatistic)
         {
-            using (StreamWriter sw = File.CreateText(path + "designStatistics " + designNum + ".txt"))
+            using (StreamWriter sw = File.CreateText(string.Format("{0}Design {1} Statistics.txt", path, designNum)))
             {
                 sw.WriteLine(designStatistic.ToString());
             }
         }
 
-        private static void SaveTestInfo(string path, int testNum, object compOrder, object posComparer, object posSearcher,
+        private static void SaveTestInfo(string path, int testNum, object compOrder, object posComparer,
+            object posSearcher,
             object posSorter)
         {
-            using (StreamWriter sw = File.CreateText(path + "testInfo " + testNum + ".txt"))
+            using (StreamWriter sw = File.CreateText(string.Format("{0}Heuristics {1}.txt", path, testNum)))
             {
                 sw.WriteLine(compOrder.ToString());
                 sw.WriteLine(posComparer.ToString());
@@ -80,22 +84,23 @@ namespace TestRunner
             Bitmap[] bitmaps;
 
             //todo создаём эту папку в папке на которую натравили либо если указан (то параметр номер х) лучше добавить файл конфигурации этой консольки
-            const string resultDerectory = @"D:\TestResults\"; //args[?]
+            string resultDerectory = args.Length > 0 ? args[0] + @"\Tests\" : @"D:\TestResults\"; //args[?]
             Directory.CreateDirectory(resultDerectory);
 
-            ReadInput(args, out design, out approximate, out sizes, out bitmaps);
-
-            for (int i = 0; i < design.Length; i++)
+            if (ReadInput(args, out design, out approximate, out sizes, out bitmaps))
             {
-                Design d = design[i];
-                PlacementGlobal a1 = approximate[i];
-                var t = new ChipTask(d, a1)
+                for (int i = 0; i < design.Length; i++)
                 {
-                    Height = 10,
-                    Width = 10
-                };
+                    Design d = design[i];
+                    PlacementGlobal a1 = approximate[i];
+                    var t = new ChipTask(d, a1)
+                    {
+                        Height = 30,
+                        Width = 30
+                    };
 
-                t.Save(string.Format("Small {0}.bin", i));
+                    t.Save(string.Format("Small {0}.bin", i));
+                }
             }
 
             Type typeToReflect = typeof (DetailPlacerBase);
@@ -196,20 +201,28 @@ namespace TestRunner
                 }
             }
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
 
-        private static void ReadInput(string[] args, out Design[] design, out PlacementGlobal[] approximate,
+        private static bool ReadInput(string[] args, out Design[] design, out PlacementGlobal[] approximate,
             out Size[] sizes, out Bitmap[] bitmaps)
         {
             if (args.Length == 0)
             {
                 GenerateTestData(out design, out approximate, out sizes, out bitmaps);
+                return true;
             }
             else
             {
                 LoadFromDirectory(args[0], out design, out approximate, out sizes, out bitmaps);
             }
+
+            if (design.Length == 0)
+            {
+                GenerateTestData(out design, out approximate, out sizes, out bitmaps);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -252,12 +265,14 @@ namespace TestRunner
         private static void GenerateTestData(out Design[] design, out PlacementGlobal[] approximate, out Size[] sizes,
             out Bitmap[] bitmaps)
         {
-            design = new Design[1];
-            approximate = new PlacementGlobal[1];
-            sizes = new Size[1];
-            bitmaps = new Bitmap[1];
-
-            GenerateTestDesign(out design[0], out approximate[0], out sizes[0], out bitmaps[0]);
+            design = new Design[3];
+            approximate = new PlacementGlobal[3];
+            sizes = new Size[3];
+            bitmaps = new Bitmap[3];
+            for (int i = 0; i < design.Length; i++)
+            {
+                GenerateTestDesign(out design[i], out approximate[i], out sizes[i], out bitmaps[i]);
+            }
         }
 
         private static void GenerateTestDesign(out Design design, out PlacementGlobal placement, out Size size,
@@ -265,16 +280,16 @@ namespace TestRunner
         {
             IGenerator generator = new RandomGenerator();
 
-            const int n = 10;
-            const int maxx = 8;
-            const int maxy = 8;
+            const int n = 150;
+            const int maxx = 16;
+            const int maxy = 16;
             const int p = 70;
 
             const int mx = maxx/2; //мат.ожидание
             const int my = maxy/2;
 
             const double volume = n*mx*my*(100.0/p);
-            int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume)));
+            int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume)))/3;
 
             generator.NextDesignWithPlacement(n, 500, 4, p, maxx, maxy, side, side, out design, out placement);
 
