@@ -23,6 +23,7 @@ namespace ChipSynthesys.Statistic.Statistics
             var statisticResult = new StatisticResult();
 
             statisticResult.Add(new PlacedRow { Design = design, GlobalPlacement = placement });
+            statisticResult.Add(new ManhattanMetrikRow { Design = design, GlobalPlacement = placement });
 
             result = statisticResult;
         }
@@ -32,6 +33,7 @@ namespace ChipSynthesys.Statistic.Statistics
             var statisticResult = new StatisticResult();
 
             statisticResult.Add(new PlacedRow { Design = design, DetailPlacement = placement });
+            statisticResult.Add(new ManhattanMetrikRow { Design = design, DetailPlacement = placement });
 
             result = statisticResult;
         }

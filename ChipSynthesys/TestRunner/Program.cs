@@ -25,17 +25,31 @@ namespace TestRunner
         {
             using (Graphics canvas = Graphics.FromImage(bitmap))
             {
-                IDrawer drawer = new DrawerImplNets();
+                IDrawer drawer = new DrawerImpl();
+                canvas.Clear(Color.Empty);
                 drawer.Draw(design, resultPlacement, size, canvas);
             }
 
-            bitmap.Save(path + testNum + " " + designNum + ".png");
+            bitmap.Save(string.Format("{0}design{2}.exp{1}.png", path, testNum, designNum));
 
             using (StreamWriter sw = File.CreateText(path + "placememtStatistics " + testNum + " " + designNum + ".txt")
                 )
             {
                 sw.WriteLine(placementStatistic.ToString());
             }
+        }
+
+        private static void SaveTestResults(string path, int designNum, int testNum, Design design,
+            PlacementGlobal resultPlacement, Size size, Bitmap bitmap)
+        {
+            using (Graphics canvas = Graphics.FromImage(bitmap))
+            {
+                IDrawer drawer = new DrawerImpl();
+                canvas.Clear(Color.Empty);
+                drawer.Draw(design, resultPlacement, size, canvas);
+            }
+
+            bitmap.Save(string.Format("{0}design{2}.exp{1}.png", path, testNum, designNum));
         }
 
         private static void SaveDesignsInfo(string path, int designNum, IStatisticResult<double> designStatistic)
@@ -108,6 +122,12 @@ namespace TestRunner
                 SaveDesignsInfo(resultDerectory, i + 1, designStatistics);
             }
 
+            for (int i = 0; i < design.Length; i++)
+            {
+                SaveTestResults(resultDerectory, i + 1, 0, design[i], approximate[i], sizes[i], bitmaps[i]);
+            }
+
+
             foreach (Type comOrderType in componentsOrders)
             {
                 ConstructorInfo comOrder = comOrderType.GetConstructor(masType);
@@ -146,7 +166,23 @@ namespace TestRunner
                                             {
                                                 Design d = design[i];
                                                 PlacementDetail placeRes;
-                                                placer.Place(d, approximate[i], out placeRes);
+
+                                                //todo исправить другие части чтобы всё рисовали здесь 
+                                                //формирую пустое приближённое решение
+                                                var tempAppr = approximate[i];
+                                                foreach (var c in d.components)
+                                                {
+                                                    tempAppr.placed[c] = false;
+                                                }
+
+                                                //placer.Place(d, approximate[i], out placeRes);
+                                                placer.Place(d, tempAppr, out placeRes);
+
+                                                foreach (var c in d.components)
+                                                {
+                                                    tempAppr.placed[c] = true;
+                                                }
+
                                                 statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
                                                 SaveTestResults(resultDerectory, i + 1, testCount, d, placeRes,
                                                     placemetStatistics, sizes[i], bitmaps[i]);
