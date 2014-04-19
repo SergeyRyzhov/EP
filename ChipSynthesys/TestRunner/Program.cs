@@ -107,13 +107,13 @@ namespace TestRunner
             Assembly a = Assembly.GetAssembly(typeToReflect);
             Type[] existingTypes = a.GetTypes();
             Type[] componentsOrders = existingTypes.Where(t =>
-                (typeof (ICompontsOrderer).IsAssignableFrom(t)) && (!t.IsInterface)).ToArray();
+                (typeof (ICompontsOrderer).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract)).ToArray();
             Type[] positionComparers = existingTypes.Where(t =>
-                (typeof (IPositionComparer).IsAssignableFrom(t)) && (!t.IsInterface)).ToArray();
+                (typeof(IPositionComparer).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract)).ToArray();
             Type[] positionSearchers = existingTypes.Where(t =>
-                (typeof (IPositionSearcher).IsAssignableFrom(t)) && (!t.IsInterface)).ToArray();
+                (typeof(IPositionSearcher).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract)).ToArray();
             Type[] positionSorters = existingTypes.Where(t =>
-                (typeof (IPositionsSorter).IsAssignableFrom(t)) && (!t.IsInterface)).ToArray();
+                (typeof(IPositionsSorter).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract)).ToArray();
 
             var masType = new Type[] {};
             var statistic = new CommonStatistic();
