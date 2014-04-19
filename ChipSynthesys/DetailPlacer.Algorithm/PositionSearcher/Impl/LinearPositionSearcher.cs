@@ -1,4 +1,5 @@
 using System;
+using PlaceModel;
 
 namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
@@ -9,15 +10,8 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
             return "Линейный перебор доступных позиций";
         }
 
-        public LinearPositionSearcher() : base(64)
-        {
-        }
-
-        public LinearPositionSearcher(int maxCount) : base(maxCount)
-        {
-        }
-
-        protected override bool DetourPositions(int n, int m, int[,] mask, Func<int, int, bool> addIfTheLimitIsNotExceeded)
+        protected override bool DetourPositions(Design design, PlacementGlobal approximate, PlacementDetail result,
+            Component current, int n, int m, int[,] mask, Func<int, int, bool> addIfTheLimitIsNotExceeded)
         {
             for (int i = 0; i < n; i++)
             {
@@ -33,6 +27,16 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
                 }
             }
             return false;
+        }
+
+        public LinearPositionSearcher()
+            : base(64)
+        {
+        }
+
+        public LinearPositionSearcher(int maxCount)
+            : base(maxCount)
+        {
         }
     }
 }
