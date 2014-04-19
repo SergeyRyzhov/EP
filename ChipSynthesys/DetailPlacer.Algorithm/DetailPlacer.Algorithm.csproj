@@ -39,7 +39,7 @@
     <Compile Include="GlobalPlacerBase.cs" />
     <Compile Include="CompontsOrderer\ICompontsOrderer.cs" />
     <Compile Include="PositionSearcher\Impl\PositionSearcherBase.cs" />
-    <Compile Include="PositionSearcher\Impl\DivergingSpiralPositionSearcher.cs" />
+    <Compile Include="PositionSearcher\Impl\SpiralPositionSearcher.cs" />
     <Compile Include="PositionSorter\PositionComparer\IPositionComparer.cs" />
     <Compile Include="PositionSearcher\IPositionSearcher.cs" />
     <Compile Include="PositionSorter\IPositionsSorter.cs" />

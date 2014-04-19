@@ -5,8 +5,10 @@ using PlaceModel;
 
 namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
-    public class DivergingSpiralPositionSearcher : PositionSearcherBase
+    public class SpiralPositionSearcher : PositionSearcherBase
     {
+        private readonly bool m_twisting;
+
         protected class Point
         {
             public Point(int x, int y)
@@ -17,10 +19,16 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 
             public int X;
             public int Y;
+
+            public override string ToString()
+            {
+                return string.Format("({0};{1})", X, Y);
+            }
         }
         public override string ToString()
         {
-            return "Перебор доступных позиций по спирали от краёв области";
+            return string.Format("Перебор доступных позиций по спирали от {0}",
+                m_twisting ? "краёв области" : "текущих координат");
         }
 
         private static IEnumerable<Point> DivergingSpiral(int h, int w)
@@ -52,6 +60,37 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
             }
         }
 
+        private static IEnumerable<Point> UnwindingSpiral(int h, int w, int sx, int sy)
+        {
+            int maxWSide = Math.Max(w - sx - 1, sx);
+            int maxHSide = Math.Max(h - sy - 1, sy);
+            int maxSide = Math.Max(maxWSide, maxHSide);
+
+            for (int side = 1; side <= maxSide; side++)
+            {
+                for (int i = sx - side; i <= sx + side - 1; i++)
+                {
+                    if(i >= 0 && sy - side >= 0)
+                        yield return new Point(i, sy - side);
+                }
+                for (int j = sy - side; j <= sy + side - 1; j++)
+                {
+                    if (sx + side >= 0 && j >= 0)
+                        yield return new Point(sx + side, j);
+                }
+                for (int i = sx + side; i >= sx - side + 1; i--)
+                {
+                    if (i >= 0 && sy+side >= 0)
+                        yield return new Point(i, sy + side);
+                }
+                for (int j = sy + side; j >= sy - side + 1; j--)
+                {
+                    if (sx - side >= 0 && j >= 0)
+                    yield return new Point(sx - side, j);
+                }
+            }
+        }
+
         protected override bool DetourPositions(Design design, PlacementGlobal approximate, PlacementDetail result,
             Component current, int n, int m, int[,] mask, Func<int, int, bool> addIfTheLimitIsNotExceeded)
         {
@@ -76,17 +115,27 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
                 return false;
             });
 
-            return DivergingSpiral(m, n).Any(point => checker(point.X, point.Y));
+            return m_twisting
+                ? DivergingSpiral(m, n).Any(point => checker(point.X, point.Y))
+                : UnwindingSpiral(m, n, cx, cy).Any(point => checker(point.X, point.Y));
         }
 
-        public DivergingSpiralPositionSearcher()
-            : base(64)
+        public SpiralPositionSearcher()
+            : this(64, false)
         {
         }
 
-        public DivergingSpiralPositionSearcher(int maxCount)
+        public SpiralPositionSearcher(int maxCount)
+            : this(maxCount, false)
+        {
+        }
+
+        public SpiralPositionSearcher(int maxCount, bool enableTwisting)
             : base(maxCount)
         {
+            m_twisting = enableTwisting;
         }
+
+
     }
 }

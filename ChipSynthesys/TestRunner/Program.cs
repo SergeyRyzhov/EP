@@ -291,7 +291,7 @@ namespace TestRunner
             const double volume = n*mx*my*(100.0/p);
             int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume)))/3;
 
-            generator.NextDesignWithPlacement(n, 500, 4, p, maxx, maxy, side, side, out design, out placement);
+            generator.NextDesignWithPlacement(n, 250, 4, p, maxx, maxy, side, side, out design, out placement);
 
             const int scale = 20; //масштаб здесь, внутри должен быть рассчитан по исходным данным
             int imageSide = side*scale + 2*scale; //2 для переферии
