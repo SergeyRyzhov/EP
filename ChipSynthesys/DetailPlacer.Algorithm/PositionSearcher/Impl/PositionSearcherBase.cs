@@ -100,7 +100,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
                         }
                     }
                 }
-                else
+                /*else
                 {
                     var cx = (int) Math.Round(approximate.x[component]);
                     var cy = (int) Math.Round(approximate.y[component]);
@@ -115,7 +115,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
                             mask[cx + l, cy + k] = 1;
                         }
                     }
-                }
+                }*/
             }
             return mask;
         }
