@@ -11,7 +11,7 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
             return "Сравнение позиций согласно суммарной Манхеттенской метрики";
         }
 
-        public bool Better(Design design, PlacementDetail placement, Component current, int firstX, int firstY, int secondX,
+        public bool Better(Design design, PlacementGlobal approximate,  PlacementDetail placement, Component current, int firstX, int firstY, int secondX,
             int secondY)
         {
             int firstMark = MarkPosition(design, placement, current, firstX, firstY);

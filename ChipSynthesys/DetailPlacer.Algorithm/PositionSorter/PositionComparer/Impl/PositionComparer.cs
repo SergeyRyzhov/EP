@@ -9,7 +9,7 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
             return "Жадный выбор позиций со строго меньшими или большим координатами";
         }
 
-        public bool Better(Design design, PlacementDetail placement, Component current, int firstX, int firstY, int secondX, int secondY)
+        public bool Better(Design design, PlacementGlobal approximate, PlacementDetail placement, Component current, int firstX, int firstY, int secondX, int secondY)
         {
             if (firstX < secondX)
                 if(firstY < secondY)
