@@ -40,6 +40,23 @@ namespace TestRunner
             {
                 sw.WriteLine(placementStatistic.ToString());
             }
+
+            var global = new PlacementGlobal(design);
+            foreach (Component c in design.components)
+            {
+                global.x[c] = resultPlacement.x[c];
+                global.y[c] = resultPlacement.y[c];
+                global.placed[c] = resultPlacement.placed[c];
+            }
+
+            var t = new ChipTask(design, global)
+            {
+                Height = 30,
+                Width = 30
+            };
+
+            t.Save(string.Format("{0}PlacememtResult on design {2} in {1} test.bin", path, testNum,
+                        designNum));
         }
 
         private static void SaveTestResults(string path, int designNum, int testNum, Design design,
@@ -47,7 +64,7 @@ namespace TestRunner
         {
             using (Graphics canvas = Graphics.FromImage(bitmap))
             {
-                IDrawer drawer = new DrawerImpl();
+                IDrawer drawer = new DrawerImplNets();
                 canvas.Clear(Color.Empty);
                 drawer.Draw(design, resultPlacement, size, canvas);
             }
@@ -291,8 +308,23 @@ namespace TestRunner
             const double volume = n*mx*my*(100.0/p);
             int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume)))/3;
 
+            double r = 2.0;
+            int a = 0;
             generator.NextDesignWithPlacement(n, 250, 4, p, maxx, maxy, side, side, out design, out placement);
 
+            double cx = design.field.cellsx/2.0;
+            double cy = design.field.cellsy/2.0;
+
+            foreach (Component c in design.components)
+            {
+                placement.x[c] = r*Math.Cos(a) +cx;
+                placement.y[c] = r*Math.Sin(a)+cy;
+                a += 30;
+                if (a == 360)
+                {
+                    r += 2;
+                }
+            }
             const int scale = 20; //масштаб здесь, внутри должен быть рассчитан по исходным данным
             int imageSide = side*scale + 2*scale; //2 для переферии
             size = new Size(imageSide, imageSide);
