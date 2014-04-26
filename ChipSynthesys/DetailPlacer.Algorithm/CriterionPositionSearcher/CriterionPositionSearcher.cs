@@ -21,7 +21,11 @@ namespace DetailPlacer.Algorithm.CriterionPositionSearcher
             m_current = current;
         }
 
-        public void Build()
+        /// <summary>
+        /// Обновление просматриваеваемых позиций
+        /// </summary>
+        /// <param name="size">Число позиций для рассмотрения</param>
+        public void Build(int size)
         {
             int w = m_design.field.cellsx;
             int h = m_design.field.cellsy;
@@ -29,7 +33,7 @@ namespace DetailPlacer.Algorithm.CriterionPositionSearcher
             var x = (int)Math.Ceiling(m_approximate.x[m_current]);
             var y = (int)Math.Ceiling(m_approximate.x[m_current]);
 
-            m_points = UnwindingSpiral(h, w, x, y).ToList();
+            m_points = UnwindingSpiral(h, w, x, y).Take(size).ToList();
         }
 
         private static IEnumerable<Point> UnwindingSpiral(int h, int w, int sx, int sy)
@@ -65,8 +69,12 @@ namespace DetailPlacer.Algorithm.CriterionPositionSearcher
 
         public IEnumerable<Point> Search(IPointComparer comparer)
         {
+            if (m_points == null)
+            {
+                throw  new Exception("Сперва необходимо вызвать метод Build. ");
+            }
+
             var sorted = m_points.ToList();
-            
             sorted.Sort(comparer);
             return sorted;
         }
