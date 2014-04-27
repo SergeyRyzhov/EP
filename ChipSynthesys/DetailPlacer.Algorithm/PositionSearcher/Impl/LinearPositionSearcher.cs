@@ -30,7 +30,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
         }
 
         public LinearPositionSearcher()
-            : base(64)
+            : base(16)
         {
         }
 

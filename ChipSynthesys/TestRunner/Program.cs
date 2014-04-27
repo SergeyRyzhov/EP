@@ -281,7 +281,7 @@ namespace TestRunner
         private static void GenerateTestData(out Design[] design, out PlacementGlobal[] approximate, out Size[] sizes,
             out Bitmap[] bitmaps)
         {
-            const int amount = 9;
+            const int amount = 1;
             design = new Design[amount];
             approximate = new PlacementGlobal[amount];
             sizes = new Size[amount];

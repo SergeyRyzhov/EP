@@ -122,7 +122,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
         }
 
         public SpiralPositionSearcher()
-            : this(64, false)
+            : this(16, false)
         {
         }
 
