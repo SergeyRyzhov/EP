@@ -295,9 +295,9 @@ namespace TestRunner
         private static void GenerateTestDesign(out Design design, out PlacementGlobal placement, out Size size,
             out Bitmap bitmap)
         {
-            IGenerator generator = new RandomGenerator();
+            IGenerator generator = new DenseGenerator();
 
-            const int n = 150;
+            const int n = 10;
             const int maxx = 16;
             const int maxy = 16;
             const int p = 70;
@@ -308,11 +308,11 @@ namespace TestRunner
             const double volume = n*mx*my*(100.0/p);
             int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume)))/3;
 
-            double r = 2.0;
-            int a = 0;
-            generator.NextDesignWithPlacement(n, 250, 4, p, maxx, maxy, side, side, out design, out placement);
+            generator.NextDesignWithPlacement(n, 25, 4, p, maxx, maxy, side, side, out design, out placement);
 
-            double cx = design.field.cellsx/2.0;
+            //double r = 2.0;
+            //int a = 0;
+            /*double cx = design.field.cellsx/2.0;
             double cy = design.field.cellsy/2.0;
 
             foreach (Component c in design.components)
@@ -324,7 +324,7 @@ namespace TestRunner
                 {
                     r += 2;
                 }
-            }
+            }*/
             const int scale = 20; //масштаб здесь, внутри должен быть рассчитан по исходным данным
             int imageSide = side*scale + 2*scale; //2 для переферии
             size = new Size(imageSide, imageSide);

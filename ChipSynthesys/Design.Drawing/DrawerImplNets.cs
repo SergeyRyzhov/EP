@@ -55,6 +55,11 @@ namespace ChipSynthesys.Draw
             // вычислить и нарисовать цепь
             for (int i = 0; i < design.nets.Length; i++)
             {
+                if (design.nets[i].items.Length == 0)
+                {
+                    continue;
+                }
+
                 // для определения границ по х центральной линии масс 
                 float xMin = design.field.cellsx * scaling;
                 float xMax = 0;
@@ -153,6 +158,10 @@ namespace ChipSynthesys.Draw
             // вычислить и нарисовать цепь
             for (int i = 0; i < design.nets.Length; i++)
             {
+                if (design.nets[i].items.Length == 0)
+                {
+                    continue;
+                }
                 // для определения границ по х центральной линии масс 
                 int xMin = design.field.cellsx * scaling;
                 int xMax = 0;

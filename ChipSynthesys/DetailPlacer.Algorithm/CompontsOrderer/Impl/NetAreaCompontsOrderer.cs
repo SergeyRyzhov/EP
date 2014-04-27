@@ -125,6 +125,11 @@ namespace DetailPlacer.Algorithm.CompontsOrderer.Impl
 
         private static double MarkNet(PlacementGlobal approximate, PlacementDetail result, Net net)
         {
+            if (net.items.Length == 0)
+            {
+                return 0.0;
+            }
+
             double mark = 0.0;
 
             double l;
