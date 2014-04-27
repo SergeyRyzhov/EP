@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlaceModel;
+using System;
+using System.Linq;
 
 namespace ChipSynthesys.UnitTests.PlaceModel
 {

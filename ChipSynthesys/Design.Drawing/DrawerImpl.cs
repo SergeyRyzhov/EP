@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using PlaceModel;
+﻿using PlaceModel;
+using System.Drawing;
 
 namespace ChipSynthesys.Draw
 {
@@ -7,7 +7,6 @@ namespace ChipSynthesys.Draw
     {
         private short PenThickness = 3;
         private const short dotSize = 8;                     // можно поменять
-
 
         public override void Draw(Design design, PlacementGlobal placement, Size size, Graphics canvas)
         {
@@ -27,18 +26,15 @@ namespace ChipSynthesys.Draw
                     canvas.DrawRectangle(pen, (int)(placement.x[c] * scaling),
                         (int)(placement.y[c] * scaling), c.sizex * scaling, c.sizey * scaling);
 
-
                     canvas.FillRectangle(br,
                         (int)(placement.x[c] * scaling) + PenThickness - 1,
                         (int)(placement.y[c] * scaling) + PenThickness - 1,
                         c.sizex * scaling - PenThickness,
                         c.sizey * scaling - PenThickness);
 
-
                     canvas.FillEllipse(brBlack, (int)(placement.x[c] * scaling - dotSize / 2), (int)(placement.y[c] * scaling - dotSize / 2), dotSize, dotSize);
                 }
             }
-
         }
 
         public override void Draw(Design design, PlacementDetail placement, Size size, Graphics canvas)
@@ -59,18 +55,15 @@ namespace ChipSynthesys.Draw
                     canvas.DrawRectangle(pen, placement.x[c] * scaling,
                         placement.y[c] * scaling, c.sizex * scaling, c.sizey * scaling);
 
-
                     canvas.FillRectangle(br,
                         placement.x[c] * scaling + PenThickness - 1,
                         placement.y[c] * scaling + PenThickness - 1,
                         c.sizex * scaling - PenThickness,
                         c.sizey * scaling - PenThickness);
 
-
                     canvas.FillEllipse(brBlack, placement.x[c] * scaling - dotSize / 2, placement.y[c] * scaling - dotSize / 2, dotSize, dotSize);
                 }
             }
-
         }
     }
 }

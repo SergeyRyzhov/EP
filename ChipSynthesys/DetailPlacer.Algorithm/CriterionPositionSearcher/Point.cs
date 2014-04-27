@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DetailPlacer.Algorithm.PositionSearcher;
-using DetailPlacer.Algorithm.PositionSearcher.Impl;
-using PlaceModel;
-
-namespace DetailPlacer.Algorithm.CriterionPositionSearcher
+﻿namespace DetailPlacer.Algorithm.CriterionPositionSearcher
 {
     public class Point
     {

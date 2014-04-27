@@ -1,24 +1,20 @@
-﻿using DetailPlacer.Algorithm.CompontsOrderer;
-using DetailPlacer.Algorithm.PositionSearcher;
+﻿using DetailPlacer.Algorithm.PositionSearcher;
 using DetailPlacer.Algorithm.PositionSearcher.Impl;
-using DetailPlacer.Algorithm.PositionSorter;
-using DetailPlacer.Algorithm.PositionSorter.Impl;
-using DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl;
 using PlaceModel;
 using System.Collections.Generic;
 using System.Linq;
-
 
 namespace DetailPlacer.Algorithm
 {
     public class CrossReductPlacer : PlacerBase, IDetailPlacer
     {
         private readonly IPositionSearcher m_positionSearcher;
+
         public CrossReductPlacer()
         {
             m_positionSearcher = new SpiralPositionSearcher();
-
         }
+
         public virtual void CreateRegions(Design design, out int[] RegionsValues, out int[] xCoordRegions,
             out int[] yCoordRegions, out int wRegs, out int hRegs, out int regsCount)
         {
@@ -55,7 +51,6 @@ namespace DetailPlacer.Algorithm
             {
                 compInRegions[i] = new List<int>();
                 if (RegionsValues[i] != -1) RegionsValues[i] = 0;
-
             }
 
             for (var i = 0; i < design.components.Length; i++)
@@ -76,6 +71,7 @@ namespace DetailPlacer.Algorithm
                 }
             }
         }
+
         private int Metric(int xCoordReg, int yCoordReg, int wReg, int hReg, int x, int y)
         {
             var maxX = System.Math.Max(xCoordReg + wReg, x);
@@ -99,7 +95,6 @@ namespace DetailPlacer.Algorithm
 
                 for (var i = 0; i < x.Length; i++)
                 {
-
                     if (!(x[i] + current.sizex <= xCoordReg || xCoordReg + wRegs <= x[i]
                         || y[i] + current.sizey <= yCoordReg || yCoordReg + hRegs <= y[i])) continue;
                     var m = Metric(xCoordReg, yCoordReg, wRegs, hRegs, x[i], y[i]);
@@ -173,7 +168,6 @@ namespace DetailPlacer.Algorithm
                         }
                         if (result.placed[design.components[compInd]]) continue;
                         PlaceComponent(design, approximate, design.components[compInd], result, out placed, xCoordRegions[i], yCoordRegions[i], wRegs, hRegs);
-
                     }
 
                     RegionsValues[i] = -1;
@@ -182,9 +176,7 @@ namespace DetailPlacer.Algorithm
 
                 CulcValuesInRegions(design, approximate, result, out compInRegions, RegionsValues, xCoordRegions, yCoordRegions, wRegs, hRegs, regsCount);
                 if (!RegionsValues.Any(t => t > 1)) break;
-
             } while (true);
-
         }
     }
 }

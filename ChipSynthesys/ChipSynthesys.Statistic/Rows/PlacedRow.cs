@@ -10,7 +10,7 @@ namespace ChipSynthesys.Statistic.Rows
         public Design Design { get; set; }
 
         public PlacementDetail DetailPlacement { get; set; }
-        
+
         public PlacementGlobal GlobalPlacement { get; set; }
 
         public static string Key { get { return StatisticKeys.Placed; } }

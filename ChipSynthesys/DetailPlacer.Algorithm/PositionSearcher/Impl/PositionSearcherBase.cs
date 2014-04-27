@@ -1,6 +1,6 @@
+using PlaceModel;
 using System;
 using System.Collections.Generic;
-using PlaceModel;
 
 namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
@@ -13,7 +13,8 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 
         private readonly int m_maxCount;
 
-        protected PositionSearcherBase() : this(64)
+        protected PositionSearcherBase()
+            : this(64)
         {
         }
 
@@ -38,7 +39,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
             var addIfTheLimitIsNotExceeded = new Func<int, int, bool>((a, b) =>
             {
                 var av = IsAvailable(mask, w, h, a, b);
-                if(!av) return true;
+                if (!av) return true;
 
                 lx.Add(a);
                 ly.Add(b);
@@ -46,7 +47,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
                 return lx.Count != m_maxCount;
             });
 
-            var success = DetourPositions(design,approximate,result,current,n, m, mask, addIfTheLimitIsNotExceeded);
+            var success = DetourPositions(design, approximate, result, current, n, m, mask, addIfTheLimitIsNotExceeded);
             if (!success)
             {
                 //€чейки найдены но не достаточно, либо не найдены совсем

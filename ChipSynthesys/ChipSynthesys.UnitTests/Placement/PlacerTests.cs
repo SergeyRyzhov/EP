@@ -1,10 +1,10 @@
-﻿using System;
-using System.Drawing;
-using ChipSynthesys.Common.Generators;
+﻿using ChipSynthesys.Common.Generators;
 using ChipSynthesys.Draw;
 using DetailPlacer.Algorithm;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlaceModel;
+using System;
+using System.Drawing;
 
 namespace ChipSynthesys.UnitTests.Placement
 {
@@ -71,7 +71,6 @@ namespace ChipSynthesys.UnitTests.Placement
             bitmap.Save(TestFile(name + " 1. after"));
         }
 
-
         private static void GenerateTestDesign(out Design design, out PlacementGlobal placement, out Size size, out Bitmap bitmap)
         {
             IGenerator generator = new RandomGenerator();
@@ -85,7 +84,7 @@ namespace ChipSynthesys.UnitTests.Placement
             const int my = maxy / 2;
 
             const double volume = n * mx * my * (100.0 / p);
-            int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume)))/2;
+            int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume))) / 2;
 
             generator.NextDesignWithPlacement(n, 500, 4, p, maxx, maxy, side, side, out design, out placement);
 

@@ -1,12 +1,13 @@
-using System;
 using ChipSynthesys.Common.Randoms;
 using PlaceModel;
+using System;
 
 namespace ChipSynthesys.Common.Generators
 {
     public class DenseGenerator : IGenerator
     {
         private readonly IGenerator m_simple;
+
         public DenseGenerator()
         {
             m_simple = new RandomGenerator();
@@ -52,26 +53,6 @@ namespace ChipSynthesys.Common.Generators
                     r += 2;
                 }
             }
-
-            //            double r = 2.0;
-            //            double a = 0;
-            //
-            //            double cx = design.field.cellsx / 2.0;
-            //            double cy = design.field.cellsy / 2.0;
-            //            double step = Math.Min(design.field.cellsx/2.0, design.field.cellsy/2.0) / 5;
-            //            double delta = 360.0 / design.components.Length * 5;
-            //
-            //            foreach (Component c in design.components)
-            //            {
-            //                placement.x[c] = r * Math.Cos(a) + cx;
-            //                placement.y[c] = r * Math.Sin(a) + cy;
-            //                placement.placed[c] = true;
-            //                if ((a += delta) >= 360)
-            //                {
-            //                    a = a - 360;
-            //                    r += step;
-            //                }
-            //            }
         }
     }
 }

@@ -48,11 +48,11 @@ namespace DetailPlacer.Algorithm
                 ReorderArray(perm, ref unplacedComponents);
 
                 var current = unplacedComponents.FirstOrDefault();
-                
+
                 bool placed;
                 PlaceComponent(design, approximate, current, result, out placed);
 
-                if(!placed)
+                if (!placed)
                     notPalced.Add(current);
             } while (unplacedComponents.Length > 0);
         }
@@ -68,7 +68,7 @@ namespace DetailPlacer.Algorithm
             {
                 var perm = new int[x.Length];
                 m_positionsSorter.SortPositions(design, approximate, result, current, x, y, ref perm);
-                
+
                 ReorderArray(perm, ref x);
                 ReorderArray(perm, ref y);
 
@@ -83,7 +83,6 @@ namespace DetailPlacer.Algorithm
                 placed = false;
             }
         }
-
 
         /// <summary>
         /// Перепаковка компонент согласно перестановке
@@ -125,11 +124,13 @@ namespace DetailPlacer.Algorithm
 
     public class DetailPlacerImpl : DetailPlacerBase
     {
-        public DetailPlacerImpl() : base(new CompontsOrderer.Impl.CompontsOrderer(), new PositionSearcher.Impl.LinearPositionSearcher(), new PositionsSorter(new NetsPositionComparer()))
+        public DetailPlacerImpl()
+            : base(new CompontsOrderer.Impl.CompontsOrderer(), new PositionSearcher.Impl.LinearPositionSearcher(), new PositionsSorter(new NetsPositionComparer()))
         {
         }
 
-        public DetailPlacerImpl(ICompontsOrderer compontsOrderer, IPositionSearcher positionSearcher, IPositionsSorter positionsSorter) : base(compontsOrderer, positionSearcher, positionsSorter)
+        public DetailPlacerImpl(ICompontsOrderer compontsOrderer, IPositionSearcher positionSearcher, IPositionsSorter positionsSorter)
+            : base(compontsOrderer, positionSearcher, positionsSorter)
         {
         }
     }

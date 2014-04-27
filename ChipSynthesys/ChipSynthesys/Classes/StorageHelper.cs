@@ -6,9 +6,10 @@ namespace ChipSynthesys.Common.Classes
     internal class StorageHelper<T> where T : class
     {
         private readonly SoapFormatter m_serializer;
+
         public StorageHelper()
         {
-            m_serializer= new SoapFormatter();
+            m_serializer = new SoapFormatter();
         }
 
         public void Store(string fileName, T obj)

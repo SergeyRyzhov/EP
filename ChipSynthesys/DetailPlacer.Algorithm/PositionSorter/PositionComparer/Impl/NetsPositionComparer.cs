@@ -1,6 +1,6 @@
+using PlaceModel;
 using System;
 using System.Linq;
-using PlaceModel;
 
 namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
 {
@@ -11,7 +11,7 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
             return "Сравнение позиций согласно суммарной Манхеттенской метрики";
         }
 
-        public bool Better(Design design, PlacementGlobal approximate,  PlacementDetail placement, Component current, int firstX, int firstY, int secondX,
+        public bool Better(Design design, PlacementGlobal approximate, PlacementDetail placement, Component current, int firstX, int firstY, int secondX,
             int secondY)
         {
             int firstMark = MarkPosition(design, placement, current, firstX, firstY);
@@ -30,10 +30,9 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
             placement.y[current] = y;
             placement.placed[current] = true;
 
-
             foreach (var n in nets)
             {
-                var first = n.items.Where(cc => placement.placed[cc]).Select((com,i) => new {Com = com, I = i}).First();
+                var first = n.items.Where(cc => placement.placed[cc]).Select((com, i) => new { Com = com, I = i }).First();
                 var c = first.Com;
 
                 var l = placement.x[c];
@@ -54,7 +53,6 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
                 }
                 summ += (r - l) + (b - t);
             }
-
 
             placement.placed[current] = oldValue;
 

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using PlaceModel;
+using System;
 using System.Linq;
-using PlaceModel;
 
 namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
 {
@@ -54,11 +54,11 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
                     continue;
                 }
 
-                int ox = result.placed[c] ? result.x[c] : (int) Math.Round(approximate.x[c]);
-                int oy = result.placed[c] ? result.y[c] : (int) Math.Round(approximate.y[c]);
-                
-                var cx = Math.Max(x,ox);
-                var cy = Math.Max(y,oy);
+                int ox = result.placed[c] ? result.x[c] : (int)Math.Round(approximate.x[c]);
+                int oy = result.placed[c] ? result.y[c] : (int)Math.Round(approximate.y[c]);
+
+                var cx = Math.Max(x, ox);
+                var cy = Math.Max(y, oy);
                 var cxw = Math.Min(x + current.sizex, ox + c.sizex);
                 var cyh = Math.Min(y + current.sizey, oy + c.sizey);
                 if ((cxw - cx > 0) && (cyh - cy > 0))
@@ -116,7 +116,6 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
             return mask;
         }
 
-
         private static int MarkPosition(Design design, PlacementDetail placement, Component current, int x, int y)
         {
             int summ = 0;
@@ -126,7 +125,6 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
             placement.x[current] = x;
             placement.y[current] = y;
             placement.placed[current] = true;
-
 
             foreach (var n in nets)
             {
@@ -151,7 +149,6 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
                 }
                 summ += (r - l) + (b - t);
             }
-
 
             placement.placed[current] = oldValue;
 

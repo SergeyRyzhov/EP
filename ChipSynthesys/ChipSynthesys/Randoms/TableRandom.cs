@@ -1,8 +1,7 @@
-﻿using System;
+﻿using ChipSynthesys.Common.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using ChipSynthesys.Common.Classes;
 
 namespace ChipSynthesys.Common.Randoms
 {

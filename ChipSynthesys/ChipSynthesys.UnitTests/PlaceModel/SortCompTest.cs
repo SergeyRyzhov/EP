@@ -1,9 +1,7 @@
-﻿using DetailPlacer.Algorithm;
-using DetailPlacer.Algorithm.CompontsOrderer.Impl;
+﻿using DetailPlacer.Algorithm.CompontsOrderer.Impl;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlaceModel;
 
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ChipSynthesys.UnitTests.PlaceModel
 {
     [TestClass]
@@ -14,18 +12,18 @@ namespace ChipSynthesys.UnitTests.PlaceModel
         {
             var order = new CompontsOrderer();
             var p = new Component.Pool();
-            p.Add(3,3);
-            p.Add(3,3);
-            p.Add(5,3);
-            p.Add(2,3);
-            p.Add(3,2);
-            p.Add(2,2);
+            p.Add(3, 3);
+            p.Add(3, 3);
+            p.Add(5, 3);
+            p.Add(2, 3);
+            p.Add(3, 2);
+            p.Add(2, 2);
             var n = new Net.Pool();
-            var design = new Design(new Field(0,0,20,20),p,n);
+            var design = new Design(new Field(0, 0, 20, 20), p, n);
             var perm = new int[6];
             for (var i = 0; i < 6; i++) perm[i] = 0;
-            var placement= new PlacementGlobal(design);
-           
+            var placement = new PlacementGlobal(design);
+
             placement.x[design.components[0]] = 2;
             placement.y[design.components[0]] = 2;
             placement.x[design.components[1]] = 4;
@@ -38,15 +36,13 @@ namespace ChipSynthesys.UnitTests.PlaceModel
             placement.y[design.components[4]] = 1;
             placement.x[design.components[5]] = 12;
             placement.y[design.components[5]] = 5;
-           
-            
-            order.SortComponents(design,placement,new PlacementDetail(design),design.components,ref perm);
+
+            order.SortComponents(design, placement, new PlacementDetail(design), design.components, ref perm);
             var res = new[] { 1, 3, 5, 0, 2, 4 };
             for (var i = 0; i < 6; i++)
             {
                 Assert.AreEqual(res[i], perm[i]);
             }
-         }
-
+        }
     }
 }

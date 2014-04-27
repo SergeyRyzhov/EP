@@ -1,7 +1,7 @@
+using PlaceModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PlaceModel;
 
 namespace DetailPlacer.Algorithm.CompontsOrderer.Impl
 {
@@ -95,7 +95,7 @@ namespace DetailPlacer.Algorithm.CompontsOrderer.Impl
             for (int i = 0; i < design.nets.Length; i++)
             {
                 Net net = design.nets[i];
-                var info = new NetInfo(net) {Criteria = MarkNet(approximate, result, net), Area = MarkNet(net)};
+                var info = new NetInfo(net) { Criteria = MarkNet(approximate, result, net), Area = MarkNet(net) };
                 markedNets.Add(i, info);
             }
 
@@ -120,7 +120,7 @@ namespace DetailPlacer.Algorithm.CompontsOrderer.Impl
 
         private static int MarkNet(Net net)
         {
-            return net.items.Sum(c => c.sizex*c.sizey);
+            return net.items.Sum(c => c.sizex * c.sizey);
         }
 
         private static double MarkNet(PlacementGlobal approximate, PlacementDetail result, Net net)
@@ -171,7 +171,7 @@ namespace DetailPlacer.Algorithm.CompontsOrderer.Impl
                 }
             }
 
-                mark += (r - l) + (b - t);
+            mark += (r - l) + (b - t);
             return mark;
         }
     }

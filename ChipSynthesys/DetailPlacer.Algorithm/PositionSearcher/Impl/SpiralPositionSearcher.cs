@@ -1,7 +1,7 @@
+using PlaceModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PlaceModel;
 
 namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
@@ -25,6 +25,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
                 return string.Format("({0};{1})", X, Y);
             }
         }
+
         public override string ToString()
         {
             return string.Format("Перебор доступных позиций по спирали от {0}",
@@ -70,7 +71,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
             {
                 for (int i = sx - side; i <= sx + side - 1; i++)
                 {
-                    if(i >= 0 && sy - side >= 0)
+                    if (i >= 0 && sy - side >= 0)
                         yield return new Point(i, sy - side);
                 }
                 for (int j = sy - side; j <= sy + side - 1; j++)
@@ -80,13 +81,13 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
                 }
                 for (int i = sx + side; i >= sx - side + 1; i--)
                 {
-                    if (i >= 0 && sy+side >= 0)
+                    if (i >= 0 && sy + side >= 0)
                         yield return new Point(i, sy + side);
                 }
                 for (int j = sy + side; j >= sy - side + 1; j--)
                 {
                     if (sx - side >= 0 && j >= 0)
-                    yield return new Point(sx - side, j);
+                        yield return new Point(sx - side, j);
                 }
             }
         }
@@ -135,7 +136,5 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
         {
             m_twisting = enableTwisting;
         }
-
-
     }
 }

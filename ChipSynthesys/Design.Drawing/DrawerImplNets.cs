@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using PlaceModel;
+﻿using PlaceModel;
+using System.Drawing;
 
 namespace ChipSynthesys.Draw
 {
@@ -10,7 +10,6 @@ namespace ChipSynthesys.Draw
     {
         private short PenThickness = 3;
         private const short dotSize = 8;
-
 
         public override void Draw(PlaceModel.Design design, PlacementGlobal placement, Size size,
             System.Drawing.Graphics canvas)
@@ -27,7 +26,6 @@ namespace ChipSynthesys.Draw
             // рисуем границу
             canvas.DrawRectangle(framePen, 0, 0, design.field.cellsx * scaling - 1, design.field.cellsy * scaling - 1);
 
-
             double[] drawnNetsY = new double[design.nets.Length];
 
             // рисуем элементы
@@ -37,7 +35,6 @@ namespace ChipSynthesys.Draw
                 {
                     canvas.DrawRectangle(pen, (float)(placement.x[c] * scaling),
                                          (float)(placement.y[c] * scaling), c.sizex * scaling, c.sizey * scaling);
-
 
                     canvas.FillRectangle(br,
                                          (float)(placement.x[c] * scaling) + PenThickness - 1,
@@ -51,7 +48,6 @@ namespace ChipSynthesys.Draw
                 }
             }
 
-
             // вычислить и нарисовать цепь
             for (int i = 0; i < design.nets.Length; i++)
             {
@@ -60,13 +56,13 @@ namespace ChipSynthesys.Draw
                     continue;
                 }
 
-                // для определения границ по х центральной линии масс 
+                // для определения границ по х центральной линии масс
                 float xMin = design.field.cellsx * scaling;
                 float xMax = 0;
 
-                // сколько разместили 
+                // сколько разместили
                 int placeInNet = 0;
-                // проходим по всем компонентам сети 
+                // проходим по всем компонентам сети
                 foreach (var comp in design.nets[i].items)
                 {
                     if (placement.placed[comp])
@@ -79,7 +75,6 @@ namespace ChipSynthesys.Draw
                         drawnNetsY[i] += placement.y[comp];
                         placeInNet++;
                     }
-                    
                 }
 
                 // сосчитали среднее для одной цепи => ищем среднее
@@ -95,24 +90,23 @@ namespace ChipSynthesys.Draw
                     if (placement.placed[comp])
                     {
                         canvas.DrawLine(framePen,
-                                        (float) placement.x[comp]*scaling + (float) comp.sizex/2*scaling,
-                                        (float) placement.y[comp]*scaling + (float) comp.sizey/2*scaling,
-                                        (float) placement.x[comp]*scaling + (float) comp.sizex/2*scaling,
-                                        (float) drawnNetsY[i]);
+                                        (float)placement.x[comp] * scaling + (float)comp.sizex / 2 * scaling,
+                                        (float)placement.y[comp] * scaling + (float)comp.sizey / 2 * scaling,
+                                        (float)placement.x[comp] * scaling + (float)comp.sizex / 2 * scaling,
+                                        (float)drawnNetsY[i]);
 
                         // чтобы уменьшить размер точек - делим радиус (два параметра в конце)
                         // и делим на такое же число отступ для правильного позиционирования центра
                         canvas.FillEllipse(brBlack,
                                            (float)
-                                           (placement.x[comp]*scaling + (float) comp.sizex*scaling/2 - dotSize/2),
+                                           (placement.x[comp] * scaling + (float)comp.sizex * scaling / 2 - dotSize / 2),
                                            (float)
-                                           (placement.y[comp]*scaling + (float) comp.sizey*scaling/2 - dotSize/2),
+                                           (placement.y[comp] * scaling + (float)comp.sizey * scaling / 2 - dotSize / 2),
                                            dotSize, dotSize);
                     }
                 }
             }
         }
-
 
         public override void Draw(PlaceModel.Design design, PlacementDetail placement, Size size,
                                   System.Drawing.Graphics canvas)
@@ -129,10 +123,8 @@ namespace ChipSynthesys.Draw
             // для центра масс по координатам
             int[] drawnNetsY = new int[design.nets.Length];
 
-
             // рисуем границу
             canvas.DrawRectangle(framePen, 0, 0, design.field.cellsx * scaling - 1, design.field.cellsy * scaling - 1);
-
 
             // рисуем элементы
             foreach (var c in design.components)
@@ -141,7 +133,6 @@ namespace ChipSynthesys.Draw
                 {
                     canvas.DrawRectangle(pen, placement.x[c] * scaling,
                                          placement.y[c] * scaling, c.sizex * scaling, c.sizey * scaling);
-
 
                     canvas.FillRectangle(br,
                                          placement.x[c] * scaling + PenThickness - 1,
@@ -162,21 +153,21 @@ namespace ChipSynthesys.Draw
                 {
                     continue;
                 }
-                // для определения границ по х центральной линии масс 
+                // для определения границ по х центральной линии масс
                 int xMin = design.field.cellsx * scaling;
                 int xMax = 0;
 
-                // сколько разместили 
+                // сколько разместили
                 int placeInNet = 0;
-                // проходим по всем компонентам сети 
+                // проходим по всем компонентам сети
                 foreach (var comp in design.nets[i].items)
                 {
                     if (placement.placed[comp])
                     {
-                        if (placement.x[comp]*scaling + comp.sizex*scaling/2 < xMin)
-                            xMin = placement.x[comp]*scaling + comp.sizex*scaling/2;
-                        if (placement.x[comp]*scaling + comp.sizex*scaling/2 > xMax)
-                            xMax = placement.x[comp]*scaling + comp.sizex*scaling/2;
+                        if (placement.x[comp] * scaling + comp.sizex * scaling / 2 < xMin)
+                            xMin = placement.x[comp] * scaling + comp.sizex * scaling / 2;
+                        if (placement.x[comp] * scaling + comp.sizex * scaling / 2 > xMax)
+                            xMax = placement.x[comp] * scaling + comp.sizex * scaling / 2;
                     }
 
                     drawnNetsY[i] += placement.y[comp];
@@ -186,10 +177,8 @@ namespace ChipSynthesys.Draw
                 // сосчитали среднее для одной цепи => ищем среднее
                 drawnNetsY[i] = drawnNetsY[i] / placeInNet * scaling;
 
-
                 // рисуем линию горизонтальную, проходящую через центр масс
                 canvas.DrawLine(framePen, xMin, drawnNetsY[i], xMax, drawnNetsY[i]);
-          
 
                 //соединяем компоненты с линией масс
                 foreach (var comp in design.nets[i].items)
@@ -197,16 +186,16 @@ namespace ChipSynthesys.Draw
                     if (placement.placed[comp])
                     {
                         canvas.DrawLine(framePen,
-                                        placement.x[comp]*scaling + comp.sizex*scaling/2,
-                                        placement.y[comp]*scaling + comp.sizey*scaling/2,
-                                        placement.x[comp]*scaling + comp.sizex*scaling/2,
+                                        placement.x[comp] * scaling + comp.sizex * scaling / 2,
+                                        placement.y[comp] * scaling + comp.sizey * scaling / 2,
+                                        placement.x[comp] * scaling + comp.sizex * scaling / 2,
                                         drawnNetsY[i]);
 
                         // чтобы уменьшить размер точек - делим радиус (два параметра в конце)
                         // и делим на такое же число отступ для правильного позиционирования центра
                         canvas.FillEllipse(brBlack,
-                                           placement.x[comp]*scaling + comp.sizex*scaling/2 - dotSize/2,
-                                           placement.y[comp]*scaling + comp.sizey*scaling/2 - dotSize/2,
+                                           placement.x[comp] * scaling + comp.sizex * scaling / 2 - dotSize / 2,
+                                           placement.y[comp] * scaling + comp.sizey * scaling / 2 - dotSize / 2,
                                            dotSize, dotSize);
                     }
                 }

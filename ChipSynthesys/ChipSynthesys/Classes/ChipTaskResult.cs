@@ -1,14 +1,15 @@
-﻿using System;
+﻿using PlaceModel;
+using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using PlaceModel;
 
 namespace ChipSynthesys.Common.Classes
 {
     [Serializable]
     public class ChipTaskResult : ChipTask
     {
-        public ChipTaskResult(Design design, PlacementGlobal approximate, PlacementDetail detail) : base(design, approximate)
+        public ChipTaskResult(Design design, PlacementGlobal approximate, PlacementDetail detail)
+            : base(design, approximate)
         {
             Detail = detail;
         }

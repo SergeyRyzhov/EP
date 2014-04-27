@@ -1,8 +1,6 @@
-﻿using System;
-
-using ChipSynthesys.Common.Randoms;
-
+﻿using ChipSynthesys.Common.Randoms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace ChipSynthesys.UnitTests.Common
 {

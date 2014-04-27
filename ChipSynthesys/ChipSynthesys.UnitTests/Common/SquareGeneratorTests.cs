@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ChipSynthesys.Common.Generators;
+﻿using ChipSynthesys.Common.Generators;
 using ChipSynthesys.Draw;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlaceModel;
+using System;
 using System.Drawing;
 
 namespace ChipSynthesys.UnitTests.Common
@@ -14,7 +14,7 @@ namespace ChipSynthesys.UnitTests.Common
         public void PlacementTest()
         {
             IGenerator generator = new SquareGenerator();
-            
+
             const int n = 25;
             const int maxx = 3;
             const int maxy = 3;
@@ -26,7 +26,7 @@ namespace ChipSynthesys.UnitTests.Common
             const double volume = n * mx * my * (100.0 / p);
             int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume)));
             side = Math.Max(n * maxx, n * maxy);
-           
+
             Design design;
             PlacementGlobal placement;
 
@@ -65,7 +65,7 @@ namespace ChipSynthesys.UnitTests.Common
                 Console.WriteLine(s.ToString());
             }
             DrawDisign(design, placement, size, bitmap, "Test_square_gen.png");
-            DrawDisignNet(design, placement,size,bitmap, "Test.png");
+            DrawDisignNet(design, placement, size, bitmap, "Test.png");
         }
 
         private void DrawDisign(Design design, PlacementGlobal placement, Size size, Bitmap bitmap, string fileName)
@@ -82,7 +82,6 @@ namespace ChipSynthesys.UnitTests.Common
 
         private void DrawDisignNet(Design design, PlacementGlobal placement, Size size, Bitmap bitmap, string fileName)
         {
-
             using (Graphics canvas = Graphics.FromImage(bitmap))
             {
                 IDrawer drawer = new DrawerImplNets();
@@ -92,6 +91,5 @@ namespace ChipSynthesys.UnitTests.Common
 
             bitmap.Save(fileName);
         }
-
     }
 }

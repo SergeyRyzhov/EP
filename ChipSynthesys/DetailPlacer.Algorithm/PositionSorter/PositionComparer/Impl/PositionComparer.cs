@@ -12,7 +12,7 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
         public bool Better(Design design, PlacementGlobal approximate, PlacementDetail placement, Component current, int firstX, int firstY, int secondX, int secondY)
         {
             if (firstX < secondX)
-                if(firstY < secondY)
+                if (firstY < secondY)
                     return true;
 
             if (firstX > secondX)

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using PlaceModel;
+using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using PlaceModel;
 
 namespace ChipSynthesys.Common.Classes
 {
@@ -40,7 +40,7 @@ namespace ChipSynthesys.Common.Classes
             using (var file = File.Open(fileName, FileMode.Open))
             {
                 var stg = new BinaryFormatter();
-                return stg.Deserialize(file) as ChipTask; 
+                return stg.Deserialize(file) as ChipTask;
             }
         }
     }

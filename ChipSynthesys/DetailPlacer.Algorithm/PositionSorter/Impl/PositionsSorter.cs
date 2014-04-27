@@ -1,8 +1,8 @@
-﻿using System;
+﻿using DetailPlacer.Algorithm.PositionSorter.PositionComparer;
+using PlaceModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using DetailPlacer.Algorithm.PositionSorter.PositionComparer;
-using PlaceModel;
 
 namespace DetailPlacer.Algorithm.PositionSorter.Impl
 {
@@ -19,6 +19,7 @@ namespace DetailPlacer.Algorithm.PositionSorter.Impl
         {
             m_positionComparer = positionComparer;
         }
+
         protected class PosInfo
         {
             public PosInfo(int id)
@@ -35,7 +36,7 @@ namespace DetailPlacer.Algorithm.PositionSorter.Impl
         {
             private readonly Func<int, int, int, int, bool> m_compare;
 
-            public PosComparer(Func<int,int,int,int,bool> compare)
+            public PosComparer(Func<int, int, int, int, bool> compare)
             {
                 m_compare = compare;
             }
@@ -55,7 +56,7 @@ namespace DetailPlacer.Algorithm.PositionSorter.Impl
             var indx = new List<PosInfo>();
             for (int i = 0; i < length; i++)
             {
-                indx.Add(new PosInfo(i) {X = x[i], Y = y[i]});
+                indx.Add(new PosInfo(i) { X = x[i], Y = y[i] });
             }
             indx.Sort(new PosComparer((a, b, c, d) => m_positionComparer.Better(design, approximate, result, current, a, b, c, d)));
 

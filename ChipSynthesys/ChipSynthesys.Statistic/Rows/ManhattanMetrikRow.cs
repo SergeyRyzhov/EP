@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ChipSynthesys.Statistic.Common;
+﻿using ChipSynthesys.Statistic.Common;
 using ChipSynthesys.Statistic.Interfaces;
 using PlaceModel;
+using System;
+using System.Linq;
 
 namespace ChipSynthesys.Statistic.Rows
 {
-    class ManhattanMetrikRow : ISatisticRow<double>
+    internal class ManhattanMetrikRow : ISatisticRow<double>
     {
         public Design Design { get; set; }
 
@@ -68,7 +65,7 @@ namespace ChipSynthesys.Statistic.Rows
 
             return summ;
         }
-        
+
         private static double ComputeMetrik(Design design, PlacementGlobal placement)
         {
             double summ = 0;

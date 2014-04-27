@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using ChipSynthesys.Common.Classes;
+﻿using ChipSynthesys.Common.Classes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlaceModel;
+using System.Linq;
 
 namespace ChipSynthesys.UnitTests.PlaceModel
 {
@@ -28,7 +28,6 @@ namespace ChipSynthesys.UnitTests.PlaceModel
             Assert.AreEqual(loadedTask.Approximate.y[loadedComponent], 2.0);
         }
 
-
         [TestMethod]
         public void SaveAndLoadChipTaskResult()
         {
@@ -44,7 +43,6 @@ namespace ChipSynthesys.UnitTests.PlaceModel
 
             placementDetail.x[component] = 2;
             placementDetail.y[component] = 1;
-
 
             var task = new ChipTaskResult(design, placementGlobal, placementDetail);
             task.Save(path);

@@ -1,8 +1,6 @@
-using System;
-
 using ChipSynthesys.Common.Classes;
-
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace ChipSynthesys.UnitTests.Common
 {

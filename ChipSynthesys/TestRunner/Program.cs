@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using ChipSynthesys.Common.Classes;
+﻿using ChipSynthesys.Common.Classes;
 using ChipSynthesys.Common.Generators;
 using ChipSynthesys.Draw;
 using ChipSynthesys.Statistic.Interfaces;
@@ -15,6 +9,12 @@ using DetailPlacer.Algorithm.PositionSearcher;
 using DetailPlacer.Algorithm.PositionSorter;
 using DetailPlacer.Algorithm.PositionSorter.PositionComparer;
 using PlaceModel;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace TestRunner
 {
@@ -120,11 +120,11 @@ namespace TestRunner
                 }
             }
 
-            Type typeToReflect = typeof (DetailPlacerBase);
+            Type typeToReflect = typeof(DetailPlacerBase);
             Assembly a = Assembly.GetAssembly(typeToReflect);
             Type[] existingTypes = a.GetTypes();
             Type[] componentsOrders = existingTypes.Where(t =>
-                (typeof (ICompontsOrderer).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract)).ToArray();
+                (typeof(ICompontsOrderer).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract)).ToArray();
             Type[] positionComparers = existingTypes.Where(t =>
                 (typeof(IPositionComparer).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract)).ToArray();
             Type[] positionSearchers = existingTypes.Where(t =>
@@ -132,7 +132,7 @@ namespace TestRunner
             Type[] positionSorters = existingTypes.Where(t =>
                 (typeof(IPositionsSorter).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract)).ToArray();
 
-            var masType = new Type[] {};
+            var masType = new Type[] { };
             var statistic = new CommonStatistic();
             IStatisticResult<double> designStatistics;
             IStatisticResult<double> placemetStatistics;
@@ -148,7 +148,6 @@ namespace TestRunner
             {
                 SaveTestResults(resultDerectory, i + 1, 0, design[i], approximate[i], sizes[i], bitmaps[i]);
             }
-
 
             foreach (Type comOrderType in componentsOrders)
             {
@@ -174,11 +173,11 @@ namespace TestRunner
                                         var posComparer = posComp.Invoke
                                             (null) as IPositionComparer;
                                         ConstructorInfo posSort =
-                                            posSortType.GetConstructor(new[] {typeof (IPositionComparer)});
+                                            posSortType.GetConstructor(new[] { typeof(IPositionComparer) });
                                         if (posSort != null)
                                         {
                                             var posSorter = posSort.Invoke
-                                                (new Object[] {posComparer}) as IPositionsSorter;
+                                                (new Object[] { posComparer }) as IPositionsSorter;
                                             var placer = new DetailPlacerImpl(compOrder, posSearcher, posSorter);
                                             testCount++;
                                             SaveTestInfo(resultDerectory, testCount, compOrder, posSearcher,
@@ -189,7 +188,7 @@ namespace TestRunner
                                                 Design d = design[i];
                                                 PlacementDetail placeRes;
 
-                                                //todo исправить другие части чтобы всё рисовали здесь 
+                                                //todo исправить другие части чтобы всё рисовали здесь
                                                 //формирую пустое приближённое решение
                                                 var tempAppr = approximate[i];
                                                 foreach (var c in d.components)
@@ -265,7 +264,7 @@ namespace TestRunner
                     designList.Add(task.Design);
                     solutionList.Add(task.Approximate);
 
-                    var size = new Size(task.Height*scale, task.Width*scale);
+                    var size = new Size(task.Height * scale, task.Width * scale);
                     var bitmap = new Bitmap(size.Width, size.Height);
 
                     sizeList.Add(size);
@@ -300,33 +299,18 @@ namespace TestRunner
             const int n = 10;
             const int maxx = 16;
             const int maxy = 16;
-            const int p = 70;
+            const int p = 10;
 
-            const int mx = maxx/2; //мат.ожидание
-            const int my = maxy/2;
+            const int mx = maxx / 2; //мат.ожидание
+            const int my = maxy / 2;
 
-            const double volume = n*mx*my*(100.0/p);
-            int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume)))/3;
+            const double volume = n * mx * my * (100.0 / p);
+            int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume))) / 3;
 
-            generator.NextDesignWithPlacement(n, 25, 4, p, maxx, maxy, side, side, out design, out placement);
+            generator.NextDesignWithPlacement(n, 5, 4, p, maxx, maxy, side, side, out design, out placement);
 
-            //double r = 2.0;
-            //int a = 0;
-            /*double cx = design.field.cellsx/2.0;
-            double cy = design.field.cellsy/2.0;
-
-            foreach (Component c in design.components)
-            {
-                placement.x[c] = r*Math.Cos(a) +cx;
-                placement.y[c] = r*Math.Sin(a)+cy;
-                a += 30;
-                if (a == 360)
-                {
-                    r += 2;
-                }
-            }*/
             const int scale = 20; //масштаб здесь, внутри должен быть рассчитан по исходным данным
-            int imageSide = side*scale + 2*scale; //2 для переферии
+            int imageSide = side * scale + 2 * scale; //2 для переферии
             size = new Size(imageSide, imageSide);
             bitmap = new Bitmap(size.Width, size.Height);
         }

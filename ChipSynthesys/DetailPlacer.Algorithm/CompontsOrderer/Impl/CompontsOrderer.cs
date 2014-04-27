@@ -1,6 +1,6 @@
+using PlaceModel;
 using System.Collections.Generic;
 using System.Linq;
-using PlaceModel;
 
 namespace DetailPlacer.Algorithm.CompontsOrderer.Impl
 {
@@ -12,7 +12,7 @@ namespace DetailPlacer.Algorithm.CompontsOrderer.Impl
         }
 
         public void SortComponents(Design design, PlacementGlobal approximate, PlacementDetail result, Component[] unplacedComponents, ref int[] perm)
-        {            
+        {
             var n = unplacedComponents.Count();
             var cols = new List<int>();
             var rowIndex = new List<int>();
@@ -81,7 +81,6 @@ namespace DetailPlacer.Algorithm.CompontsOrderer.Impl
             }
 
             perm = sortComp.ToArray();
-            
         }
     }
 }

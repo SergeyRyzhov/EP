@@ -1,17 +1,12 @@
-﻿using System;
-using System.Drawing;
-using System.Text;
-
-using ChipSynthesys.Common.Classes;
+﻿using ChipSynthesys.Common.Classes;
 using ChipSynthesys.Common.Generators;
 using ChipSynthesys.Common.Randoms;
-using ChipSynthesys.Draw;
 using ChipSynthesys.Statistic.Interfaces;
 using ChipSynthesys.Statistic.Statistics;
-
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using PlaceModel;
+using System;
+using System.Text;
 
 namespace ChipSynthesys.UnitTests.Custom
 {
@@ -44,7 +39,7 @@ namespace ChipSynthesys.UnitTests.Custom
             var g = new RandomGenerator();
             Design d;
             PlacementGlobal p;
-            g.NextDesignWithPlacement(2, 1, 2, 50, 3, 3,6,6, out d, out p);
+            g.NextDesignWithPlacement(2, 1, 2, 50, 3, 3, 6, 6, out d, out p);
 
             IStatistic<double, double> statistic = new CommonStatistic();
             IStatisticResult<double> designResult;

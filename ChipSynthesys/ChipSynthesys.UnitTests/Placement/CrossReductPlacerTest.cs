@@ -1,8 +1,4 @@
-﻿using System;
-using System.Drawing;
-using ChipSynthesys.Common.Generators;
-using ChipSynthesys.Draw;
-using DetailPlacer.Algorithm;
+﻿using DetailPlacer.Algorithm;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlaceModel;
 
@@ -14,15 +10,14 @@ namespace ChipSynthesys.UnitTests.Placement
         [TestMethod]
         public void CrossReductPlacerTestImplTest()
         {
-            
             var p = new Component.Pool();
-            p.Add(3,3);
-            p.Add(4,2);
-            p.Add(2,4);
-            p.Add(6,2);
+            p.Add(3, 3);
+            p.Add(4, 2);
+            p.Add(2, 4);
+            p.Add(6, 2);
             var n = new Net.Pool();
-            var design= new Design(new Field(0,0,10,10),p,n);
-           
+            var design = new Design(new Field(0, 0, 10, 10), p, n);
+
             var approximate = new PlacementGlobal(design);
             approximate.x[p[0]] = 4.5;
             approximate.y[p[0]] = 1.5;
@@ -35,8 +30,6 @@ namespace ChipSynthesys.UnitTests.Placement
             PlacementDetail result;
             IDetailPlacer placer = new CrossReductPlacer();
             placer.Place(design, approximate, out result);
-           
-           
         }
     }
 }

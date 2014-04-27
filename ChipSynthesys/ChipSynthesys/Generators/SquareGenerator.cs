@@ -3,8 +3,6 @@ using PlaceModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 
 namespace ChipSynthesys.Common.Generators
 {
@@ -26,30 +24,29 @@ namespace ChipSynthesys.Common.Generators
         }
 
         public void NextDesignWithPlacement(int components, int nets, int maxNetSize, int percent, int maxSizeX, int maxSizeY, int width, int height, out Design design, out PlacementGlobal placement)
-        {      
-           
+        {
             List<int> Parts = new List<int>();
             List<int> Coordinate = new List<int>();
             List<int> X_Coord = new List<int>();
             List<int> Y_Coord = new List<int>();
             var rnd = new Random();
-            var SizeX=0;
-            var SizeY=0;
+            var SizeX = 0;
+            var SizeY = 0;
             Square1(maxSizeX, maxSizeY, components, out SizeX, out SizeY);
-            Division_Square(components,percent, SizeX, SizeY,maxSizeX,maxSizeY,Parts,Coordinate);  
+            Division_Square(components, percent, SizeX, SizeY, maxSizeX, maxSizeY, Parts, Coordinate);
             var c = new Component.Pool();
             var sum = 0;
-            var num=0;                       
+            var num = 0;
             for (int i = 0; i < Parts.Count - 1; i += 2)
-                {
-                    c.Add(Parts[i] , Parts[i + 1]);
-                    X_Coord.Add(Coordinate[i]);
-                    Y_Coord.Add(Coordinate[i + 1]);
-                    sum += Parts[i] * Parts[i + 1];                  
-                    num = num + 1;
-                    if (components == num)
-                        break;
-                }
+            {
+                c.Add(Parts[i], Parts[i + 1]);
+                X_Coord.Add(Coordinate[i]);
+                Y_Coord.Add(Coordinate[i + 1]);
+                sum += Parts[i] * Parts[i + 1];
+                num = num + 1;
+                if (components == num)
+                    break;
+            }
             if (sum != SizeX * SizeY)
             {
                 Parts.Clear();
@@ -59,29 +56,29 @@ namespace ChipSynthesys.Common.Generators
                 NextDesignWithPlacement(components, nets, maxNetSize, percent, maxSizeX, maxSizeY, width, height, out design, out placement);
             }
             sum = ((100 - percent) * sum) / percent;
-            Add_Square(SizeX, SizeY, sum, out SizeX,out SizeY);            
+            Add_Square(SizeX, SizeY, sum, out SizeX, out SizeY);
             var n = new Net.Pool();
             design = new Design(new Field(0, 0, SizeX, SizeY), c, n);
             placement = new PlacementGlobal(design);
-            int l=0;
-            foreach( Component com in design.components)
+            int l = 0;
+            foreach (Component com in design.components)
             {
                 placement.x[com] = X_Coord[l];
                 placement.y[com] = Y_Coord[l];
                 placement.placed[com] = true;
                 l++;
             }
-            var q=0; 
+            var q = 0;
             List<int> Net = new List<int>();
-            List<int> n_net = new List<int>();            
+            List<int> n_net = new List<int>();
             for (int k = 0; k < nets; k++)
-            {               
-                Net.Add(q);                
+            {
+                Net.Add(q);
                 double x_q = placement.x[c[q]];
                 double y_q = placement.y[c[q]];
                 double w_q = c[q].sizex;
                 double h_q = c[q].sizey;
-                int i = 1;                
+                int i = 1;
                 for (int j = 0; j < components; j++)
                 {
                     double x_j = placement.x[c[j]];
@@ -92,7 +89,7 @@ namespace ChipSynthesys.Common.Generators
                     if ((x_q == x_j + w_j && y_q == y_j) || (x_q == x_j && y_q == y_j + h_j) || (x_q + w_q == x_j && y_q == y_j) || (x_q == x_j && y_q + h_q == y_j))
                     {
                         Net.Add(j);
-                        i++;                        
+                        i++;
                     }
                     if ((x_j + w_j == x_q && y_j < y_q && y_q < y_j + h_j) || (x_j + w_j == x_q && y_q < y_j && y_j < y_q + h_q) || (x_q + w_q == x_j && y_j < y_q && y_q < y_j + h_j) || (x_q + w_q == x_j && y_q < y_j && y_j < y_q + h_q))
                     {
@@ -104,27 +101,24 @@ namespace ChipSynthesys.Common.Generators
                         Net.Add(j);
                         i++;
                     }
-                    if (i == maxNetSize || j==components-1)
+                    if (i == maxNetSize || j == components - 1)
                     { n_net.Add(i); break; }
-                } 
-                q++;              
+                }
+                q++;
             }
-            var count=0;
+            var count = 0;
             for (int i = 0; i < nets; i++)
             {
-                
                 n.Add(new Component[n_net[i]]);
-                for (int j = 0; j <n[i].items.Length; j++)
+                for (int j = 0; j < n[i].items.Length; j++)
                 {
                     int component = Net[count];
-                      n[i].items[j] = c[component];
-                      count++;                
+                    n[i].items[j] = c[component];
+                    count++;
                 }
             }
-            design = new Design(new Field(0, 0, SizeX, SizeY), c, n); 
-        
+            design = new Design(new Field(0, 0, SizeX, SizeY), c, n);
         }
-
 
         private void Division_Square(int components, int percent, int SizeX, int SizeY, int maxSizeX, int maxSizeY, List<int> Parts, List<int> Coordinate)
         {
@@ -136,9 +130,8 @@ namespace ChipSynthesys.Common.Generators
                 { break; }
                 Division(Parts[i], Parts[i + 1], maxSizeX, maxSizeY, i, Parts, Coordinate);
             } while (true);
-
         }
-        
+
         private void Division(int x, int y, int maxX, int maxY, int ind, List<int> Parts, List<int> Coordinate)
         {
             int x1, x2, y1, y2;
@@ -152,7 +145,7 @@ namespace ChipSynthesys.Common.Generators
             {
                 if (x == maxX || x - maxX == 1)
                 {
-                    n = rnd.Next(1, maxX);                    
+                    n = rnd.Next(1, maxX);
                 }
                 if (x <= maxX)
                 { n = rnd.Next(1, x); }
@@ -184,7 +177,6 @@ namespace ChipSynthesys.Common.Generators
                 }
                 else
                 {
-
                     Parts.Add(x1);
                     Coordinate.Add(c_x);
                     Parts.Add(y);
@@ -194,7 +186,6 @@ namespace ChipSynthesys.Common.Generators
                     Parts.Add(y);
                     Coordinate.Add(c_y);
                 }
-
             }
 
             if (y > x || (x == y && maxY < maxX) || x == 1 || (x == y && maxY < y && maxX >= x))
@@ -241,8 +232,6 @@ namespace ChipSynthesys.Common.Generators
                     Coordinate.Add(n);
                 }
             }
-
-
         }
 
         private int Contorol(List<int> Parts, int maxX, int maxY, int comp)
@@ -273,7 +262,7 @@ namespace ChipSynthesys.Common.Generators
                 { return -1; }
             }
             return -1;
-        }       
+        }
 
         private void Add_Square(int w, int h, int sum, out int SizeX, out int SizeY)
         {
@@ -346,7 +335,6 @@ namespace ChipSynthesys.Common.Generators
 
             sizeX = Convert.ToInt16(Math.Sqrt(s));
             sizeY = s / sizeX;
-        }          
-
+        }
     }
 }
