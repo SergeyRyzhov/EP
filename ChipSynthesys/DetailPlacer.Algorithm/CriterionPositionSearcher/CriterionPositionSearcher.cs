@@ -12,6 +12,7 @@ namespace DetailPlacer.Algorithm.CriterionPositionSearcher
         private readonly PlacementDetail m_detail;
         private readonly Component m_current;
         private List<Point> m_points;
+        private IEnumerator<Point> m_result;
 
         public CriterionPositionSearcher(Design design, PlacementGlobal approximate, PlacementDetail detail, Component current)
         {
@@ -77,6 +78,14 @@ namespace DetailPlacer.Algorithm.CriterionPositionSearcher
             var sorted = m_points.ToList();
             sorted.Sort(comparer);
             return sorted;
+        }
+
+        public Point Next(IPointComparer comparer)
+        {
+            if (m_result == null)
+                m_result = Search(comparer).GetEnumerator();
+
+            return m_result.MoveNext() ? m_result.Current : null;
         }
     }
 }
