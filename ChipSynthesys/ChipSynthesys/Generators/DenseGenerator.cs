@@ -27,8 +27,8 @@ namespace ChipSynthesys.Common.Generators
         public void NextDesignWithPlacement(int components, int nets, int maxNetSize, int percent, int maxSizeX, int maxSizeY,
             int width, int height, out Design design, out PlacementGlobal placement)
         {
-            NextDesignWithPlacement(components, nets, new RangeRandom(maxNetSize), percent, new RangeRandom(maxSizeX),
-                new RangeRandom(maxSizeY), width, height, out design, out placement);
+            NextDesignWithPlacement(components, nets, new RangeRandom(1, maxNetSize), percent, new RangeRandom(1, maxSizeX),
+                new RangeRandom(1, maxSizeY), width, height, out design, out placement);
         }
 
         public void NextDesignWithPlacement(int components, int nets, IRandom<int> maxNetSize, int percent, IRandom<int> maxSizeX,

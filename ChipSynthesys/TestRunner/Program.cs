@@ -325,26 +325,17 @@ namespace TestRunner
             out Bitmap bitmap)
         {
             IGenerator generator = new DenseGenerator();
-            //int[] param = {100, 50, 15, 50, 8, 8, 0 , 0};
-            const int n = 10;
-            const int maxx = 8;
-            const int maxy = 8;
-            const int p = 50;
-
-            const int nets = 5;
-            const int maxNetSize = 4;
+                    const int n    = 10  ;       //число компонент
+                    const int maxx = 8   ;       //размер по x
+                    const int maxy = 8   ;       //размер по y
+                    const int p    = 50  ;       //процент заполнения
+                    const int nets = 5   ;       //число сетей
+              const int maxNetSize = 4   ;       //длина цепей
             generator.NextDesignWithPlacement(n, nets, maxNetSize, p, maxx, maxy, 0, 0, out design, out placement);
 
             const int scale = 20; //масштаб здесь, внутри должен быть рассчитан по исходным данным
             size = new Size(design.field.cellsx * scale, design.field.cellsy * scale);
             bitmap = new Bitmap(size.Width, size.Height);
-
-//            int mx = maxx / 2; //мат.ожидание
-//            int my = maxy / 2;
-//
-//            double volume = n * mx * my * (100.0 / p);
-//            int side = Convert.ToInt32(Math.Ceiling(Math.Sqrt(volume))) / 3;
-//            int imageSide = design.field.cellsx * design.field.cellsy + 2 * scale; //2 для переферии
         }
     }
 }

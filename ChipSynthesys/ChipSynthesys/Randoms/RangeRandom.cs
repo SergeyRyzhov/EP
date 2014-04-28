@@ -16,6 +16,11 @@ namespace ChipSynthesys.Common.Randoms
         {
         }
 
+        public RangeRandom(int min, int max)
+            : this(min, max, new Random())
+        {
+        }
+
         public RangeRandom(int min, int max, Random random)
         {
             m_min = min;
