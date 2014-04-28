@@ -217,6 +217,35 @@ namespace TestRunner
                 }
             }
 
+
+            //other tests
+            var crossReductPlacer = new CrossReductPlacer();
+            testCount++;
+            for (int i = 0; i < design.Length; i++)
+            {
+                Design d = design[i];
+                PlacementDetail placeRes;
+
+                //todo исправить другие части чтобы всё рисовали здесь
+                //формирую пустое приближённое решение
+                var tempAppr = approximate[i];
+                foreach (var c in d.components)
+                {
+                    tempAppr.placed[c] = false;
+                }
+
+                //placer.Place(d, approximate[i], out placeRes);
+                crossReductPlacer.Place(d, tempAppr, out placeRes);
+
+                foreach (var c in d.components)
+                {
+                    tempAppr.placed[c] = true;
+                }
+
+                statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
+                SaveTestResults(resultDerectory, i + 1, testCount, d, placeRes,
+                    placemetStatistics, sizes[i], bitmaps[i]);
+            }
             //Console.ReadLine();
         }
 
