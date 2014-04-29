@@ -202,6 +202,12 @@ namespace TestRunner
                                                 foreach (var c in d.components)
                                                 {
                                                     tempAppr.placed[c] = true;
+                                                    if (!placeRes.placed[c])
+                                                    {
+                                                        placeRes.x[c] = (int) approximate[i].x[c];
+                                                        placeRes.y[c] = (int) approximate[i].y[c];
+                                                        //placeRes.placed[c] = true;
+                                                    }
                                                 }
 
                                                 statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
@@ -240,6 +246,12 @@ namespace TestRunner
                 foreach (var c in d.components)
                 {
                     tempAppr.placed[c] = true;
+                    if (!placeRes.placed[c])
+                    {
+                        placeRes.x[c] = (int) approximate[i].x[c];
+                        placeRes.y[c] = (int) approximate[i].y[c];
+                        //placeRes.placed[c] = true;
+                    }
                 }
 
                 statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
@@ -325,11 +337,11 @@ namespace TestRunner
             out Bitmap bitmap)
         {
             IGenerator generator = new DenseGenerator();
-                    const int n    = 10  ;       //число компонент
+                    const int n    = 30  ;       //число компонент
                     const int maxx = 8   ;       //размер по x
                     const int maxy = 8   ;       //размер по y
-                    const int p    = 50  ;       //процент заполнения
-                    const int nets = 5   ;       //число сетей
+                    const int p    = 90  ;       //процент заполнения
+                    const int nets = 30   ;       //число сетей
               const int maxNetSize = 4   ;       //длина цепей
             generator.NextDesignWithPlacement(n, nets, maxNetSize, p, maxx, maxy, 0, 0, out design, out placement);
 

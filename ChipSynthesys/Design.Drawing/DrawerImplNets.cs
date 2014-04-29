@@ -76,6 +76,11 @@ namespace ChipSynthesys.Draw
                         placeInNet++;
                     }
                 }
+                if (placeInNet == 0)
+                {
+                    continue;
+
+                }
 
                 // сосчитали среднее для одной цепи => ищем среднее
                 drawnNetsY[i] = drawnNetsY[i] / placeInNet * scaling;
@@ -117,6 +122,7 @@ namespace ChipSynthesys.Draw
 
             Brush br = new SolidBrush(Color.LightGray);
             Pen pen = new Pen(Color.Red, PenThickness);
+            Pen penNp = new Pen(Color.Orange, PenThickness);
             Pen framePen = new Pen(Color.Black, 1);
             Brush brBlack = new SolidBrush(Color.Black);
 
@@ -132,6 +138,21 @@ namespace ChipSynthesys.Draw
                 if (placement.placed[c])
                 {
                     canvas.DrawRectangle(pen, placement.x[c] * scaling,
+                                         placement.y[c] * scaling, c.sizex * scaling, c.sizey * scaling);
+
+                    canvas.FillRectangle(br,
+                                         placement.x[c] * scaling + PenThickness - 1,
+                                         placement.y[c] * scaling + PenThickness - 1,
+                                         c.sizex * scaling - PenThickness,
+                                         c.sizey * scaling - PenThickness);
+
+                    // проверить как отображается
+                    canvas.FillEllipse(brBlack, placement.x[c] * scaling - dotSize / 2, placement.y[c] * scaling - dotSize / 2,
+                                       dotSize, dotSize);
+                }
+                else
+                {
+                    canvas.DrawRectangle(penNp, placement.x[c] * scaling,
                                          placement.y[c] * scaling, c.sizex * scaling, c.sizey * scaling);
 
                     canvas.FillRectangle(br,
