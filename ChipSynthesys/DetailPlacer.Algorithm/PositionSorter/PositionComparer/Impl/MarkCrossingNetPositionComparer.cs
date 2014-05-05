@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
 {
-    internal class MarkCrossingNetPositionComparer : IPositionComparer
+    public class MarkCrossingNetPositionComparer : IPositionComparer
     {
         protected class PosInfo
         {

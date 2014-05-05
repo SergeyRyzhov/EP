@@ -2,7 +2,7 @@
 
 namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
 {
-    internal class PositionComparer : IPositionComparer
+    public class PositionComparer : IPositionComparer
     {
         public override string ToString()
         {

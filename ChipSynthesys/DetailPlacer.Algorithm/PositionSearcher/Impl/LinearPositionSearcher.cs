@@ -3,7 +3,7 @@ using System;
 
 namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
-    internal class LinearPositionSearcher : PositionSearcherBase
+    public class LinearPositionSearcher : PositionSearcherBase
     {
         public override string ToString()
         {

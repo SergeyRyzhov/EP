@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
-    internal class SpiralPositionSearcher : PositionSearcherBase
+    public class SpiralPositionSearcher : PositionSearcherBase
     {
         private readonly bool m_twisting;
         

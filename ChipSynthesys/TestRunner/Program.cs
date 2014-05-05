@@ -93,6 +93,14 @@ namespace TestRunner
             }
         }
 
+        private static void SaveTestInfo(string path, int testNum, IDetailPlacer placer)
+        {
+            using (StreamWriter sw = File.CreateText(string.Format("{0}Heuristics {1}.txt", path, testNum)))
+            {
+                sw.WriteLine(placer.ToString());
+            }
+        }
+
         private static void Main(string[] args)
         {
             Design[] design;
@@ -249,7 +257,8 @@ namespace TestRunner
                         {
                             tempAppr.placed[c] = false;
                         }
-
+                        testCount++;
+                        SaveTestInfo(resultDerectory, testCount, placer);
                         //placer.Place(d, approximate[i], out placeRes);
                         placer.Place(d, tempAppr, out placeRes);
 
@@ -265,7 +274,7 @@ namespace TestRunner
                         }
 
                         statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
-                        SaveTestResults(resultDerectory, i + 1, ++testCount, d, placeRes,
+                        SaveTestResults(resultDerectory, i + 1, testCount, d, placeRes,
                             placemetStatistics, sizes[i], bitmaps[i]);
                     }
                 }
