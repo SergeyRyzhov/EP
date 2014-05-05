@@ -23,14 +23,7 @@ namespace TestRunner
         private static void SaveTestResults(string path, int designNum, int testNum, Design design,
             PlacementDetail resultPlacement, IStatisticResult<double> placementStatistic, Size size, Bitmap bitmap)
         {
-            using (Graphics canvas = Graphics.FromImage(bitmap))
-            {
-                IDrawer drawer = new DrawerImplNets();
-                canvas.Clear(Color.Empty);
-                drawer.Draw(design, resultPlacement, size, canvas);
-            }
-
-            bitmap.Save(string.Format("{0}Result for design {2} on exp {1}.png", path, testNum, designNum));
+            DrawerHelper.SimpleDraw(design, resultPlacement, size, bitmap, string.Format("{0}Result for design {2} on exp {1}.png", path, testNum, designNum));
 
             using (
                 StreamWriter sw =
@@ -62,14 +55,7 @@ namespace TestRunner
         private static void SaveTestResults(string path, int designNum, int testNum, Design design,
             PlacementGlobal resultPlacement, Size size, Bitmap bitmap)
         {
-            using (Graphics canvas = Graphics.FromImage(bitmap))
-            {
-                IDrawer drawer = new DrawerImplNets();
-                canvas.Clear(Color.Empty);
-                drawer.Draw(design, resultPlacement, size, canvas);
-            }
-
-            bitmap.Save(string.Format("{0}Result for design {2} on exp {1}.png", path, testNum, designNum));
+            DrawerHelper.SimpleDraw(design, resultPlacement, size, bitmap, string.Format("{0}Result for design {2} on exp {1}.png", path, testNum, designNum));
         }
 
         private static void SaveDesignsInfo(string path, int designNum, IStatisticResult<double> designStatistic)

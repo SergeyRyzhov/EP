@@ -42,12 +42,14 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ChipTask.cs" />
     <Compile Include="Classes\ChipTaskResult.cs" />
+    <Compile Include="Classes\DrawerHelper.cs" />
     <Compile Include="Classes\StorageHelper.cs" />
     <Compile Include="Generators\DenseGenerator.cs" />
     <Compile Include="Generators\IGenerator.cs" />
@@ -60,6 +62,10 @@
     <Compile Include="Classes\ValuePair.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Design.Drawing\Draw.csproj">
+      <Project>{4D455B69-7F69-4661-90E9-D9AED4F7C27C}</Project>
+      <Name>Draw</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PlaceModel\PlaceModel.csproj">
       <Project>{B772B461-D744-48CF-9578-754175A549D1}</Project>
       <Name>PlaceModel</Name>
