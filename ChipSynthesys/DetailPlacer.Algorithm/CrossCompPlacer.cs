@@ -16,7 +16,7 @@ using System.Linq;
 
 namespace DetailPlacer.Algorithm
 {
-    public class CrossCompPlacer : PlacerBase, IDetailPlacer
+    public class CrossCompPlacer : IDetailPlacer
     {
        
         public void CreateCells(int width, int height, Design design, out int[] XCellCoord, out int[] YCellCoord, int qtcells)
