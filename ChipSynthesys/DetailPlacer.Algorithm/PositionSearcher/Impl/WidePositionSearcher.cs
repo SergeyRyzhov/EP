@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
-    public class WidePositionSearcher// : IPositionSearcher
+    public class WidePositionSearcher : IPositionSearcher
     {
         private readonly int m_size;
 
@@ -15,7 +15,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
         }
 
         public WidePositionSearcher()
-            :this(3)
+            :this(10)
         {
         }
 
@@ -136,14 +136,14 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
                 }
             }
 
-            for (int i = 0; i < m.Width; i++)
-            {
-                for (int j = 0; j < m.Height; j++)
-                {
-                    Console.Write("{0} ", (int)m[i,j]);
-                }
-                Console.WriteLine();
-            }
+//            for (int i = 0; i < m.Width; i++)
+//            {
+//                for (int j = 0; j < m.Height; j++)
+//                {
+//                    Console.Write("{0} ", (int)m[i,j]);
+//                }
+//                Console.WriteLine();
+//            }
             return m;
         }
 
@@ -208,9 +208,9 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
             {
                 var result = PlaceType.Allow;
 
-                for (int dy = 0; dy <= c.sizey; dy++)
+                for (int dy = 0; dy < c.sizey; dy++)
                 {
-                    for (int dx = 0; dx <= c.sizex; dx++)
+                    for (int dx = 0; dx < c.sizex; dx++)
                     {
                         try
                         {

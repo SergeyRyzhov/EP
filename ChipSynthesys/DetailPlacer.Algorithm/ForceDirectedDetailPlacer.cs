@@ -27,11 +27,11 @@ namespace DetailPlacer.Algorithm
                 result.placed[c] = true;
             }
             int maxIteration = design.components.Length;
-            DrawerHelper.SimpleDraw(design, result, new Size(600, 600), new Bitmap(600, 600), string.Format("FD {0:##}.png", maxIteration));
+            //DrawerHelper.SimpleDraw(design, result, new Size(600, 600), new Bitmap(600, 600), string.Format("FD {0:##}.png", maxIteration));
             while (Iteration(design, result) && maxIteration > 0)
             {
                 maxIteration--;
-                DrawerHelper.SimpleDraw(design, result,new Size(600,600),new Bitmap(600,600), string.Format("FD {0:##}.png", maxIteration));
+                //DrawerHelper.SimpleDraw(design, result,new Size(600,600),new Bitmap(600,600), string.Format("FD {0:##}.png", maxIteration));
             }
         }
 
