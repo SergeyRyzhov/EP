@@ -350,7 +350,7 @@ namespace DetailPlacer.Algorithm
                  minX = Math.Min(minX, approximate.x[next]);
                  maxX = Math.Max(maxX,approximate.x[next]+next.sizex);
                  minY = Math.Min(minY, approximate.y[next]);
-                 maxY = Math.Max(maxY,approximate.y[Current] + Current.sizey);
+                 maxY = Math.Max(maxY, approximate.y[Current] + Current.sizey);
                 }
             }
             double area = (maxX - minX) * (maxY - minY);
