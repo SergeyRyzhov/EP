@@ -26,7 +26,8 @@ namespace DetailPlacer.Algorithm
             for (int i = 0; i < qtcells; i++)
             {
                 CompInCell[i].Clear();
-                if (ValueCell[i] < 0) continue;
+                if (ValueCell[i] ==-1) 
+                    continue;
                 else
                     ValueCell[i] = 0;
             }
@@ -85,7 +86,7 @@ namespace DetailPlacer.Algorithm
                  sizey = comp.sizey;
                  for (int i = 0; i < qtcells; i++)
                  {
-                     if (ValueCell[i] < 0)
+                     if (ValueCell[i] ==-1)
                          continue;
                      else
                      {
@@ -98,10 +99,12 @@ namespace DetailPlacer.Algorithm
                                  for (int k = 0; k < sizex; k++)
                                  {
                                      if (i + j * w + k < qtcells)
-                                     {
-                                         ValueCell[i + j * w + k]++;
-                                         CompInCell[i + j * w + k].Add(comp);
-                                     }
+                                         {
+                                             if (ValueCell[i + j * w + k] < 0)
+                                                 continue;
+                                             ValueCell[i + j * w + k]++;
+                                             CompInCell[i + j * w + k].Add(comp);
+                                         }                                     
                                  }
                              }
                          }
@@ -125,12 +128,12 @@ namespace DetailPlacer.Algorithm
 
             CreateCells(width, height, design,out XCellCoord, out YCellCoord, qtcells);
             int[] ValueCell = CreatCompValueCells(qtcells);
-           
+           FillCells(design, approximate, XCellCoord, YCellCoord, qtcells, ValueCell,height,width, compInCell);
             result = new PlacementDetail(design);
             do{
-                FillCells(design, approximate, XCellCoord, YCellCoord, qtcells, ValueCell,height,width, compInCell);
-                enumerator=0;                 
-               
+                
+                enumerator=0;
+               // FillCells(design, approximate, XCellCoord, YCellCoord, qtcells, ValueCell, height, width, compInCell);
                 for (int i = 0; i < qtcells; i++)
                 {
                     if (ValueCell[i] > 1 && ValueCell[i] > enumerator)
@@ -149,10 +152,10 @@ namespace DetailPlacer.Algorithm
                         bestCoord = BestCell(XCellCoord, YCellCoord, ValueCell, qtcells, indCell, bestComp, design, approximate);
                         result.x[bestComp] = XCellCoord[bestCoord];
                         result.y[bestComp] = YCellCoord[bestCoord];
-                        approximate.x[bestComp] = XCellCoord[bestCoord];
-                        approximate.y[bestComp] = YCellCoord[bestCoord]; 
+                       // approximate.x[bestComp] = XCellCoord[bestCoord];
+                       // approximate.y[bestComp] = YCellCoord[bestCoord]; 
                         result.placed[bestComp] = true;                        
-                        ValueCell[indCell] = -1;
+                        ValueCell[indCell] = -1;                       
                         for (int i = 0; i < bestComp.sizey; i++)
                         {
                             for (int j = 0; j < bestComp.sizex; j++)
@@ -170,7 +173,7 @@ namespace DetailPlacer.Algorithm
                     }
                     else
                     { ValueCell[indCell] = -1; }
-                    Clear(qtcells, ValueCell, compInCell);
+                   // Clear(qtcells, ValueCell, compInCell);
 
                 }
             }while(fixedComponents.Count() != design.components.Count() && enumerator != 0);
@@ -188,6 +191,7 @@ namespace DetailPlacer.Algorithm
                     //result.y[comp] = YCellCoord[Coord];
                     result.placed[comp] = true;
                     ValueCell[ind] = -1;
+                    DrawerHelper.SimpleDraw(design, result, new Size(600, 600), new Bitmap(600, 600), string.Format("iter {0}.png", comp));
                 }
             }
          
@@ -254,7 +258,7 @@ namespace DetailPlacer.Algorithm
                     continue;
 
                 double percentCurrent = PercentCross(XCellCoord[i], YCellCoord[i], Current, design, approximate);
-               int areaCurrent = CloselyCell(XCellCoord[i], YCellCoord[i], XCellCoord[indexcurrent], YCellCoord[indexcurrent]);
+                int areaCurrent = CloselyCell(XCellCoord[i], YCellCoord[i], XCellCoord[indexcurrent], YCellCoord[indexcurrent]);
                 double area2Current = NearNet(Current, approximate, design, XCellCoord[i], YCellCoord[i]);
 
                 var percentOfBestIsBest = percentBest < percentCurrent;
@@ -264,7 +268,7 @@ namespace DetailPlacer.Algorithm
                
                 if(percentOfBestIsBest && areaOfBestIsBest ||
                   percentOfBestIsBest && area2OfBestIsBest)// ||
-                  // areaOfBestIsBest && area2OfBestIsBest)
+                   //areaOfBestIsBest && area2OfBestIsBest)
                     continue;
 
                 percentBest = percentCurrent;
@@ -362,20 +366,22 @@ namespace DetailPlacer.Algorithm
             double maxX = approximate.x[Current] + Current.sizex;
             double minY = approximate.y[Current];
             double maxY = approximate.y[Current]+Current.sizey ;
-
-            foreach( Net net in design.Nets(Current)) 
-            {
-                foreach (Component next in net.items)
-                { 
-                 minX = Math.Min(minX, approximate.x[next]);
-                 maxX = Math.Max(maxX,approximate.x[next]+next.sizex);
-                 minY = Math.Min(minY, approximate.y[next]);
-                 maxY = Math.Max(maxY, approximate.y[Current] + Current.sizey);
+            double area;
+            foreach (Net net in design.Nets(Current))
+                {
+                    foreach (Component next in net.items)
+                    {
+                        minX = Math.Min(minX, approximate.x[next]);
+                        maxX = Math.Max(maxX, approximate.x[next] + next.sizex);
+                        minY = Math.Min(minY, approximate.y[next]);
+                        maxY = Math.Max(maxY, approximate.y[Current] + Current.sizey);
+                    }
                 }
-            }
-            double area = (maxX - minX) * (maxY - minY);
-            return area;
-        }
+                area = (maxX - minX) * (maxY - minY);
+                return area;
+
+         }
+        
 
     }
 
