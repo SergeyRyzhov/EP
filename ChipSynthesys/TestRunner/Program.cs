@@ -124,22 +124,22 @@ namespace TestRunner
             Assembly a = Assembly.GetAssembly(typeToReflect);
             Type[] existingTypes = a.GetTypes();
             Type[] componentsOrders = existingTypes.Where(t =>
-                (typeof(ICompontsOrderer).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract)).ToArray();
+                (typeof(ICompontsOrderer).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract) && (t.IsPublic)).ToArray();
             Type[] positionComparers = existingTypes.Where(t =>
-                (typeof(IPositionComparer).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract)).ToArray();
+                (typeof(IPositionComparer).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract) && (t.IsPublic)).ToArray();
             Type[] positionSearchers = existingTypes.Where(t =>
-                (typeof(IPositionSearcher).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract)).ToArray();
+                (typeof(IPositionSearcher).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract) && (t.IsPublic)).ToArray();
             Type[] positionSorters = existingTypes.Where(t =>
-                (typeof(IPositionsSorter).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract)).ToArray();
+                (typeof(IPositionsSorter).IsAssignableFrom(t)) && (!t.IsInterface) && (!t.IsAbstract) && (t.IsPublic)).ToArray();
 
             var masType = new Type[] { };
             var statistic = new CommonStatistic();
-            IStatisticResult<double> designStatistics;
             IStatisticResult<double> placemetStatistics;
             int testCount = 0;
 
             for (int i = 0; i < design.Length; i++)
             {
+                IStatisticResult<double> designStatistics;
                 statistic.DesignStatistic(design[i], out designStatistics);
                 SaveDesignsInfo(resultDerectory, i + 1, designStatistics);
             }
@@ -202,12 +202,12 @@ namespace TestRunner
                                                 foreach (var c in d.components)
                                                 {
                                                     tempAppr.placed[c] = true;
-                                                    if (!placeRes.placed[c])
-                                                    {
-                                                        placeRes.x[c] = (int) approximate[i].x[c];
-                                                        placeRes.y[c] = (int) approximate[i].y[c];
-                                                        //placeRes.placed[c] = true;
-                                                    }
+                                                    //                                                    if (!placeRes.placed[c])
+                                                    //                                                    {
+                                                    //                                                        placeRes.x[c] = (int) approximate[i].x[c];
+                                                    //                                                        placeRes.y[c] = (int) approximate[i].y[c];
+                                                    //                                                        //placeRes.placed[c] = true;
+                                                    //                                                    }
                                                 }
 
                                                 statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
@@ -223,40 +223,53 @@ namespace TestRunner
                 }
             }
 
-
-            //other tests
-            var crossReductPlacer = new CrossReductPlacer();
-            testCount++;
-            for (int i = 0; i < design.Length; i++)
+            Type[] otherPlacers =
+                existingTypes.Where(
+                    t =>
+                        typeof(IDetailPlacer).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract &&
+                        typeof(DetailPlacerImpl) != t).ToArray();
+            foreach (Type otherPlacerType in otherPlacers)
             {
-                Design d = design[i];
-                PlacementDetail placeRes;
-
-                //todo исправить другие части чтобы всё рисовали здесь
-                //формирую пустое приближённое решение
-                var tempAppr = approximate[i];
-                foreach (var c in d.components)
+                ConstructorInfo info = otherPlacerType.GetConstructor(masType);
+                if (info != null)
                 {
-                    tempAppr.placed[c] = false;
-                }
-
-                //placer.Place(d, approximate[i], out placeRes);
-                crossReductPlacer.Place(d, tempAppr, out placeRes);
-
-                foreach (var c in d.components)
-                {
-                    tempAppr.placed[c] = true;
-                    if (!placeRes.placed[c])
+                    var placer = info.Invoke(null) as IDetailPlacer;
+                    if(placer== null)
+                        continue;
+                    
+                    for (int i = 0; i < design.Length; i++)
                     {
-                        placeRes.x[c] = (int) approximate[i].x[c];
-                        placeRes.y[c] = (int) approximate[i].y[c];
-                        //placeRes.placed[c] = true;
+                        Design d = design[i];
+                        PlacementDetail placeRes;
+
+                        //todo исправить другие части чтобы всё рисовали здесь
+                        //формирую пустое приближённое решение
+                        var tempAppr = approximate[i];
+                        foreach (var c in d.components)
+                        {
+                            tempAppr.placed[c] = false;
+                        }
+
+                        //placer.Place(d, approximate[i], out placeRes);
+                        placer.Place(d, tempAppr, out placeRes);
+
+                        foreach (var c in d.components)
+                        {
+                            tempAppr.placed[c] = true;
+                            //                    if (!placeRes.placed[c])
+                            //                    {
+                            //                        placeRes.x[c] = (int) approximate[i].x[c];
+                            //                        placeRes.y[c] = (int) approximate[i].y[c];
+                            //                        //placeRes.placed[c] = true;
+                            //                    }
+                        }
+
+                        statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
+                        SaveTestResults(resultDerectory, i + 1, ++testCount, d, placeRes,
+                            placemetStatistics, sizes[i], bitmaps[i]);
                     }
                 }
 
-                statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
-                SaveTestResults(resultDerectory, i + 1, testCount, d, placeRes,
-                    placemetStatistics, sizes[i], bitmaps[i]);
             }
             //Console.ReadLine();
         }
@@ -337,12 +350,12 @@ namespace TestRunner
             out Bitmap bitmap)
         {
             IGenerator generator = new DenseGenerator();
-                    const int n    = 30  ;       //число компонент
-                    const int maxx = 8   ;       //размер по x
-                    const int maxy = 8   ;       //размер по y
-                    const int p    = 90  ;       //процент заполнения
-                    const int nets = 30   ;       //число сетей
-              const int maxNetSize = 4   ;       //длина цепей
+            const int n = 30;       //число компонент
+            const int maxx = 4;       //размер по x
+            const int maxy = 4;       //размер по y
+            const int p = 50;       //процент заполнения
+            const int nets = 4;       //число сетей
+            const int maxNetSize = 4;       //длина цепей
             generator.NextDesignWithPlacement(n, nets, maxNetSize, p, maxx, maxy, 0, 0, out design, out placement);
 
             const int scale = 20; //масштаб здесь, внутри должен быть рассчитан по исходным данным

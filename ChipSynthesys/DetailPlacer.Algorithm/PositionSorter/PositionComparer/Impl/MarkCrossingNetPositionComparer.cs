@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
 {
-    public class MarkCrossingNetPositionComparer : IPositionComparer
+    internal class MarkCrossingNetPositionComparer : IPositionComparer
     {
         protected class PosInfo
         {
@@ -20,11 +20,10 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
 
         public override string ToString()
         {
-            return "Сравнение позиций с учётом вклада в критерий и минимизации пересечений";
+            return "Частичный критерий и минимизации пересечений";
         }
 
-        public bool Better(Design design, PlacementGlobal approximate, PlacementDetail placement, Component current, int firstX, int firstY, int secondX,
-            int secondY)
+        public bool Better(Design design, PlacementGlobal approximate, PlacementDetail placement, Component current, int firstX, int firstY, int secondX, int secondY)
         {
             int firstMark = MarkPosition(design, placement, current, firstX, firstY);
             int secondMark = MarkPosition(design, placement, current, secondX, secondY);

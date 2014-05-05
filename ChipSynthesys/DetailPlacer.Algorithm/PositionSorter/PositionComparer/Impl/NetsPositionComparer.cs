@@ -8,7 +8,7 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
     {
         public override string ToString()
         {
-            return "Сравнение позиций согласно суммарной Манхеттенской метрики";
+            return "Частичный критерий";
         }
 
         public bool Better(Design design, PlacementGlobal approximate, PlacementDetail placement, Component current, int firstX, int firstY, int secondX,

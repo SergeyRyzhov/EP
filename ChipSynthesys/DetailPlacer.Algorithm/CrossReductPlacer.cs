@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DetailPlacer.Algorithm
 {
-    public class CrossReductPlacer : PlacerBase, IDetailPlacer
+    public class CrossReductPlacer : IDetailPlacer
     {
         private readonly IPositionSearcher m_positionSearcher;
 

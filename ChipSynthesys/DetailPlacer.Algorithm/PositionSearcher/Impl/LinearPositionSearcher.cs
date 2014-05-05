@@ -3,11 +3,11 @@ using System;
 
 namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
-    public class LinearPositionSearcher : PositionSearcherBase
+    internal class LinearPositionSearcher : PositionSearcherBase
     {
         public override string ToString()
         {
-            return "Линейный перебор доступных позиций";
+            return "Линейный перебор";
         }
 
         protected override bool DetourPositions(Design design, PlacementGlobal approximate, PlacementDetail result,

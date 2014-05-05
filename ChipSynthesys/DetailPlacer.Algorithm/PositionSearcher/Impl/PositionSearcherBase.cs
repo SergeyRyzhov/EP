@@ -101,22 +101,6 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
                         }
                     }
                 }
-                /*else
-                {
-                    var cx = (int) Math.Round(approximate.x[component]);
-                    var cy = (int) Math.Round(approximate.y[component]);
-
-                    int ph = component.sizey;
-                    int pw = component.sizex;
-
-                    for (int k = 0; k < ph; k++)
-                    {
-                        for (int l = 0; l < pw; l++)
-                        {
-                            mask[cx + l, cy + k] = 1;
-                        }
-                    }
-                }*/
             }
             return mask;
         }

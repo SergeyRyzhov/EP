@@ -19,7 +19,7 @@ namespace DetailPlacer.Algorithm
     /// **стратегия сравнения
     /// 3,3 присвоение
     /// </summary>
-    public abstract class DetailPlacerBase : PlacerBase, IDetailPlacer
+    public abstract class DetailPlacerBase : IDetailPlacer
     {
         private readonly ICompontsOrderer m_compontsOrderer;
         private readonly IPositionSearcher m_positionSearcher;
@@ -35,6 +35,12 @@ namespace DetailPlacer.Algorithm
         public void Place(Design design, PlacementGlobal approximate, out PlacementDetail result)
         {
             result = new PlacementDetail(design);
+            foreach (Component component in design.components)
+            {
+//                result.x[component] = (int)approximate.x[component];
+//                result.y[component] = (int)approximate.y[component];
+            }
+
             var notPalced = new List<Component>();
             Component[] unplacedComponents;
             do
@@ -55,6 +61,13 @@ namespace DetailPlacer.Algorithm
                 if (!placed)
                     notPalced.Add(current);
             } while (unplacedComponents.Length > 0);
+
+            foreach (Component component in notPalced)
+            {
+                result.x[component] = (int)approximate.x[component];
+                result.y[component] = (int)approximate.y[component];
+                result.placed[component] = false;
+            }
         }
 
         protected virtual void PlaceComponent(Design design, PlacementGlobal approximate, Component current, PlacementDetail result, out bool placed)
@@ -79,7 +92,7 @@ namespace DetailPlacer.Algorithm
             }
             else
             {
-                result.placed[current] = false;
+                result.placed[current] = true;
                 placed = false;
             }
         }
