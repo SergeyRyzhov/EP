@@ -8,7 +8,7 @@ namespace DetailPlacer.Algorithm.CompontsOrderer.Impl
     {
         public override string ToString()
         {
-            return "Упорядочение компонент согласно раскраске графа";
+            return "Раскраска графа";
         }
 
         public void SortComponents(Design design, PlacementGlobal approximate, PlacementDetail result, Component[] unplacedComponents, ref int[] perm)

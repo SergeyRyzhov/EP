@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompontsOrderer\Impl\CompontsOrderer.cs" />
@@ -43,22 +44,29 @@
     <Compile Include="CrossCompPlacer.cs" />
     <Compile Include="CrossReductPlacer.cs" />
     <Compile Include="DetailPlacerBase.cs" />
+    <Compile Include="ForceDirectedDetailPlacer.cs" />
     <Compile Include="GlobalPlacerBase.cs" />
     <Compile Include="CompontsOrderer\ICompontsOrderer.cs" />
     <Compile Include="PositionSearcher\Impl\PositionSearcherBase.cs" />
+    <Compile Include="PositionSearcher\Impl\SpiralGenerator.cs" />
     <Compile Include="PositionSearcher\Impl\SpiralPositionSearcher.cs" />
+    <Compile Include="PositionSearcher\Impl\WidePositionSearcher.cs" />
+    <Compile Include="PositionSorter\PositionComparer\Impl\CriterionHelper.cs" />
     <Compile Include="PositionSorter\PositionComparer\Impl\MarkCrossingNetPositionComparer.cs" />
     <Compile Include="PositionSorter\PositionComparer\IPositionComparer.cs" />
     <Compile Include="PositionSearcher\IPositionSearcher.cs" />
     <Compile Include="PositionSorter\IPositionsSorter.cs" />
     <Compile Include="PositionSorter\PositionComparer\Impl\NetsPositionComparer.cs" />
-    <Compile Include="PlacerBase.cs" />
     <Compile Include="PositionSorter\PositionComparer\Impl\PositionComparer.cs" />
     <Compile Include="PositionSearcher\Impl\LinearPositionSearcher.cs" />
     <Compile Include="PositionSorter\Impl\PositionsSorter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ChipSynthesys\Common.csproj">
+      <Project>{0019C9DD-A444-41C9-A4FA-1970F25C5141}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PlaceModel\PlaceModel.csproj">
       <Project>{b772b461-d744-48cf-9578-754175a549d1}</Project>
       <Name>PlaceModel</Name>

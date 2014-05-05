@@ -7,7 +7,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
     {
         public override string ToString()
         {
-            return "Линейный перебор доступных позиций";
+            return "Линейный перебор";
         }
 
         protected override bool DetourPositions(Design design, PlacementGlobal approximate, PlacementDetail result,
