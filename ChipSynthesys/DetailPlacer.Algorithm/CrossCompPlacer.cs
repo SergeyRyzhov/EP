@@ -58,7 +58,6 @@ namespace DetailPlacer.Algorithm
 
             return result;
         }
-
         public void FillCells(Design design, PlacementGlobal approximate, int[] XCellCoord, int[] YCellCoord, int qtcells, int[] ValueCell,int h, int w, List<List<Component>> CompInCell)
          {
              double xCoord;
@@ -129,7 +128,7 @@ namespace DetailPlacer.Algorithm
                     if (bestComp != null)
                     {
                         int bestCoord;
-                        bestCoord = BestCell(XCellCoord, YCellCoord, ValueCell, qtcells, indCell, bestComp, design, approximate);
+                        bestCoord = BestCell2(XCellCoord, YCellCoord, ValueCell, qtcells, indCell, bestComp, design, approximate);
                         result.x[bestComp] = XCellCoord[bestCoord];
                         result.y[bestComp] = YCellCoord[bestCoord];
                         result.placed[bestComp] = true;
@@ -148,7 +147,6 @@ namespace DetailPlacer.Algorithm
                             }
                         }
                         fixedComponents.Add(bestComp);
-
                     }
                     else
                     { ValueCell[indCell] = -1; }
@@ -216,7 +214,7 @@ namespace DetailPlacer.Algorithm
             return true;
         }
         
-        public int BestCell(int[] XCellCoord, int[] YCellCoord, int[] ValueCell, int qtcells, int indexcurrent, Component Current, Design design, PlacementGlobal approximate)
+        public int BestCell2(int[] XCellCoord, int[] YCellCoord, int[] ValueCell, int qtcells, int indexcurrent, Component Current, Design design, PlacementGlobal approximate)
         {
             int indexOfBest = 0;
 
@@ -226,8 +224,8 @@ namespace DetailPlacer.Algorithm
             }
 
             double percentBest=PercentCross(XCellCoord[indexOfBest], YCellCoord[indexOfBest], Current, design, approximate);
-            int areaBest=CloselyCell(XCellCoord[indexOfBest], YCellCoord[indexOfBest], XCellCoord[indexcurrent], YCellCoord[indexcurrent]);
-            double area2Best=NearNet(Current, approximate, design, XCellCoord[indexOfBest], YCellCoord[indexOfBest]);
+            //int areaBest=CloselyCell(XCellCoord[indexOfBest], YCellCoord[indexOfBest], XCellCoord[indexcurrent], YCellCoord[indexcurrent]);
+            //double area2Best=NearNet(Current, approximate, design, XCellCoord[indexOfBest], YCellCoord[indexOfBest]);
 
             for(int i = indexOfBest + 1; i < qtcells; i++)
             {
@@ -235,28 +233,33 @@ namespace DetailPlacer.Algorithm
                     continue;
 
                 double percentCurrent = PercentCross(XCellCoord[i], YCellCoord[i], Current, design, approximate);
-                int areaCurrent = CloselyCell(XCellCoord[i], YCellCoord[i], XCellCoord[indexcurrent], YCellCoord[indexcurrent]);
-                double area2Current = NearNet(Current, approximate, design, XCellCoord[i], YCellCoord[i]);
+                //int areaCurrent = CloselyCell(XCellCoord[i], YCellCoord[i], XCellCoord[indexcurrent], YCellCoord[indexcurrent]);
+                //double area2Current = NearNet(Current, approximate, design, XCellCoord[i], YCellCoord[i]);
 
                 var percentOfBestIsBest = percentBest < percentCurrent;
-                var areaOfBestIsBest = areaBest < areaCurrent;
-                var area2OfBestIsBest = area2Best < area2Current;
+               // var areaOfBestIsBest = areaBest < areaCurrent;
+                //var area2OfBestIsBest = area2Best < area2Current;
 
                
-                if(percentOfBestIsBest && areaOfBestIsBest ||
-                   percentOfBestIsBest && area2OfBestIsBest ||
-                   areaOfBestIsBest && area2OfBestIsBest)
+                if(percentOfBestIsBest)// && areaOfBestIsBest )
+                //||
+                //   percentOfBestIsBest && area2OfBestIsBest ||
+                //   areaOfBestIsBest && area2OfBestIsBest)
                     continue;
 
                 percentBest = percentCurrent;
-                areaBest = areaCurrent;
-                area2Best = area2Current;
+              //  areaBest = areaCurrent;
+               // area2Best = area2Current;
                 indexOfBest = i;
             }
 
             return  indexOfBest;
         }
 
+        public int BestCell(int[] XCellCoord, int[] YCellCoord, int[] ValueCell, int qtcells, int indexcurrent, Component Current, Design design, PlacementGlobal approximate)
+        {
+            return 0;
+        }
         private bool CanNotBePlaced(int cell, int x, int y, Component component, Design design)
         {
             var field = design.field;
