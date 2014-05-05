@@ -128,7 +128,7 @@ namespace DetailPlacer.Algorithm
                     if (bestComp != null)
                     {
                         int bestCoord;
-                        bestCoord = BestCell2(XCellCoord, YCellCoord, ValueCell, qtcells, indCell, bestComp, design, approximate);
+                        bestCoord = BestCell(XCellCoord, YCellCoord, ValueCell, qtcells, indCell, bestComp, design, approximate);
                         result.x[bestComp] = XCellCoord[bestCoord];
                         result.y[bestComp] = YCellCoord[bestCoord];
                         result.placed[bestComp] = true;
@@ -214,7 +214,7 @@ namespace DetailPlacer.Algorithm
             return true;
         }
         
-        public int BestCell2(int[] XCellCoord, int[] YCellCoord, int[] ValueCell, int qtcells, int indexcurrent, Component Current, Design design, PlacementGlobal approximate)
+        public int BestCell(int[] XCellCoord, int[] YCellCoord, int[] ValueCell, int qtcells, int indexcurrent, Component Current, Design design, PlacementGlobal approximate)
         {
             int indexOfBest = 0;
 
@@ -256,10 +256,7 @@ namespace DetailPlacer.Algorithm
             return  indexOfBest;
         }
 
-        public int BestCell(int[] XCellCoord, int[] YCellCoord, int[] ValueCell, int qtcells, int indexcurrent, Component Current, Design design, PlacementGlobal approximate)
-        {
-            return 0;
-        }
+       
         private bool CanNotBePlaced(int cell, int x, int y, Component component, Design design)
         {
             var field = design.field;
