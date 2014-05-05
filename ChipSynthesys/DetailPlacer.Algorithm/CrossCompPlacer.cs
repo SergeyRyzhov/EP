@@ -13,12 +13,24 @@ using DetailPlacer.Algorithm.CriterionPositionSearcher;
 using PlaceModel;
 using System.Collections.Generic;
 using System.Linq;
+using ChipSynthesys.Common.Classes;
+using System.Drawing;
 
 namespace DetailPlacer.Algorithm
 {
     public class CrossCompPlacer : IDetailPlacer
     {
-       
+
+        public void Clear(int qtcells, int[] ValueCell, List<List<Component>> CompInCell)
+        {
+            for (int i = 0; i < qtcells; i++)
+            {
+                CompInCell[i].Clear();
+                if (ValueCell[i] < 0) continue;
+                else
+                    ValueCell[i] = 0;
+            }
+        }
         public void CreateCells(int width, int height, Design design, out int[] XCellCoord, out int[] YCellCoord, int qtcells)
                 {
                     int coord_x = design.field.beginx;
@@ -72,8 +84,12 @@ namespace DetailPlacer.Algorithm
                  sizex = comp.sizex;
                  sizey = comp.sizey;
                  for (int i = 0; i < qtcells; i++)
-                 { 
-                     if (XCellCoord[i] <= xCoord && xCoord < XCellCoord[i] + 1 && YCellCoord[i] <= yCoord && yCoord < YCellCoord[i] + 1)
+                 {
+                     if (ValueCell[i] < 0)
+                         continue;
+                     else
+                     {
+                         if (XCellCoord[i] <= xCoord && xCoord < XCellCoord[i] + 1 && YCellCoord[i] <= yCoord && yCoord < YCellCoord[i] + 1)
                          {
                              if (XCellCoord[i] < xCoord && YCellCoord[i] < yCoord)
                              { sizex++; sizey++; }
@@ -88,7 +104,8 @@ namespace DetailPlacer.Algorithm
                                      }
                                  }
                              }
-                         }                     
+                         }
+                     }
                  }
                       
              }
@@ -104,13 +121,14 @@ namespace DetailPlacer.Algorithm
             int enumerator;
             int indCell=0;          
             List<List<Component>> compInCell = InitCompInCell(qtcells);
-            List<Component> fixedComponents = new List<Component>();        
+            List<Component> fixedComponents = new List<Component>();      
 
             CreateCells(width, height, design,out XCellCoord, out YCellCoord, qtcells);
             int[] ValueCell = CreatCompValueCells(qtcells);
-            FillCells(design, approximate, XCellCoord, YCellCoord, qtcells, ValueCell,height,width, compInCell);
+           
             result = new PlacementDetail(design);
             do{
+                FillCells(design, approximate, XCellCoord, YCellCoord, qtcells, ValueCell,height,width, compInCell);
                 enumerator=0;                 
                
                 for (int i = 0; i < qtcells; i++)
@@ -131,8 +149,9 @@ namespace DetailPlacer.Algorithm
                         bestCoord = BestCell(XCellCoord, YCellCoord, ValueCell, qtcells, indCell, bestComp, design, approximate);
                         result.x[bestComp] = XCellCoord[bestCoord];
                         result.y[bestComp] = YCellCoord[bestCoord];
-                        result.placed[bestComp] = true;
-                        
+                        approximate.x[bestComp] = XCellCoord[bestCoord];
+                        approximate.y[bestComp] = YCellCoord[bestCoord]; 
+                        result.placed[bestComp] = true;                        
                         ValueCell[indCell] = -1;
                         for (int i = 0; i < bestComp.sizey; i++)
                         {
@@ -147,9 +166,11 @@ namespace DetailPlacer.Algorithm
                             }
                         }
                         fixedComponents.Add(bestComp);
+                        DrawerHelper.SimpleDraw(design, result, new Size(600, 600), new Bitmap(600, 600), string.Format("iter {0}.png", bestComp));
                     }
                     else
                     { ValueCell[indCell] = -1; }
+                    Clear(qtcells, ValueCell, compInCell);
 
                 }
             }while(fixedComponents.Count() != design.components.Count() && enumerator != 0);
@@ -159,11 +180,11 @@ namespace DetailPlacer.Algorithm
                 if (result.placed[comp] == false)
                 {
                                        
-                    result.x[comp] = (int)approximate.x[comp];
-                    result.y[comp] = (int)approximate.y[comp];
+                   result.x[comp] = (int)approximate.x[comp];
+                   result.y[comp] = (int)approximate.y[comp];
                     int ind = GetCellIndex((int)approximate.x[comp],(int)approximate.y[comp], XCellCoord,YCellCoord,qtcells);
-                    //int Coord = BestCell(XCellCoord, YCellCoord, ValueCell, qtcells, ind, comp, design, approximate);
-                    //result.x[comp] = XCellCoord[Coord];
+                   // int Coord = BestCell(XCellCoord, YCellCoord, ValueCell, qtcells, ind, comp, design, approximate);
+                   // result.x[comp] = XCellCoord[Coord];
                     //result.y[comp] = YCellCoord[Coord];
                     result.placed[comp] = true;
                     ValueCell[ind] = -1;
@@ -224,8 +245,8 @@ namespace DetailPlacer.Algorithm
             }
 
             double percentBest=PercentCross(XCellCoord[indexOfBest], YCellCoord[indexOfBest], Current, design, approximate);
-            //int areaBest=CloselyCell(XCellCoord[indexOfBest], YCellCoord[indexOfBest], XCellCoord[indexcurrent], YCellCoord[indexcurrent]);
-            //double area2Best=NearNet(Current, approximate, design, XCellCoord[indexOfBest], YCellCoord[indexOfBest]);
+            int areaBest=CloselyCell(XCellCoord[indexOfBest], YCellCoord[indexOfBest], XCellCoord[indexcurrent], YCellCoord[indexcurrent]);
+            double area2Best=NearNet(Current, approximate, design, XCellCoord[indexOfBest], YCellCoord[indexOfBest]);
 
             for(int i = indexOfBest + 1; i < qtcells; i++)
             {
@@ -233,23 +254,22 @@ namespace DetailPlacer.Algorithm
                     continue;
 
                 double percentCurrent = PercentCross(XCellCoord[i], YCellCoord[i], Current, design, approximate);
-                //int areaCurrent = CloselyCell(XCellCoord[i], YCellCoord[i], XCellCoord[indexcurrent], YCellCoord[indexcurrent]);
-                //double area2Current = NearNet(Current, approximate, design, XCellCoord[i], YCellCoord[i]);
+               int areaCurrent = CloselyCell(XCellCoord[i], YCellCoord[i], XCellCoord[indexcurrent], YCellCoord[indexcurrent]);
+                double area2Current = NearNet(Current, approximate, design, XCellCoord[i], YCellCoord[i]);
 
                 var percentOfBestIsBest = percentBest < percentCurrent;
-               // var areaOfBestIsBest = areaBest < areaCurrent;
-                //var area2OfBestIsBest = area2Best < area2Current;
+                var areaOfBestIsBest = areaBest < areaCurrent;
+                var area2OfBestIsBest = area2Best < area2Current;
 
                
-                if(percentOfBestIsBest)// && areaOfBestIsBest )
-                //||
-                //   percentOfBestIsBest && area2OfBestIsBest ||
-                //   areaOfBestIsBest && area2OfBestIsBest)
+                if(percentOfBestIsBest && areaOfBestIsBest ||
+                  percentOfBestIsBest && area2OfBestIsBest)// ||
+                  // areaOfBestIsBest && area2OfBestIsBest)
                     continue;
 
                 percentBest = percentCurrent;
-              //  areaBest = areaCurrent;
-               // area2Best = area2Current;
+                areaBest = areaCurrent;
+                area2Best = area2Current;
                 indexOfBest = i;
             }
 
