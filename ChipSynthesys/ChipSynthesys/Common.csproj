@@ -60,6 +60,7 @@
     <Compile Include="Generators\SquareGenerator.cs" />
     <Compile Include="Randoms\TableRandom.cs" />
     <Compile Include="Classes\ValuePair.cs" />
+    <Compile Include="TestsConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Design.Drawing\Draw.csproj">

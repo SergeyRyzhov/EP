@@ -1,3 +1,4 @@
+using ChipSynthesys.Common;
 using PlaceModel;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
         private readonly int m_maxCount;
 
         protected PositionSearcherBase()
-            : this(64)
+            : this(TestsConstants.SearchSize)
         {
         }
 

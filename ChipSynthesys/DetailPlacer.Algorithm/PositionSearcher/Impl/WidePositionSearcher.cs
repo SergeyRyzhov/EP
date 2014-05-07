@@ -1,4 +1,5 @@
-﻿using DetailPlacer.Algorithm.CriterionPositionSearcher;
+﻿using ChipSynthesys.Common;
+using DetailPlacer.Algorithm.CriterionPositionSearcher;
 using PlaceModel;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
         }
 
         public WidePositionSearcher()
-            :this(10)
+            :this(TestsConstants.SearchSize)
         {
         }
 

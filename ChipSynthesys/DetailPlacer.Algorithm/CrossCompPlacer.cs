@@ -124,7 +124,16 @@ namespace DetailPlacer.Algorithm
             int enumerator;
             int indCell=0;          
             List<List<Component>> compInCell = InitCompInCell(qtcells);
-            List<Component> fixedComponents = new List<Component>();      
+            List<Component> fixedComponents = new List<Component>();
+
+            var myApproximate = new PlacementGlobal(design);
+            foreach (Component c in design.components)
+            {
+                myApproximate.x[c] = approximate.x[c];
+                myApproximate.y[c] = approximate.y[c];
+                myApproximate.placed[c] = approximate.placed[c];
+            }
+
 
             CreateCells(width, height, design,out XCellCoord, out YCellCoord, qtcells);
             int[] ValueCell = CreatCompValueCells(qtcells);
@@ -133,7 +142,7 @@ namespace DetailPlacer.Algorithm
             do{
                 
                 enumerator=0;
-                FillCells(design, approximate, XCellCoord, YCellCoord, qtcells, ValueCell, height, width, compInCell);
+                FillCells(design, myApproximate, XCellCoord, YCellCoord, qtcells, ValueCell, height, width, compInCell);
                 for (int i = 0; i < qtcells; i++)
                 {
                     if (ValueCell[i] > 1 && ValueCell[i] > enumerator)
@@ -149,11 +158,11 @@ namespace DetailPlacer.Algorithm
                     if (bestComp != null)
                     {
                         int bestCoord;
-                        bestCoord = BestCell(XCellCoord, YCellCoord, ValueCell, qtcells, indCell, bestComp, design, approximate);
+                        bestCoord = BestCell(XCellCoord, YCellCoord, ValueCell, qtcells, indCell, bestComp, design, myApproximate);
                         result.x[bestComp] = XCellCoord[bestCoord];
                         result.y[bestComp] = YCellCoord[bestCoord];
-                        approximate.x[bestComp] = XCellCoord[bestCoord];
-                        approximate.y[bestComp] = YCellCoord[bestCoord]; 
+                        myApproximate.x[bestComp] = XCellCoord[bestCoord];
+                        myApproximate.y[bestComp] = YCellCoord[bestCoord]; 
                         result.placed[bestComp] = true;                        
                         ValueCell[indCell] = -1;                       
                         for (int i = 0; i < bestComp.sizey; i++)
@@ -169,7 +178,7 @@ namespace DetailPlacer.Algorithm
                             }
                         }
                         fixedComponents.Add(bestComp);
-                        DrawerHelper.SimpleDraw(design, result, new Size(600, 600), new Bitmap(600, 600), string.Format("iter {0}.png", bestComp));
+                        //DrawerHelper.SimpleDraw(design, result, new Size(600, 600), new Bitmap(600, 600), string.Format("iter {0}.png", bestComp));
                     }
                     else
                     { ValueCell[indCell] = -1; }
@@ -185,13 +194,13 @@ namespace DetailPlacer.Algorithm
                                        
                    //result.x[comp] = (int)approximate.x[comp];
                   // result.y[comp] = (int)approximate.y[comp];
-                    int ind = GetCellIndex((int)approximate.x[comp],(int)approximate.y[comp], XCellCoord,YCellCoord,qtcells);
-                    int Coord = BestCell(XCellCoord, YCellCoord, ValueCell, qtcells, ind, comp, design, approximate);
+                    int ind = GetCellIndex((int)myApproximate.x[comp],(int)myApproximate.y[comp], XCellCoord,YCellCoord,qtcells);
+                    int Coord = BestCell(XCellCoord, YCellCoord, ValueCell, qtcells, ind, comp, design, myApproximate);
                     result.x[comp] = XCellCoord[Coord];
                     result.y[comp] = YCellCoord[Coord];
                     result.placed[comp] = true;
                     ValueCell[ind] = -1;
-                    DrawerHelper.SimpleDraw(design, result, new Size(600, 600), new Bitmap(600, 600), string.Format("iter {0}.png", comp));
+                    //DrawerHelper.SimpleDraw(design, result, new Size(600, 600), new Bitmap(600, 600), string.Format("iter {0}.png", comp));
                 }
             }
          

@@ -1,3 +1,4 @@
+using ChipSynthesys.Common;
 using PlaceModel;
 using System;
 using System.Linq;
@@ -44,7 +45,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
         }
 
         public SpiralPositionSearcher()
-            : this(16, false)
+            : this(TestsConstants.SearchSize, false)
         {
         }
 
