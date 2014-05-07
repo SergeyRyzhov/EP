@@ -17,6 +17,74 @@ using System.Reflection;
 
 namespace TestRunner
 {
+    [Serializable]
+    public class PlacementStatisticModel :XmlModel
+    {
+        public SerializableDictionary<string, double> PlacementStatistic { get; set; }
+
+        public PlacementStatisticModel()
+        {
+            PlacementStatistic = new SerializableDictionary<string, double>();
+        }
+
+        public PlacementStatisticModel(IStatisticResult<double> placementStatistic)
+        {
+            PlacementStatistic = new SerializableDictionary<string, double>();
+            foreach (var d in placementStatistic.Results)
+            {
+                PlacementStatistic.Add(d.Key, d.Value);
+            }
+        }
+    }
+
+    [Serializable]
+    public class DesignStatisticModel : XmlModel
+    {
+        public SerializableDictionary<string, double> DesignStatistic { get; set; }
+
+        public DesignStatisticModel()
+        {
+            DesignStatistic = new SerializableDictionary<string, double>();
+        }
+
+        public DesignStatisticModel(IStatisticResult<double> designStatistic)
+        {
+            DesignStatistic = new SerializableDictionary<string, double>();
+            foreach (var d in designStatistic.Results)
+            {
+                DesignStatistic.Add(d.Key, d.Value);
+            }
+        }
+    }
+
+    [Serializable]
+    public class HeuristicsModel : XmlModel
+    {
+        public SerializableDictionary<string, string> Heuristics { get; set; }
+
+        public HeuristicsModel()
+        {
+            Heuristics = new SerializableDictionary<string, string>();
+        }
+
+        public HeuristicsModel(ICompontsOrderer compontsOrderer, IPositionSearcher positionSearcher,
+            IPositionComparer positionComparer,
+            IPositionsSorter positionsSorter)
+        {
+            Heuristics = new SerializableDictionary<string, string>
+            {
+                {"Сортировка компонент", compontsOrderer.ToString()},
+                {"Поиск позиций", positionSearcher.ToString()},
+                {"Сортировка позиций", positionsSorter.ToString()},
+                {"Сравнение позиций", positionComparer.ToString()}
+            };
+        }
+        public HeuristicsModel(IDetailPlacer placer)
+        {
+            Heuristics = new SerializableDictionary<string, string> {{"Размещатель", placer.ToString()}};
+        }
+    }
+
     public class Program
     {
         private static void SaveTestResults(string path, int designNum, int testNum, Design design,
@@ -24,14 +92,18 @@ namespace TestRunner
         {
             DrawerHelper.SimpleDraw(design, resultPlacement, size, bitmap, string.Format("{0}Result for design {2} on exp {1}.png", path, testNum, designNum));
 
-            using (
-                StreamWriter sw =
-                    File.CreateText(string.Format("{0}PlacememtStatistics on design {2} in {1} test.txt", path, testNum,
-                        designNum))
-                )
-            {
-                sw.WriteLine(placementStatistic.ToString());
-            }
+            var xmlS = new PlacementStatisticModel(placementStatistic);
+            xmlS.Save(string.Format("{0}PlacememtStatistics on design {2} in {1} test.xml", path, testNum,
+                        designNum));
+
+//            using (
+//                StreamWriter sw =
+//                    File.CreateText(string.Format("{0}PlacememtStatistics on design {2} in {1} test.txt", path, testNum,
+//                        designNum))
+//                )
+//            {
+//                sw.WriteLine(placementStatistic.ToString());
+//            }
 
             var global = new PlacementGlobal(design);
             foreach (Component c in design.components)
@@ -59,31 +131,39 @@ namespace TestRunner
 
         private static void SaveDesignsInfo(string path, int designNum, IStatisticResult<double> designStatistic)
         {
-            using (StreamWriter sw = File.CreateText(string.Format("{0}Design {1} Statistics.txt", path, designNum)))
-            {
-                sw.WriteLine(designStatistic.ToString());
-            }
+
+            var xmlS = new DesignStatisticModel(designStatistic);
+            xmlS.Save(string.Format("{0}Design {1} Statistics.xml", path, designNum));
+
+//            using (StreamWriter sw = File.CreateText(string.Format("{0}Design {1} Statistics.txt", path, designNum)))
+//            {
+//                sw.WriteLine(designStatistic.ToString());
+//            }
         }
 
-        private static void SaveTestInfo(string path, int testNum, object compOrder, object posComparer,
-            object posSearcher,
-            object posSorter)
+        private static void SaveTestInfo(string path, int testNum, ICompontsOrderer compOrder, IPositionSearcher posComparer,
+            IPositionComparer posSearcher,
+            IPositionsSorter posSorter)
         {
-            using (StreamWriter sw = File.CreateText(string.Format("{0}Heuristics {1}.txt", path, testNum)))
-            {
-                sw.WriteLine(compOrder.ToString());
-                sw.WriteLine(posComparer.ToString());
-                sw.WriteLine(posSearcher.ToString());
-                sw.WriteLine(posSorter.ToString());
-            }
+            var xmlS = new HeuristicsModel(compOrder,posComparer,posSearcher,posSorter);
+            xmlS.Save(string.Format("{0}Heuristics {1}.xml", path, testNum));
+//            using (StreamWriter sw = File.CreateText(string.Format("{0}Heuristics {1}.txt", path, testNum)))
+//            {
+//                sw.WriteLine(compOrder.ToString());
+//                sw.WriteLine(posComparer.ToString());
+//                sw.WriteLine(posSearcher.ToString());
+//                sw.WriteLine(posSorter.ToString());
+//            }
         }
 
         private static void SaveTestInfo(string path, int testNum, IDetailPlacer placer)
         {
-            using (StreamWriter sw = File.CreateText(string.Format("{0}Heuristics {1}.txt", path, testNum)))
-            {
-                sw.WriteLine(placer.ToString());
-            }
+            var xmlS = new HeuristicsModel(placer);
+            xmlS.Save(string.Format("{0}Heuristics {1}.xml", path, testNum));
+//            using (StreamWriter sw = File.CreateText(string.Format("{0}Heuristics {1}.txt", path, testNum)))
+//            {
+//                sw.WriteLine(placer.ToString());
+//            }
         }
 
         private static void Main(string[] args)
