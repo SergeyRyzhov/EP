@@ -1,6 +1,5 @@
+using ChipSynthesys.Common.Classes;
 using PlaceModel;
-using System;
-using System.Linq;
 
 namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
 {

@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Classes\ChipTask.cs" />
     <Compile Include="Classes\ChipTaskResult.cs" />
+    <Compile Include="Classes\CriterionHelper.cs" />
     <Compile Include="Classes\DrawerHelper.cs" />
     <Compile Include="Classes\StorageHelper.cs" />
     <Compile Include="Generators\DenseGenerator.cs" />

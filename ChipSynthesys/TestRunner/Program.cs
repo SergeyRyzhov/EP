@@ -1,6 +1,5 @@
 ﻿using ChipSynthesys.Common.Classes;
 using ChipSynthesys.Common.Generators;
-using ChipSynthesys.Draw;
 using ChipSynthesys.Statistic.Interfaces;
 using ChipSynthesys.Statistic.Statistics;
 using DetailPlacer.Algorithm;
@@ -348,9 +347,9 @@ namespace TestRunner
             const int n = 30;       //число компонент
             const int maxx = 4;       //размер по x
             const int maxy = 4;       //размер по y
-            const int p = 50;       //процент заполнения
-            const int nets = 4;       //число сетей
-            const int maxNetSize = 4;       //длина цепей
+            const int p = 75;       //процент заполнения
+            const int nets = 15;       //число сетей
+            const int maxNetSize = 5;       //длина цепей
             generator.NextDesignWithPlacement(n, nets, maxNetSize, p, maxx, maxy, 0, 0, out design, out placement);
 
             const int scale = 20; //масштаб здесь, внутри должен быть рассчитан по исходным данным
