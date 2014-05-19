@@ -122,7 +122,19 @@ namespace DetailPlacer.Algorithm
             }
             return myApproximate;
         }
-        public void Place(Design design, PlacementGlobal approximate, out PlacementDetail result)
+
+        public PlacementGlobal CreateMyApproximate(PlacementDetail detail, Design design)
+        {
+            var myApproximate = new PlacementGlobal(design);
+            foreach (Component c in design.components)
+            {
+                myApproximate.x[c] = detail.x[c];
+                myApproximate.y[c] = detail.y[c];
+                myApproximate.placed[c] = detail.placed[c];
+            }
+            return myApproximate;
+        }
+        public virtual void Place(Design design, PlacementGlobal approximate, out PlacementDetail result)
         {
             int width = design.field.cellsx;
             int height = design.field.cellsy;
@@ -183,22 +195,59 @@ namespace DetailPlacer.Algorithm
             {
                 if (result.placed[comp] == false)
                 {
+                    FillCells(design, myApproximate, XCellCoord, YCellCoord, qtcells, ValueCell, height, width, compInCell);
+
                     int ind = GetCellIndex((int)myApproximate.x[comp], (int)myApproximate.y[comp], XCellCoord, YCellCoord, qtcells);
                     int Coord = BestCell(XCellCoord, YCellCoord, ValueCell, qtcells, ind, comp, design, myApproximate);
-                    result.x[comp] = XCellCoord[Coord];
-                    result.y[comp] = YCellCoord[Coord];
-                    result.placed[comp] = true;
+                    //result.x[comp] = XCellCoord[Coord];
+                    //result.y[comp] = YCellCoord[Coord];
+                    //result.placed[comp] = true;
                     myApproximate.x[comp] = XCellCoord[Coord];
                     myApproximate.y[comp] = YCellCoord[Coord];
                     ValueCell[ind] = -1;
                     //ValueCell[Coord] = -1;
-                    DrawerHelper.SimpleDraw(design, result, new Size(600, 600), new Bitmap(600, 600), string.Format("iter {0}.png", comp));
-
+                    Clear(qtcells, ValueCell, compInCell);
                 }
             }
-                      
+            for (int i = 0; i < qtcells; i++)
+            {
+                ValueCell[i] = 0;
+            }
+            
+            foreach (Component comp in design.components)
+            {
+                FillCells(design, myApproximate, XCellCoord, YCellCoord, qtcells, ValueCell, height, width, compInCell);
+
+                int ind = GetCellIndex((int)myApproximate.x[comp], (int)myApproximate.y[comp], XCellCoord, YCellCoord, qtcells);
+                int Coord = BestCell(XCellCoord, YCellCoord, ValueCell, qtcells, ind, comp, design, myApproximate);
+                //result.x[comp] = XCellCoord[Coord];
+                //result.y[comp] = YCellCoord[Coord];
+                //result.placed[comp] = true;
+                myApproximate.x[comp] = XCellCoord[Coord];
+                myApproximate.y[comp] = YCellCoord[Coord];
+                ValueCell[ind] = -1;
+                //ValueCell[Coord] = -1;
+                Clear(qtcells, ValueCell, compInCell);
+            }
+            
+            foreach (Component comp in design.components)
+            {
+                FillCells(design, myApproximate, XCellCoord, YCellCoord, qtcells, ValueCell, height, width, compInCell);
+
+                int ind = GetCellIndex((int)myApproximate.x[comp], (int)myApproximate.y[comp], XCellCoord, YCellCoord, qtcells);
+                int Coord = BestCell(XCellCoord, YCellCoord, ValueCell, qtcells, ind, comp, design, myApproximate);
+                result.x[comp] = XCellCoord[Coord];
+                result.y[comp] = YCellCoord[Coord];
+                result.placed[comp] = true;
+                myApproximate.x[comp] = XCellCoord[Coord];
+                myApproximate.y[comp] = YCellCoord[Coord];
+                ValueCell[ind] = -1;
+                //ValueCell[Coord] = -1;
+                Clear(qtcells, ValueCell, compInCell);
+            }       
 
         }
+        
         public int GetCellIndex(int x, int y, int[] XCoord, int[] YCoord, int qt)
         {
             for (int j = 0; j < qt; j++)
