@@ -41,6 +41,7 @@
     <Compile Include="CriterionPositionSearcher\ICriterionPositionSearcher.cs" />
     <Compile Include="CriterionPositionSearcher\IPointComparer.cs" />
     <Compile Include="CriterionPositionSearcher\Point.cs" />
+    <Compile Include="CrossComponentVariant2.cs" />
     <Compile Include="CrossCompPlacer.cs" />
     <Compile Include="CrossReductPlacer.cs" />
     <Compile Include="DetailPlacerBase.cs" />
