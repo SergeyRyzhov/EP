@@ -18,7 +18,7 @@ using System.Reflection;
 namespace TestRunner
 {
     [Serializable]
-    public class PlacementStatisticModel :XmlModel
+    public class PlacementStatisticModel : XmlModel
     {
         public SerializableDictionary<string, double> PlacementStatistic { get; set; }
 
@@ -81,7 +81,7 @@ namespace TestRunner
         }
         public HeuristicsModel(IDetailPlacer placer)
         {
-            Heuristics = new SerializableDictionary<string, string> {{"Размещатель", placer.ToString()}};
+            Heuristics = new SerializableDictionary<string, string> { { "Размещатель", placer.ToString() } };
         }
     }
 
@@ -96,14 +96,14 @@ namespace TestRunner
             xmlS.Save(string.Format("{0}PlacememtStatistics on design {2} in {1} test.xml", path, testNum,
                         designNum));
 
-//            using (
-//                StreamWriter sw =
-//                    File.CreateText(string.Format("{0}PlacememtStatistics on design {2} in {1} test.txt", path, testNum,
-//                        designNum))
-//                )
-//            {
-//                sw.WriteLine(placementStatistic.ToString());
-//            }
+            //            using (
+            //                StreamWriter sw =
+            //                    File.CreateText(string.Format("{0}PlacememtStatistics on design {2} in {1} test.txt", path, testNum,
+            //                        designNum))
+            //                )
+            //            {
+            //                sw.WriteLine(placementStatistic.ToString());
+            //            }
 
             var global = new PlacementGlobal(design);
             foreach (Component c in design.components)
@@ -127,6 +127,13 @@ namespace TestRunner
             PlacementGlobal resultPlacement, Size size, Bitmap bitmap)
         {
             DrawerHelper.SimpleDraw(design, resultPlacement, size, bitmap, string.Format("{0}Result for design {2} on exp {1}.png", path, testNum, designNum));
+
+            var statistic = new CommonStatistic();
+            IStatisticResult<double> placemetStatistics;
+
+            statistic.PlacementStatistic(design, resultPlacement, out placemetStatistics);
+            var xmlS = new PlacementStatisticModel(placemetStatistics);
+            xmlS.Save(string.Format("{0}PlacememtStatistics on design {2} in {1} test.xml", path, testNum, designNum));
         }
 
         private static void SaveDesignsInfo(string path, int designNum, IStatisticResult<double> designStatistic)
@@ -135,35 +142,35 @@ namespace TestRunner
             var xmlS = new DesignStatisticModel(designStatistic);
             xmlS.Save(string.Format("{0}Design {1} Statistics.xml", path, designNum));
 
-//            using (StreamWriter sw = File.CreateText(string.Format("{0}Design {1} Statistics.txt", path, designNum)))
-//            {
-//                sw.WriteLine(designStatistic.ToString());
-//            }
+            //            using (StreamWriter sw = File.CreateText(string.Format("{0}Design {1} Statistics.txt", path, designNum)))
+            //            {
+            //                sw.WriteLine(designStatistic.ToString());
+            //            }
         }
 
         private static void SaveTestInfo(string path, int testNum, ICompontsOrderer compOrder, IPositionSearcher posComparer,
             IPositionComparer posSearcher,
             IPositionsSorter posSorter)
         {
-            var xmlS = new HeuristicsModel(compOrder,posComparer,posSearcher,posSorter);
+            var xmlS = new HeuristicsModel(compOrder, posComparer, posSearcher, posSorter);
             xmlS.Save(string.Format("{0}Heuristics {1}.xml", path, testNum));
-//            using (StreamWriter sw = File.CreateText(string.Format("{0}Heuristics {1}.txt", path, testNum)))
-//            {
-//                sw.WriteLine(compOrder.ToString());
-//                sw.WriteLine(posComparer.ToString());
-//                sw.WriteLine(posSearcher.ToString());
-//                sw.WriteLine(posSorter.ToString());
-//            }
+            //            using (StreamWriter sw = File.CreateText(string.Format("{0}Heuristics {1}.txt", path, testNum)))
+            //            {
+            //                sw.WriteLine(compOrder.ToString());
+            //                sw.WriteLine(posComparer.ToString());
+            //                sw.WriteLine(posSearcher.ToString());
+            //                sw.WriteLine(posSorter.ToString());
+            //            }
         }
 
         private static void SaveTestInfo(string path, int testNum, IDetailPlacer placer)
         {
             var xmlS = new HeuristicsModel(placer);
             xmlS.Save(string.Format("{0}Heuristics {1}.xml", path, testNum));
-//            using (StreamWriter sw = File.CreateText(string.Format("{0}Heuristics {1}.txt", path, testNum)))
-//            {
-//                sw.WriteLine(placer.ToString());
-//            }
+            //            using (StreamWriter sw = File.CreateText(string.Format("{0}Heuristics {1}.txt", path, testNum)))
+            //            {
+            //                sw.WriteLine(placer.ToString());
+            //            }
         }
 
         private static void Main(string[] args)
@@ -253,6 +260,8 @@ namespace TestRunner
                                                 (new Object[] { posComparer }) as IPositionsSorter;
                                             var placer = new DetailPlacerImpl(compOrder, posSearcher, posSorter);
                                             testCount++;
+                                            if (testCount != 10)
+                                                continue;
                                             SaveTestInfo(resultDerectory, testCount, compOrder, posSearcher,
                                                 posComparer, posSorter);
 
@@ -307,9 +316,9 @@ namespace TestRunner
                 if (info != null)
                 {
                     var placer = info.Invoke(null) as IDetailPlacer;
-                    if(placer== null)
+                    if (placer == null)
                         continue;
-                    
+
                     for (int i = 0; i < design.Length; i++)
                     {
                         Design d = design[i];
