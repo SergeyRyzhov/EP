@@ -57,10 +57,84 @@ namespace BookshelfParser
           while (true);
         }
 #endif
-        
 
+        var nodes = ReadNodes(fileModel.NodesFile, fileModel.PlFile);
+        model.Nodes = nodes;
+
+        Console.WriteLine("Elements amount {0}",model.Nodes.Length);
+        Console.WriteLine("Terminal element amount {0}", model.Nodes.Count(n => n.IsTerminal));
+        Console.WriteLine("Simple element amount {0}", model.Nodes.Count(n => !n.IsTerminal));
       }
+
       return model;
+    }
+
+    private Node[] ReadNodes(StreamReader nodesFile, StreamReader plFile)
+    {
+      var np = 0;
+      var na = 0;
+
+      var id = 0;
+      var ai = 0;
+
+      var i = 0;
+      Node[] result = null;
+      do
+      {
+        string line = nodesFile.ReadLine();
+        if (line == null)
+        {
+          break;
+        }
+
+        if (line.StartsWith("UCLA") || line.StartsWith("#") || string.IsNullOrWhiteSpace(line))
+        {
+          continue;
+        }
+
+        line = line.Trim();
+
+        var lineData = line.Split(new[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
+        if (lineData[0] == "NumNodes")
+        {
+          na = int.Parse(lineData[1]);
+          result = new Node[na];
+          continue;
+        }
+
+        if (lineData[0] == "NumTerminals")
+        {
+          np = int.Parse(lineData[1]);
+          continue;
+        }
+
+        if (lineData[0].StartsWith("p") && result != null)
+        {
+          id = int.Parse(lineData[0].TrimStart('p'));
+          var node = new Node(id) { IsTerminal = true, Sx = int.Parse(lineData[1]), Sy = int.Parse(lineData[2]) };
+          result[i++] = node;
+          continue;
+        }
+
+
+        if (lineData[0].StartsWith("a") && result != null)
+        {
+          id = int.Parse(lineData[0].TrimStart('a'));
+          var node = new Node(id) { IsTerminal = false, Sx = int.Parse(lineData[1]), Sy = int.Parse(lineData[2]) };
+          result[i++] = node;
+        }
+
+        /*if (line.StartsWith("RowBasedPlacement"))
+        {
+          var files = ReadLine(line, ':', ' ');
+          Console.WriteLine("Files in benchmark: ");
+          files.Each(Console.WriteLine);
+        }*/
+
+        //Console.WriteLine(line);
+      }
+      while (true);
+      return result;
     }
 
     private BookshelfFileModel ParseFiles(string bookshelfFolder)
@@ -84,6 +158,28 @@ namespace BookshelfParser
         .First()
         .Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries)
         .ToArray();
+    }
+  }
+
+  public class Node
+  {
+    public int Id;
+
+    public bool IsTerminal;
+
+    public bool Placed;
+
+    public int X;
+
+    public int Y;
+
+    public int Sx;
+
+    public int Sy;
+
+    public Node(int id)
+    {
+      this.Id = id;
     }
   }
 
@@ -124,7 +220,7 @@ namespace BookshelfParser
 
   public class BooksheftModel
   {
-    
+    public Node[] Nodes { get; set; }
   }
 
   public static class Extension
