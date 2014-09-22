@@ -1,0 +1,566 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN" "http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+<html xmlns="http://www.w3.org/MarkUp/Wilbur/HTML32.dtd">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>LEF/DEF 5.7 Language Reference -- Preface</title>
+<META NAME="Approver" CONTENT="Technical Publications">
+<META NAME="Author" CONTENT="Technical Publications">
+<META NAME="CreateDate" CONTENT="2009-11-17">
+<META NAME="CreateTime" CONTENT="1258451517">
+<META NAME="DataType" CONTENT="Manuals">
+<META NAME="Description" CONTENT="Describes the syntax for Library Exchange Format (LEF) and Design Exchange Format (DEF) files.">
+<META NAME="DocTitle" CONTENT="LEF/DEF 5.7 Language Reference">
+<META NAME="DocType" CONTENT="Manual">
+<META NAME="FileTitle" CONTENT="Preface">
+<META NAME="FileType" CONTENT="Chapter">
+<META NAME="Keyword" CONTENT="lefdefref">
+<META NAME="Language" CONTENT="English">
+<META NAME="ModifiedDate" CONTENT="2009-11-17">
+<META NAME="ModifiedTime" CONTENT="1258451517">
+<META NAME="NextFile" CONTENT="LEFSyntax.html">
+<META NAME="PageCount" CONTENT="4">
+<META NAME="Platform" CONTENT="ALL">
+<META NAME="PrevFile" CONTENT="lefdefrefTOC.html">
+<META NAME="Product" CONTENT="Languages">
+<META NAME="ProductFamily" CONTENT="Cadence Shared Tools">
+<META NAME="ProductVersion" CONTENT="5.7">
+<META NAME="RightsManagement" CONTENT="Copyright 1990-2008 Cadence Design Systems Inc.">
+<META NAME="Title" CONTENT="LEF/DEF 5.7 Language Reference -- Preface">
+<META NAME="TopicTags" CONTENT="FALSE">
+<META NAME="Version" CONTENT="5.7">
+  </head>
+  <body style="margin-left: 5%;">
+    <a name="pagetop"></a>
+    <!-- Begin Buttons -->
+    <table width="650" cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td height="36" width="650" colspan="10">
+          <img src="../support/header_doc.gif" width="650" height="34">
+        </td>
+      </tr>
+      <tr>
+        <td height="20" width="59">
+<a href="javascript:openLibrary()"><img src="../support/nav2_library.gif" border="0" alt="View Library" height="20" width="59"></a>
+                </td>
+<td height="20" width="73">
+<a href="lefdefrefTOC.html"><img src="../support/nav2_toc.gif" alt="Table of Contents" border="0"></a>
+</td>
+
+<td height="20" width="46">
+<a href="lefdefrefIX.html"><img src="../support/nav2_index.gif" border="0"></a>
+</td>
+        <td>
+          <a href="lefdefrefTOC.html"><img src="../support/nav2_previous.gif" alt="Previous" border="0"></a>
+        </td>
+        <td>
+          <a href="LEFSyntax.html"><img src="../support/nav_next.gif" alt="Next" border="0"></a>
+        </td>
+        <td height="20">
+          <a>
+<a href="lefdefref.pdf"><img src="../support/nav2_print.gif" border="0" alt="Open PDF to print book" height="20" width="114"></a>
+          </a>
+        </td>
+        <td height="20" width="61">
+          <img src="../support/nav2_black.gif">
+        </td>
+        <td height="20" width="76">
+<a href="/feedback.htm"><img src="../support/nav2_feedback.gif" border="0" alt="Email Comments" height="20" width="76"></a>
+        </td>
+        <td height="20" width="43">
+<a href="../cdsuser/help.html"><img src="../support/nav2_help.gif" border="0" alt="Help Using Documentation" height="20" width="43"></a>
+        </td>
+        <td height="20" width="37">
+<a href="/exitsearch.htm"><img src="../support/nav2_exit.gif" border="0" alt="Shut Down Cadence Documentation Server" height="20" width="37"></a>
+        </td>
+      </tr>
+    </table>
+    <!-- End Buttons -->
+    <p>
+    <hr>
+    <p>
+      <h3>
+        <center>
+          <font >
+            <div>LEF&#47;DEF Language Reference</div>
+            <font >
+              <div>
+            </font>
+          </font>
+        </center>
+      </h3>
+      <br>
+    </p>
+    <div>
+      <h1><a name="1013271">Preface</a></h1>
+      <p><a name="1015386">This manual is a language reference for users of the Cadence</a><font color="#000000"><sup>&#174;</sup></font> Library Exchange Format (LEF) and Design Exchange Format (DEF) integrated circuit (IC) description languages. </p>
+      <p><a name="1015387">LEF defines the elements of an IC process technology and associated library of cell models. </a>DEF defines the elements of an IC design relevant to physical layout, including the netlist and design constraints. LEF and DEF inputs are in ASCII form.</p>
+      <p><a name="1015390">This manual assumes that you are familiar with the development and design of integrated </a>circuits. </p>
+      <p><a name="1014098">This preface provides the following information:</a></p>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="31.999679999999998">
+              <div>
+                <nobr>
+                  <font color="#000000"><img src="images/b_bullet.gif" alt="ParagraphBullet" border="0"></font>
+                </nobr>
+              </div>
+            </td>
+            <td><a href="#1017612" title="Preface" name="1014149"><font color="Blue"><u>What&#8217;s New</u></font></a><a href="#1017612" title="Preface">  </a></td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="31.999679999999998">
+              <div>
+                <nobr>
+                  <font color="#000000"><img src="images/b_bullet.gif" alt="ParagraphBullet" border="0"></font>
+                </nobr>
+              </div>
+            </td>
+            <td><a href="#conventions" title="Preface" name="1014143"><font color="Blue"><u>Typographic and Syntax Conventions</u></font></a><a href="#conventions" title="Preface">  </a></td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="31.999679999999998">
+              <div>
+                <nobr>
+                  <font color="#000000"><img src="images/b_bullet.gif" alt="ParagraphBullet" border="0"></font>
+                </nobr>
+              </div>
+            </td>
+            <td><a href="#1015500" title="Preface" name="1015552"><font color="Blue"><u>Character Information</u></font></a><a href="#1015500" title="Preface">  </a></td>
+          </tr>
+        </table>
+      </div>
+      <h2><a name="1017612">What&#8217;s New</a></h2>
+      <p><a name="1017614">For information on what is new or changed in LEF and DEF for version 5.7 see </a><a href="../lefdefWN/lefdefWNTOC.html" target="external_window"><font color="#0000ff"><u><em>What&#8217;s New in LEF&#47;DEF</em></u></font></a>. </p>
+      <h2><a name="conventions"></a><a name="1013460">Typographic and Syntax Conventions</a></h2>
+      <p><a name="1015411">This list describes the conventions used in this manual.</a></p>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="197.78303999999997">
+              <div>
+                <nobr><font size="2" face="'Courier New'" color="#000000">text</font></nobr>
+              </div>
+            </td>
+            <td><a name="1015413">Words in </a><font size="2" face="'Courier New'" color="#000000">monospace</font> type indicate keywords that you must enter literally. These keywords represent language tokens.</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="197.78303999999997">
+              <div>
+                <nobr><font size="2" face="'Courier New'" color="#000000"><em>variable</em></font></nobr>
+              </div>
+            </td>
+            <td><a name="1015416">Words in </a><font size="2" face="'Courier New'" color="#000000"><em>italics</em></font><font color="#000000"><em> </em></font>indicate user&#45;defined information for which you must substitute a name or a value.</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="197.78303999999997">
+              <div>
+                <nobr><font size="2" face="'Courier New'" color="#000000"><em>objRegExpr</em></font></nobr>
+              </div>
+            </td>
+            <td><a name="1015418">An object name with the identifier </a><font size="2" face="'Courier New'" color="#000000"><em>objRegExpr</em></font> represents a regular expression for the object name. </td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="197.78303999999997">
+              <div>
+                <nobr><font size="2" face="'Courier New'" color="#000000"><em>pt</em></font></nobr>
+              </div>
+            </td>
+            <td><a name="1017397">Represents a point in the design. This value corresponds to a </a>coordinate pair, such as x y. You must enclose a point within parentheses, with space between the parentheses and the coordinates. For example, </td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="197.78303999999997">
+              <div>
+                <nobr></nobr>
+              </div>
+            </td>
+            <td><a name="1017585"><font size="2" face="'Courier New'" color="#000000">RECT ( 1000 2000 ) ( 1500 400 )</font></a>.</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="197.78303999999997">
+              <div>
+                <nobr><font size="2" face="'Courier New'" color="#000000">|</font></nobr>
+              </div>
+            </td>
+            <td><a name="1015426">Vertical bars separate possible choices for a single argument. </a>They take precedence over any other character. </td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="197.78303999999997">
+              <div>
+                <nobr><font size="2" face="'Courier New'" color="#000000">[</font><font size="2" face="'Courier New'" color="#000000">&nbsp;</font><font size="2" face="'Courier New'" color="#000000">]</font></nobr>
+              </div>
+            </td>
+            <td><a name="1015428">Brackets denote optional arguments. When used with vertical </a>bars, they enclose a list of choices from which you can choose one.</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="197.78303999999997">
+              <div>
+                <nobr><font size="2" face="'Courier New'" color="#000000">{</font><font size="2" face="'Courier New'" color="#000000">&nbsp;</font><font size="2" face="'Courier New'" color="#000000">} ...</font></nobr>
+              </div>
+            </td>
+            <td><a name="1015430">Braces followed by three dots indicate that you must specify the </a>argument at least once, but you can specify it multiple times.</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="197.78303999999997">
+              <div>
+                <nobr><font size="2" face="'Courier New'" color="#000000">{</font><font size="2" face="'Courier New'" color="#000000">&nbsp;</font><font size="2" face="'Courier New'" color="#000000">}</font></nobr>
+              </div>
+            </td>
+            <td><a name="1017566">Braces used with vertical bars enclose a list of choices from </a>which you must choose one.</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="197.78303999999997">
+              <div>
+                <nobr><font size="2" face="'Courier New'" color="#000000">...</font></nobr>
+              </div>
+            </td>
+            <td><a name="1015432">Three dots indicate that you can repeat the previous argument. </a>If they are used with brackets, you can specify zero or more arguments. If they are used with braces, you must specify at least one argument, but you can specify more.</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="197.78303999999997">
+              <div>
+                <nobr><font size="2" face="'Courier New'" color="#000000">,...</font></nobr>
+              </div>
+            </td>
+            <td><a name="1015434">A comma and three dots together indicate that if you specify </a>more than one argument, you must separate those arguments with commas.</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <table border="0" cellspacing="0" cellpadding="3" summary="">
+          <tr valign="baseline">
+            <td width="197.78303999999997">
+              <div>
+                <nobr><font size="2" face="'Courier New'" color="#000000">&#34;</font><font size="2" face="'Courier New'" color="#000000">&nbsp;</font><font size="2" face="'Courier New'" color="#000000">&#34;</font></nobr>
+              </div>
+            </td>
+            <td><a name="1017369">Quotation marks enclose string values. Write quotation marks </a>within a string as <font size="2" face="'Courier New'" color="#000000">\&#34;</font>. Write a backslash within a string as <font size="2" face="'Courier New'" color="#000000">\\</font>.</td>
+          </tr>
+        </table>
+      </div>
+      <p><a name="1017367">Any characters not included in the list above are required by the language and must be </a>entered literally.</p>
+      <h2><a name="1015500">Character Information</a></h2>
+      <p><a name="1016688">LEF and DEF support the following characters:</a></p>
+      <table summary="" border="0" cellpadding="4" cellspacing="0" bordercolor="#D3D3D3" width="650">
+        <caption>
+        <tr>
+          <td cellpadding="4" valign="top" width="257">
+            <p><a name="1016661"><font size="2" face="'Courier New'" color="#000000">!</font></a> </p>
+          </td>
+          <td cellpadding="4" valign="top" width="120">
+            <p><a name="1016896">&nbsp;</a></p>
+          </td>
+          <td cellpadding="4" valign="top" width="272">
+            <p><a name="1016663"><font size="2" face="'Courier New'" color="#000000">&#60;</font></a> and <font size="2" face="'Courier New'" color="#000000">&#62; </font></p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016665"><font size="2" face="'Courier New'" color="#000000">$ </font></a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016898">&nbsp;</a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016667"><font size="2" face="'Courier New'" color="#000000">.</font></a> (period)</p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016669"><font size="2" face="'Courier New'" color="#000000">&amp;</font></a> </p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016900">&nbsp;</a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016671"><font size="2" face="'Courier New'" color="#000000">?</font></a> </p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016822"><font size="2" face="'Courier New'" color="#000000">|</font></a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016902">&nbsp;</a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016824"><font size="2" face="'Courier New'" color="#000000">{</font></a> <font size="2" face="'Courier New'" color="#000000">}</font></p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016673"><font size="2" face="'Courier New'" color="#000000">:</font></a> </p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016904">&nbsp;</a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016769"><font size="2" face="'Courier New'" color="#000000">&#8217; </font></a>(single quotation mark)</p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016677"><font size="2" face="'Courier New'" color="#000000">&#8216; </font></a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016906">&nbsp;</a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016679"><font size="2" face="'Courier New'" color="#000000">&#8220;</font></a> (double quotation mark)</p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016681"><font size="2" face="'Courier New'" color="#000000">@</font></a> </p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016908">&nbsp;</a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016754"><font size="2" face="'Courier New'" color="#000000">_</font></a> (underbar)</p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1017523"><font size="2" face="'Courier New'" color="#000000">~</font></a> </p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1017525">&nbsp;</a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1017527"><font size="2" face="'Courier New'" color="#000000">&#94;</font></a> </p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016685"><font size="2" face="'Courier New'" color="#000000">=</font></a> </p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016910">&nbsp;</a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016687"><font size="2" face="'Courier New'" color="#000000">,</font></a> (comma)</p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1017535">Uppercase and lowercase alphabet </a>characters</p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1017537">&nbsp;</a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1017544">Numbers</a></p>
+            <p><a name="1017539">&nbsp;</a></p>
+          </td>
+        </tr>
+      </table>
+      <p><a name="1015520">DEF reserves the following characters for special functions:  </a></p>
+      <table summary="" border="0" cellpadding="4" cellspacing="0" bordercolor="#D3D3D3" width="623">
+        <caption>
+        <tr>
+          <td cellpadding="4" valign="top" width="60">
+            <p><a name="1016607"><font size="2" face="'Courier New'" color="#000000">(</font></a> <font size="2" face="'Courier New'" color="#000000">)</font></p>
+          </td>
+          <td cellpadding="4" valign="top" width="562">
+            <p><a name="1016609">Coordinates</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016615"><font size="2" face="'Courier New'" color="#000000">+</font></a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016617">Start of new keyword</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016623"><font size="2" face="'Courier New'" color="#000000">&#45;</font></a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016625">Coordinates and start of new keyword</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016650"><font size="2" face="'Courier New'" color="#000000">[</font></a> <font size="2" face="'Courier New'" color="#000000">]</font></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1017553">Default special characters for bus bits unless overridden by </a><font size="2" face="'Courier New'" color="#000000">BUSBITCHARS </font></p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1017557"><font size="2" face="'Courier New'" color="#000000">&#47;</font></a> </p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1017559">Default special character for hierarchy unless overridden by </a><font size="2" face="'Courier New'" color="#000000">DIVIDERCHAR</font> </p>
+          </td>
+        </tr>
+      </table>
+      <p><a name="1016818">LEF and DEF names cannot contain the following ASCII characters:</a></p>
+      <table summary="" border="0" cellpadding="4" cellspacing="0" bordercolor="#D3D3D3" width="476">
+        <caption>
+        <tr>
+          <td cellpadding="4" valign="top" width="68">
+            <p><a name="1016803"><font size="2" face="'Courier New'" color="#000000">\n</font></a></p>
+          </td>
+          <td cellpadding="4" valign="top" width="408">
+            <p><a name="1016805">Newline </a></p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016807">&nbsp;</a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016809">Space</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016815"><font size="2" face="'Courier New'" color="#000000">;</font></a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1016817">Semicolon</a></p>
+          </td>
+        </tr>
+      </table>
+      <p><font color="#000000"><strong>Note: </strong></font><a name="1017039">LEF and DEF names also cannot contain the ASCII character used by the place&#45;and&#45;</a>route tool for comments. For example, if the tool uses the pound sign (<font size="2" face="'Courier New'" color="#000000">#</font>) for comments, it cannot be used in a LEF or DEF name.</p>
+      <p><a name="1016565">LEF and DEF interpret the following characters as regular expressions. Use these characters </a>in LEF and DEF names only when you intend a regular expression.</p>
+      <table summary="" border="0" cellpadding="4" cellspacing="0" bordercolor="#D3D3D3" width="603">
+        <caption>
+        <tr>
+          <td cellpadding="4" valign="top" width="64">
+            <p><a name="1015529"><font size="2" face="'Courier New'" color="#000000">*</font></a></p>
+          </td>
+          <td cellpadding="4" valign="top" width="119">
+            <p><a name="1015531">Asterisk</a></p>
+          </td>
+          <td cellpadding="4" valign="top" width="420">
+            <p><a name="1015533">Matches any sequence of characters</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td cellpadding="4" valign="top">
+            <p><a name="1015535"><font size="2" face="'Courier New'" color="#000000">%</font></a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1015537">Percent</a></p>
+          </td>
+          <td cellpadding="4" valign="top">
+            <p><a name="1015539">Matches any single character</a></p>
+          </td>
+        </tr>
+      </table>
+      <p><font color="#000000"><strong>Note: </strong></font><a name="1015497">Pattern matching only works in a few areas of the DEF file, such as component name </a>matching in the <font size="2" face="'Courier New'" color="#000000">SPECIALNET</font> section, and component name matching in <font size="2" face="'Courier New'" color="#000000">GROUP</font> definitions.</p>
+    </div>
+    <br>
+    <a href="#pagetop">Return to top of page</a>
+    <hr>
+    <hr align="left">
+    <div style="text-align: left;">
+      <!-- Begin Buttons -->
+      <table width="650" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td height="20" width="59">
+<a href="javascript:openLibrary()"><img src="../support/nav2_library.gif" border="0" alt="View Library" height="20" width="59"></a>
+                    </td>
+<td height="20" width="73">
+<a href="lefdefrefTOC.html"><img src="../support/nav2_toc.gif" alt="Table of Contents" border="0"></a>
+</td>
+
+<td height="20" width="46">
+<a href="lefdefrefIX.html"><img src="../support/nav2_index.gif" border="0"></a>
+</td>
+          <td>
+            <a href="lefdefrefTOC.html"><img src="../support/nav2_previous.gif" alt="Previous" border="0"></a>
+          </td>
+          <td>
+            <a href="LEFSyntax.html"><img src="../support/nav_next.gif" alt="Next" border="0"></a>
+          </td>
+          <td>
+            <a>
+<a href="lefdefref.pdf"><img src="../support/nav2_print.gif" border="0" alt="Open PDF to print book" height="20" width="114"></a>
+            </a>
+          </td>
+          <td height="20" width="61">
+            <img src="../support/nav2_black.gif">
+          </td>
+          <td height="20" width="76">
+<a href="/feedback.htm"><img src="../support/nav2_feedback.gif" border="0" alt="Email Comments" height="20" width="76"></a>
+          </td>
+          <td height="20" width="43">
+<a href="../cdsuser/help.html"><img src="../support/nav2_help.gif" border="0" alt="Help Using Documentation" height="20" width="43"></a>
+          </td>
+          <td height="20" width="37">
+<a href="/exitsearch.htm"><img src="../support/nav2_exit.gif" border="0" alt="Shut Down Cadence Documentation Server" height="20" width="37"></a>
+          </td>
+        </tr>
+      </table>
+      <!-- End Buttons -->
+    </div>
+    <br>
+    <font size="-1" >
+For support, see <a href="http://support.cadence.com" target="_blank">Cadence Online Support</a> service.</font>
+    <br>
+    <br>
+    <font size="-1" >
+      <i>Copyright &#169; 2009, <a href="http://www.cadence.com">Cadence Design Systems, Inc.</a></i>
+    </font>
+    <br>
+    <font size="-1" >
+All rights reserved.</font>
+    <br>
+    <br>
+  </body>
+</html>
