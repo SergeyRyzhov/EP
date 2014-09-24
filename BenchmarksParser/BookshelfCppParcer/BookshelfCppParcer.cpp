@@ -11,7 +11,6 @@ using namespace std;
 #ifdef _DEBUG
 //#define DEBUG
 #endif
-
 namespace bookshelfParser
 {
   vector<string> &split(const string &s, char delim, vector<string> &elems, int removeEmpty = 0) {
@@ -34,6 +33,8 @@ namespace bookshelfParser
   int IsComment(vector<string> parts);
 
   int StartWith(vector<string> parts, string prefix);
+
+  int ReadId(const char* input);
 
   class Node
   {
@@ -86,6 +87,17 @@ namespace bookshelfParser
     Node** items;
   };
 
+  class Places
+  {
+  public:
+    int size;
+    int* isTerm;
+    int* ids;
+    int* x;
+    int* y;
+    int* placed;
+  };
+
   class Net
   {
   public:
@@ -106,7 +118,16 @@ namespace bookshelfParser
   public:
     Nodes nodes;
     Nets nets;
+    Places places;
   };
+
+  int ReadId(const char* input)
+  {
+    char buffer [80];
+    char*id;
+    id=strcpy(buffer,input+1);
+    return atoi(id);
+  }
 
   Nodes* ReadNodes(const char* nodesFile)
   {
@@ -193,7 +214,7 @@ namespace bookshelfParser
         #ifdef DEBUG
         cout << "Pins amount: " << numPins << endl;
         #endif
-        continue;      
+        continue;
         }*/
 
         if(StartWith(parts,"NetDegree"))
@@ -209,10 +230,7 @@ namespace bookshelfParser
           {
             getline (myfile, line);
             vector<string> parts = split(line,' ',1);
-            char buffer [80];
-            char*id;
-            id=strcpy(buffer,parts[0].c_str()+1);
-            n->ids[j] = atoi(id);
+            n->ids[j] = ReadId(parts[0].c_str());
 #ifdef DEBUG
             cout<<n->ids[j] <<" ";
 #endif
@@ -231,6 +249,66 @@ namespace bookshelfParser
       cout << "Unable to open file";
     return nets;
   }
+
+  Places* ReadPlaces(const char* plFile, int numNodes)
+  {
+    int dAreaT = INT_MAX;
+    int dAreaL = INT_MAX;    
+    int dAreaB = INT_MIN;
+    int dAreaR = INT_MIN;
+
+    string line;
+    Places* places = new Places();
+    places->size = numNodes;
+    places->isTerm = new int[numNodes];
+    places->ids = new int[numNodes];
+    places->x = new int[numNodes];
+    places->y = new int[numNodes];
+    places->placed = new int[numNodes];
+    ifstream myfile (plFile);
+    int i = 0;
+    if (myfile.is_open())
+    {
+      while ( getline (myfile, line) )
+      {
+        vector<string> parts = split(line,' ',1);
+        if(IsComment(parts) == 1)
+          continue;
+
+        int term = parts[0].c_str()[0] == 'p';
+        int id = ReadId(parts[0].c_str());
+        int x = atoi(parts[1].c_str());
+        int y = atoi(parts[2].c_str());
+        places->isTerm[i] = term;
+        places->ids[i] = id;
+        places->x[i] = x;
+        places->y[i] = y;
+
+        dAreaT = dAreaT > y ? y : dAreaT;
+        dAreaL = dAreaL > x ? x : dAreaT; 
+        dAreaB = dAreaB < y ? y : dAreaB;
+        dAreaR = dAreaR < x ? x : dAreaR;
+
+        places->placed[i] = x > 0 || y > 0;
+#ifdef DEBUG
+        if(x > 0 || y > 0)
+        {
+          cout << (term ? "Terminal e" : "E") << "lement " << id <<" placed at (" <<x<<","<<y<<")."<<  endl;
+        }
+#endif
+      }
+      myfile.close();
+    }
+
+    else
+      cout << "Unable to open file";
+    cout << "top:" << dAreaT << endl
+      << "left:" << dAreaL<< endl
+      << "bottom:" << dAreaB<< endl
+      << "right:" << dAreaR<< endl;
+    return places;
+  }
+
   Bookshelf* Parse(char* auxFile)
   {
     Bookshelf* model = new Bookshelf();
@@ -274,9 +352,21 @@ namespace bookshelfParser
               if(file.compare(file.size() - 4, 4,"nets") == 0)
               {
                 model->nets = *ReadNets((folder + file).c_str());
+                cout<<(folder + file)<<endl;
                 netsParsed = 1;
               }
-              break;
+              continue;
+            }
+
+            if(file.size() > 2 && placesParsed == 0 && nodesParsed == 1)
+            {
+              if(file.compare(file.size() - 2, 2,"pl") == 0)
+              {
+                model->places = *ReadPlaces((folder + file).c_str(), model->nodes.size);
+                cout<<(folder + file)<<endl;
+                placesParsed = 1;
+              }
+              continue;
             }
           }
         }
@@ -312,11 +402,11 @@ namespace bookshelfParser
 
     return 0;
   }
+}
 
-  int main (int argc, char* argv[]) {
-    char* auxFile = "C:\\projects\\EP\\benchmarks\\ibmISPD02Bench_Bookshelf\\ibm01\\ibm01.aux";
-    auto model = Parse(auxFile);
-    cout<< "Model parsed. " << model->nodes.size << " nodes. " << model->nets.size << " nets." << endl;
-    return 0;
-  }
+int main (int argc, char* argv[]) {
+  char* auxFile = "C:\\projects\\EP\\benchmarks\\ibmISPD02Bench_Bookshelf\\ibm01\\ibm01.aux";
+  auto model = bookshelfParser::Parse(auxFile);
+  cout<< "Model parsed. " << model->nodes.size << " nodes. " << model->nets.size << " nets." << endl;
+  return 0;
 }
