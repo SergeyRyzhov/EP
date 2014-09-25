@@ -45,6 +45,12 @@ namespace PlaceModel
             {
                 Add(new Component(next_id(), sizex, sizey));
             }
+
+
+            public void Add(int id, int sizex, int sizey)
+            {
+                Add(new Component(id, sizex, sizey));
+            }
         }
     }
 }

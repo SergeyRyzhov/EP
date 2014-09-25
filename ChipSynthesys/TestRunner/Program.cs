@@ -175,6 +175,17 @@ namespace TestRunner
 
         private static void Main(string[] args)
         {
+            if (args.Length == 2 && args[0].ToLower() == "-p")
+            {
+                BookshlfParser p = new BookshlfParser();
+                var t = p.Parse(args[1]);
+                string fileName = args[1].Split(new char[] { '\\' }).Last() + ".bin";
+                t.Save(fileName);
+                Console.WriteLine(@"Task was parsed. File {0} was created", fileName);
+
+                return;
+            }
+
             Design[] design;
             PlacementGlobal[] approximate;
             Size[] sizes;

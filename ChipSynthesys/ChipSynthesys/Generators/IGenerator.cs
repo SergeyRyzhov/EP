@@ -1,36 +1,36 @@
-using ChipSynthesys.Common.Randoms;
+п»їusing ChipSynthesys.Common.Randoms;
 
 using PlaceModel;
 
 namespace ChipSynthesys.Common.Generators
 {
     /// <summary>
-    /// Интерфейс генератора Схемы и Размещения
+    /// Г€Г­ГІГҐГ°ГґГҐГ©Г± ГЈГҐГ­ГҐГ°Г ГІГ®Г°Г  Г‘ГµГҐГ¬Г» ГЁ ГђГ Г§Г¬ГҐГ№ГҐГ­ГЁГї
     /// </summary>
     public interface IGenerator
     {
         /// <summary>
-        /// Случайная генерация (равномерный закон распределения)
+        /// Г‘Г«ГіГ·Г Г©Г­Г Гї ГЈГҐГ­ГҐГ°Г Г¶ГЁГї (Г°Г ГўГ­Г®Г¬ГҐГ°Г­Г»Г© Г§Г ГЄГ®Г­ Г°Г Г±ГЇГ°ГҐГ¤ГҐГ«ГҐГ­ГЁГї)
         /// </summary>
-        /// <param name="components">Число компонент</param>
-        /// <param name="nets">Число сетей</param>
-        /// <param name="maxNetSize">Максимальное число компонент в цепи</param>
-        /// <param name="percent">Процент заполненности (0,100)</param>
-        /// <param name="maxSizeX">Максимальная ширина элемента</param>
-        /// <param name="maxSizeY">Максимальная высота элемента</param>
-        /// <param name="design">Полученная схема</param>
+        /// <param name="components">Г—ГЁГ±Г«Г® ГЄГ®Г¬ГЇГ®Г­ГҐГ­ГІ</param>
+        /// <param name="nets">Г—ГЁГ±Г«Г® Г±ГҐГІГҐГ©</param>
+        /// <param name="maxNetSize">ГЊГ ГЄГ±ГЁГ¬Г Г«ГјГ­Г®ГҐ Г·ГЁГ±Г«Г® ГЄГ®Г¬ГЇГ®Г­ГҐГ­ГІ Гў Г¶ГҐГЇГЁ</param>
+        /// <param name="percent">ГЏГ°Г®Г¶ГҐГ­ГІ Г§Г ГЇГ®Г«Г­ГҐГ­Г­Г®Г±ГІГЁ (0,100)</param>
+        /// <param name="maxSizeX">ГЊГ ГЄГ±ГЁГ¬Г Г«ГјГ­Г Гї ГёГЁГ°ГЁГ­Г  ГЅГ«ГҐГ¬ГҐГ­ГІГ </param>
+        /// <param name="maxSizeY">ГЊГ ГЄГ±ГЁГ¬Г Г«ГјГ­Г Гї ГўГ»Г±Г®ГІГ  ГЅГ«ГҐГ¬ГҐГ­ГІГ </param>
+        /// <param name="design">ГЏГ®Г«ГіГ·ГҐГ­Г­Г Гї Г±ГµГҐГ¬Г </param>
         void NextDesign(int components, int nets, int maxNetSize, int percent, int maxSizeX, int maxSizeY, out Design design);
 
         /// <summary>
-        /// Случайная генерация (заданный закон распределения)
+        /// Г‘Г«ГіГ·Г Г©Г­Г Гї ГЈГҐГ­ГҐГ°Г Г¶ГЁГї (Г§Г Г¤Г Г­Г­Г»Г© Г§Г ГЄГ®Г­ Г°Г Г±ГЇГ°ГҐГ¤ГҐГ«ГҐГ­ГЁГї)
         /// </summary>
-        /// <param name="components">Число компонент</param>
-        /// <param name="nets">Число сетей</param>
-        /// <param name="maxNetSize">Генератор случаных длин цепей</param>
-        /// <param name="percent">Процент заполненности (0,100)</param>
-        /// <param name="maxSizeX">Генератор случаной максимальной ширины элемента</param>
-        /// <param name="maxSizeY">Генератор случаной максимальной высоты элемента</param>
-        /// <param name="design">Полученная схема</param>
+        /// <param name="components">Г—ГЁГ±Г«Г® ГЄГ®Г¬ГЇГ®Г­ГҐГ­ГІ</param>
+        /// <param name="nets">Г—ГЁГ±Г«Г® Г±ГҐГІГҐГ©</param>
+        /// <param name="maxNetSize">ГѓГҐГ­ГҐГ°Г ГІГ®Г° Г±Г«ГіГ·Г Г­Г»Гµ Г¤Г«ГЁГ­ Г¶ГҐГЇГҐГ©</param>
+        /// <param name="percent">ГЏГ°Г®Г¶ГҐГ­ГІ Г§Г ГЇГ®Г«Г­ГҐГ­Г­Г®Г±ГІГЁ (0,100)</param>
+        /// <param name="maxSizeX">ГѓГҐГ­ГҐГ°Г ГІГ®Г° Г±Г«ГіГ·Г Г­Г®Г© Г¬Г ГЄГ±ГЁГ¬Г Г«ГјГ­Г®Г© ГёГЁГ°ГЁГ­Г» ГЅГ«ГҐГ¬ГҐГ­ГІГ </param>
+        /// <param name="maxSizeY">ГѓГҐГ­ГҐГ°Г ГІГ®Г° Г±Г«ГіГ·Г Г­Г®Г© Г¬Г ГЄГ±ГЁГ¬Г Г«ГјГ­Г®Г© ГўГ»Г±Г®ГІГ» ГЅГ«ГҐГ¬ГҐГ­ГІГ </param>
+        /// <param name="design">ГЏГ®Г«ГіГ·ГҐГ­Г­Г Гї Г±ГµГҐГ¬Г </param>
         void NextDesign(int components, int nets, IRandom<int> maxNetSize, int percent,
             IRandom<int> maxSizeX, IRandom<int> maxSizeY, out Design design);
 
