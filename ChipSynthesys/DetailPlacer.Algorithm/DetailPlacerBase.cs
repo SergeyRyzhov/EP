@@ -19,7 +19,7 @@ namespace DetailPlacer.Algorithm
     /// **стратегия сравнения
     /// 3,3 присвоение
     /// </summary>
-    public abstract class DetailPlacerBase : -
+    public abstract class DetailPlacerBase : IDetailPlacer
     {
         private readonly ICompontsOrderer m_compontsOrderer;
         private readonly IPositionSearcher m_positionSearcher;
