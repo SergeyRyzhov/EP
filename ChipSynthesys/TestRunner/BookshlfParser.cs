@@ -32,8 +32,114 @@ namespace TestRunner
             var sclFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(".scl")) ?? "");
 
             int numTerminals;
-            Design design = ParseDesign(nodesFile, netsFile, wtsFile, sclFile, out numTerminals);
-            PlacementGlobal placement = this.ParsePlacement(design, plFile, numTerminals);
+            int nodesSize;
+            var components = ParseComponents(nodesFile, out nodesSize, out numTerminals);
+
+            var nets = new Net.Pool();
+            string line;
+            int numNets;
+            int numPins;
+            Component[] nodes = components.Extract();
+            var netsStream = GetStream(netsFile);
+            while ((line = netsStream.ReadLine()) != null)
+            {
+                if (line.StartsWith("#") || line.StartsWith("UCLA") || string.IsNullOrEmpty(line))
+                {
+                    continue;
+                }
+                var lineData = line.Split(new[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
+                if (lineData.Contains("NumNets"))
+                {
+                    numNets = int.Parse(lineData.Last());
+                    continue;
+                }
+
+                if (lineData.Contains("NumPins"))
+                {
+                    numPins = int.Parse(lineData.Last());
+                    continue;
+                }
+
+                if (lineData.Contains("NetDegree"))
+                {
+                    var size = int.Parse(lineData.Last());
+                    var items = new Component[size];
+                    for (int i = 0; i < size; i++)
+                    {
+                        var netLine = netsStream.ReadLine();
+                        if (netLine == null)
+                        {
+                            continue;
+                        }
+
+                        var netData = netLine.Split(new[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        var nodeName = netData[0];
+                        var nodeId = int.Parse(nodeName.Substring(1));
+                        var id = nodeName[0] == 'p' ? nodeId - 1 : nodeId + numTerminals; //hack
+                        items[i] = nodes.First(c => c.id.Equals(id));
+                    }
+                    nets.Add(items);
+                    continue;
+                }
+
+
+            }
+            int left = int.MaxValue;
+            int right = int.MinValue;
+
+            int top = int.MaxValue;
+            int bottom = int.MinValue;
+
+            var plStream = GetStream(plFile);
+            var e = components.Extract();
+            while ((line = plStream.ReadLine()) != null)
+            {
+                if (line.StartsWith("#") || line.StartsWith("UCLA") || string.IsNullOrEmpty(line))
+                {
+                    continue;
+                }
+                var lineData = line.Split(new[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
+                var nodeName = lineData[0];
+                var nodeId = int.Parse(nodeName.Substring(1));
+                var id = nodeName[0] == 'p' ? nodeId - 1 : nodeId + numTerminals; //hack
+                var x = int.Parse(lineData[1]);
+                var y = int.Parse(lineData[2]);
+                var component = e.First(c => c.id.Equals(id));
+
+                left = left > x ? x : left;
+                right = (right < x + component.sizex) ? x + component.sizex : right;
+                top = top > y ? y : top;
+                bottom = (bottom < y + component.sizey) ? y + component.sizey : bottom;
+
+            }
+
+            var field = new Field(left, top, right - left, bottom - top);
+            Design design = new Design(field, components, nets);
+            if (design.components.Length != nodesSize)
+            {
+                throw new InvalidOperationException("Invalid nodes file");
+            }
+
+            PlacementGlobal placement = new PlacementGlobal(design);
+            plStream = GetStream(plFile);
+            while ((line = plStream.ReadLine()) != null)
+            {
+                if (line.StartsWith("#") || line.StartsWith("UCLA") || string.IsNullOrEmpty(line))
+                {
+                    continue;
+                }
+                var lineData = line.Split(new[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
+                var nodeName = lineData[0];
+                var nodeId = int.Parse(nodeName.Substring(1));
+                var id = nodeName[0] == 'p' ? nodeId - 1 : nodeId + numTerminals; //hack
+                var x = int.Parse(lineData[1]);
+                var y = int.Parse(lineData[2]);
+                var component = design.components.First(c => c.id.Equals(id));
+                placement.placed[component] = nodeName[0] == 'p';// || (x == 0 && y == 0);
+                placement.x[component] = x;
+                placement.y[component] = y;
+            }
 
             var result = new ChipTask(design, placement);
             result.Height = 50;
