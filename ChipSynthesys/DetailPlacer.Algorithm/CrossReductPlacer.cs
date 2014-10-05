@@ -82,13 +82,13 @@ namespace DetailPlacer.Algorithm
             return maxX - minX + maxY - minY;
         }
 
-        public virtual void PlaceComponent(Design design, PlacementGlobal approximate, Component current, PlacementDetail result, out bool placed, int xCoordReg, int yCoordReg, int wRegs, int hRegs)
+        public virtual void PlaceComponent(PositionHelper helper, Design design, PlacementGlobal approximate, Component current, PlacementDetail result, out bool placed, int xCoordReg, int yCoordReg, int wRegs, int hRegs)
         {
             int[] x;
             int[] y;
             bool hasPosition;
 
-            m_positionSearcher.AlvailablePositions(design, approximate, result, current, out x, out y, out hasPosition);
+            m_positionSearcher.AlvailablePositions(helper, design, approximate, result, current, out x, out y, out hasPosition);
             if (hasPosition)
             {
                 var bestMetric = int.MaxValue;
@@ -111,6 +111,7 @@ namespace DetailPlacer.Algorithm
                     result.y[current] = y[bestCoordInd];
                     result.placed[current] = true;
                     placed = true;
+                    helper.MoveComponent(current, x[bestCoordInd], y[bestCoordInd]);
                 }
                 else placed = false;
             }
@@ -124,23 +125,24 @@ namespace DetailPlacer.Algorithm
         public void Place(Design design, PlacementGlobal approximate, out PlacementDetail result)
         {
             List<int>[] compInRegions;
-            int[] RegionsValues;
+            int[] regionsValues;
             int[] xCoordRegions;
             int[] yCoordRegions;
             int wRegs, hRegs, regsCount;
-            CreateRegions(design, out RegionsValues, out xCoordRegions, out  yCoordRegions, out  wRegs, out hRegs, out regsCount);
+            CreateRegions(design, out regionsValues, out xCoordRegions, out  yCoordRegions, out  wRegs, out hRegs, out regsCount);
             result = new PlacementDetail(design);
-            CulcValuesInRegions(design, approximate, result, out compInRegions, RegionsValues, xCoordRegions, yCoordRegions, wRegs, hRegs, regsCount);
-
+            CulcValuesInRegions(design, approximate, result, out compInRegions, regionsValues, xCoordRegions, yCoordRegions, wRegs, hRegs, regsCount);
+            PositionHelper helper = new PositionHelper(design, result);
+            helper.Build();
             do
             {
-                if (!RegionsValues.Any(t => t > 1)) break;
-                var maxVal = RegionsValues.Max();
+                if (!regionsValues.Any(t => t > 1)) break;
+                var maxVal = regionsValues.Max();
 
                 for (var i = 0; i < regsCount; i++)
                 {
-                    if (RegionsValues[i] != maxVal) continue;
-                    if (RegionsValues[i] == -1) continue;
+                    if (regionsValues[i] != maxVal) continue;
+                    if (regionsValues[i] == -1) continue;
                     var maxArea = 0;
                     var maxCompInd = -1;
                     var RegContainsFixedComps = false;
@@ -161,9 +163,12 @@ namespace DetailPlacer.Algorithm
                             maxCompInd = compInRegions[i][j];
                         }
 
-                        result.placed[design.components[maxCompInd]] = true;
-                        result.x[design.components[maxCompInd]] = (int)Math.Round(approximate.x[design.components[maxCompInd]]);
-                        result.y[design.components[maxCompInd]] = (int)Math.Round(approximate.y[design.components[maxCompInd]]);
+                        var current = design.components[maxCompInd];
+                        result.placed[current] = true;
+                        result.x[current] = (int)Math.Round(approximate.x[current]);
+                        result.y[current] = (int)Math.Round(approximate.y[current]);
+
+                        helper.MoveComponent(current, result.x[current], result.y[current]);
                     
                     }
 
@@ -177,14 +182,14 @@ namespace DetailPlacer.Algorithm
                             if (compInd == maxCompInd) continue;
                         }
                         if (result.placed[design.components[compInd]]) continue;
-                        PlaceComponent(design, approximate, design.components[compInd], result, out placed, xCoordRegions[i], yCoordRegions[i], wRegs, hRegs);
+                        PlaceComponent(helper, design, approximate, design.components[compInd], result, out placed, xCoordRegions[i], yCoordRegions[i], wRegs, hRegs);
                     }
 
-                    RegionsValues[i] = -1;
+                    regionsValues[i] = -1;
                     break;
                 }
 
-                CulcValuesInRegions(design, approximate, result, out compInRegions, RegionsValues, xCoordRegions, yCoordRegions, wRegs, hRegs, regsCount);
+                CulcValuesInRegions(design, approximate, result, out compInRegions, regionsValues, xCoordRegions, yCoordRegions, wRegs, hRegs, regsCount);
 
             } while (true);
             foreach (var c in design.components)

@@ -239,7 +239,7 @@ namespace TestRunner
             {
                 SaveTestResults(resultDerectory, i + 1, 0, design[i], approximate[i], sizes[i], bitmaps[i]);
             }
-
+            if(false)
             foreach (Type comOrderType in componentsOrders)
             {
                 ConstructorInfo comOrder = comOrderType.GetConstructor(masType);
@@ -316,11 +316,11 @@ namespace TestRunner
                 }
             }
 
-            Type[] otherPlacers =
-                existingTypes.Where(
-                    t =>
-                        typeof(IDetailPlacer).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract &&
-                        typeof(DetailPlacerImpl) != t).ToArray();
+            Type[] otherPlacers = new[] { typeof(CrossReductPlacer) };
+//                existingTypes.Where(
+//                    t =>
+//                        typeof(IDetailPlacer).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract &&
+//                        typeof(DetailPlacerImpl) != t).ToArray();
             foreach (Type otherPlacerType in otherPlacers)
             {
                 ConstructorInfo info = otherPlacerType.GetConstructor(masType);

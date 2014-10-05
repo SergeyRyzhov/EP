@@ -40,7 +40,8 @@ namespace DetailPlacer.Algorithm
 //                result.x[component] = (int)approximate.x[component];
 //                result.y[component] = (int)approximate.y[component];
             }
-
+            PositionHelper helper = new PositionHelper(design,result);
+            helper.Build();
             var notPalced = new List<Component>();
             Component[] unplacedComponents;
             do
@@ -56,7 +57,7 @@ namespace DetailPlacer.Algorithm
                 var current = unplacedComponents.FirstOrDefault();
 
                 bool placed;
-                PlaceComponent(design, approximate, current, result, out placed);
+                PlaceComponent(helper, design, approximate, current, result, out placed);
 
                 if (!placed)
                     notPalced.Add(current);
@@ -70,13 +71,13 @@ namespace DetailPlacer.Algorithm
             }
         }
 
-        protected virtual void PlaceComponent(Design design, PlacementGlobal approximate, Component current, PlacementDetail result, out bool placed)
+        protected virtual void PlaceComponent(PositionHelper helper, Design design, PlacementGlobal approximate, Component current, PlacementDetail result, out bool placed)
         {
             int[] x;
             int[] y;
             bool hasPosition;
 
-            m_positionSearcher.AlvailablePositions(design, approximate, result, current, out x, out y, out hasPosition);
+            m_positionSearcher.AlvailablePositions(helper, design, approximate, result, current, out x, out y, out hasPosition);
             if (hasPosition)
             {
                 var perm = new int[x.Length];
@@ -89,6 +90,7 @@ namespace DetailPlacer.Algorithm
                 result.y[current] = y[0];
                 result.placed[current] = true;
                 placed = true;
+                helper.MoveComponent(current, x[0], y[0]);
             }
             else
             {
