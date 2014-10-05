@@ -26,6 +26,7 @@ namespace TestRunner
             string wtsFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(".wts")) ?? "");
             string plFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(".pl")) ?? "");
             string sclFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(".scl")) ?? "");
+            string globalPlFile = Path.Combine(directory, "global.txt");
 
             int numTerminals;
             int nodesSize;
@@ -139,6 +140,24 @@ namespace TestRunner
                     placement.y[component] = y;
                 }
             }
+            if (File.Exists(globalPlFile))
+            {
+                using (StreamReader plStream = GetStream(globalPlFile))
+                {
+                    while ((line = plStream.ReadLine()) != null)
+                    {
+                        string[] lineData = line.Split(new[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        int id = int.Parse(lineData[0]);
+                        var x = double.Parse(lineData[1]);
+                        var y = double.Parse(lineData[2]);
+                        Component component = design.components.First(c => c.id.Equals(id));
+                        placement.placed[component] = component.id < numTerminals; // || (x == 0 && y == 0);
+                        placement.x[component] = x;
+                        placement.y[component] = y;
+                    }
+                }
+            }
+            
 
             var result = new ChipTask(design, placement);
             result.Height = 50;
