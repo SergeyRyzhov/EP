@@ -35,10 +35,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\StatisticNames.cs" />
+    <Compile Include="Rows\AreaOfIntersectionsRow.cs" />
     <Compile Include="Rows\ComponentAmountRow.cs" />
     <Compile Include="Interfaces\ISatisticRow.cs" />
     <Compile Include="Interfaces\IStatistic.cs" />
     <Compile Include="Interfaces\IStatisticResult.cs" />
+    <Compile Include="Rows\CountOfCrossingsRow.cs" />
     <Compile Include="Rows\ManhattanMetrikRow.cs" />
     <Compile Include="Rows\PlacedRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
