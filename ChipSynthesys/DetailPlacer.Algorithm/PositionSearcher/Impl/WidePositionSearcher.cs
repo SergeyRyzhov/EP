@@ -25,7 +25,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
             m_size = size;
         }
 
-        public void AlvailablePositions(Design design, PlacementGlobal approximate, PlacementDetail result, Component current,
+        public void AlvailablePositions(PositionHelper helper, Design design, PlacementGlobal approximate, PlacementDetail result, Component current,
             out int[] x, out int[] y, out bool hasPosition)
         {
             var lx = new List<int>();

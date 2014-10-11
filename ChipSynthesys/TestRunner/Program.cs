@@ -14,6 +14,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace TestRunner
 {
@@ -240,132 +241,142 @@ namespace TestRunner
                 SaveTestResults(resultDerectory, i + 1, 0, design[i], approximate[i], sizes[i], bitmaps[i]);
             }
 
-            foreach (Type comOrderType in componentsOrders)
-            {
-                ConstructorInfo comOrder = comOrderType.GetConstructor(masType);
-                if (comOrder != null)
-                {
-                    var compOrder = comOrder.Invoke(null) as ICompontsOrderer;
+            //foreach (Type comOrderType in componentsOrders)
+            //{
+            //    ConstructorInfo comOrder = comOrderType.GetConstructor(masType);
+            //    if (comOrder != null)
+            //    {
+            //        var compOrder = comOrder.Invoke(null) as ICompontsOrderer;
 
-                    foreach (Type posSerchType in positionSearchers)
-                    {
-                        ConstructorInfo posSerch = posSerchType.GetConstructor(masType);
-                        if (posSerch != null)
-                        {
-                            var posSearcher = posSerch.Invoke(null) as IPositionSearcher;
+            //        foreach (Type posSerchType in positionSearchers)
+            //        {
+            //            ConstructorInfo posSerch = posSerchType.GetConstructor(masType);
+            //            if (posSerch != null)
+            //            {
+            //                var posSearcher = posSerch.Invoke(null) as IPositionSearcher;
 
-                            foreach (Type posSortType in positionSorters)
-                            {
-                                foreach (Type posCompType in positionComparers)
-                                {
-                                    ConstructorInfo posComp = posCompType.GetConstructor(masType);
-                                    if (posComp != null)
-                                    {
-                                        var posComparer = posComp.Invoke
-                                            (null) as IPositionComparer;
-                                        ConstructorInfo posSort =
-                                            posSortType.GetConstructor(new[] { typeof(IPositionComparer) });
-                                        if (posSort != null)
-                                        {
-                                            var posSorter = posSort.Invoke
-                                                (new Object[] { posComparer }) as IPositionsSorter;
-                                            var placer = new DetailPlacerImpl(compOrder, posSearcher, posSorter);
-                                            testCount++;
-                                            if (testCount != 10)
-                                                continue;
-                                            SaveTestInfo(resultDerectory, testCount, compOrder, posSearcher,
-                                                posComparer, posSorter);
+            //                foreach (Type posSortType in positionSorters)
+            //                {
+            //                    foreach (Type posCompType in positionComparers)
+            //                    {
+            //                        ConstructorInfo posComp = posCompType.GetConstructor(masType);
+            //                        if (posComp != null)
+            //                        {
+            //                            var posComparer = posComp.Invoke
+            //                                (null) as IPositionComparer;
+            //                            ConstructorInfo posSort =
+            //                                posSortType.GetConstructor(new[] { typeof(IPositionComparer) });
+            //                            if (posSort != null)
+            //                            {
+            //                                var posSorter = posSort.Invoke
+            //                                    (new Object[] { posComparer }) as IPositionsSorter;
+            //                                var placer = new DetailPlacerImpl(compOrder, posSearcher, posSorter);
+            //                                testCount++;
+            //                                if (testCount != 10)
+            //                                    continue;
+            //                                SaveTestInfo(resultDerectory, testCount, compOrder, posSearcher,
+            //                                    posComparer, posSorter);
 
-                                            for (int i = 0; i < design.Length; i++)
-                                            {
-                                                Design d = design[i];
-                                                PlacementDetail placeRes;
+            //                                for (int i = 0; i < design.Length; i++)
+            //                                {
+            //                                    Design d = design[i];
+            //                                    PlacementDetail placeRes;
 
-                                                //todo исправить другие части чтобы всё рисовали здесь
-                                                //формирую пустое приближённое решение
-                                                var tempAppr = approximate[i];
-                                                foreach (var c in d.components)
-                                                {
-                                                    tempAppr.placed[c] = false;
-                                                }
+            //                                    //todo исправить другие части чтобы всё рисовали здесь
+            //                                    //формирую пустое приближённое решение
+            //                                    var tempAppr = approximate[i];
+            //                                    foreach (var c in d.components)
+            //                                    {
+            //                                        tempAppr.placed[c] = false;
+            //                                    }
 
-                                                //placer.Place(d, approximate[i], out placeRes);
-                                                placer.Place(d, tempAppr, out placeRes);
+            //                                    //placer.Place(d, approximate[i], out placeRes);
+            //                                    placer.Place(d, tempAppr, out placeRes);
 
-                                                foreach (var c in d.components)
-                                                {
-                                                    tempAppr.placed[c] = true;
-                                                    //                                                    if (!placeRes.placed[c])
-                                                    //                                                    {
-                                                    //                                                        placeRes.x[c] = (int) approximate[i].x[c];
-                                                    //                                                        placeRes.y[c] = (int) approximate[i].y[c];
-                                                    //                                                        //placeRes.placed[c] = true;
-                                                    //                                                    }
-                                                }
+            //                                    foreach (var c in d.components)
+            //                                    {
+            //                                        tempAppr.placed[c] = true;
+            //                                        //                                                    if (!placeRes.placed[c])
+            //                                        //                                                    {
+            //                                        //                                                        placeRes.x[c] = (int) approximate[i].x[c];
+            //                                        //                                                        placeRes.y[c] = (int) approximate[i].y[c];
+            //                                        //                                                        //placeRes.placed[c] = true;
+            //                                        //                                                    }
+            //                                    }
 
-                                                statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
-                                                SaveTestResults(resultDerectory, i + 1, testCount, d, placeRes,
-                                                    placemetStatistics, sizes[i], bitmaps[i]);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //                                    statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
+            //                                    SaveTestResults(resultDerectory, i + 1, testCount, d, placeRes,
+            //                                        placemetStatistics, sizes[i], bitmaps[i]);
+            //                                }
+            //                            }
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             Type[] otherPlacers =
                 existingTypes.Where(
                     t =>
                         typeof(IDetailPlacer).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract &&
                         typeof(DetailPlacerImpl) != t).ToArray();
-            foreach (Type otherPlacerType in otherPlacers)
+            //foreach (Type otherPlacerType in otherPlacers)
+            //{
+            //    ConstructorInfo info = otherPlacerType.GetConstructor(masType);
+            //    if (info != null)
+            //    {
+            //        var placer = info.Invoke(null) as IDetailPlacer;
+            //        if (placer == null)
+            //            continue;
+
+            Stopwatch st = new Stopwatch();
+            st.Start();
+            var placer = new CrossCompPlacer();
+            for (int i = 0; i < design.Length; i++)
             {
-                ConstructorInfo info = otherPlacerType.GetConstructor(masType);
-                if (info != null)
+                Design d = design[i];
+                PlacementDetail placeRes;
+
+                //todo исправить другие части чтобы всё рисовали здесь
+                //формирую пустое приближённое решение
+                var tempAppr = approximate[i];
+                foreach (var c in d.components)
                 {
-                    var placer = info.Invoke(null) as IDetailPlacer;
-                    if (placer == null)
-                        continue;
+                    tempAppr.placed[c] = false;
+                }
+                testCount++;
+                SaveTestInfo(resultDerectory, testCount, placer);
+                //placer.Place(d, approximate[i], out placeRes);
 
-                    for (int i = 0; i < design.Length; i++)
-                    {
-                        Design d = design[i];
-                        PlacementDetail placeRes;
+                placer.Place(d, tempAppr, out placeRes);
 
-                        //todo исправить другие части чтобы всё рисовали здесь
-                        //формирую пустое приближённое решение
-                        var tempAppr = approximate[i];
-                        foreach (var c in d.components)
-                        {
-                            tempAppr.placed[c] = false;
-                        }
-                        testCount++;
-                        SaveTestInfo(resultDerectory, testCount, placer);
-                        //placer.Place(d, approximate[i], out placeRes);
-                        placer.Place(d, tempAppr, out placeRes);
-
-                        foreach (var c in d.components)
-                        {
-                            tempAppr.placed[c] = true;
-                            //                    if (!placeRes.placed[c])
-                            //                    {
-                            //                        placeRes.x[c] = (int) approximate[i].x[c];
-                            //                        placeRes.y[c] = (int) approximate[i].y[c];
-                            //                        //placeRes.placed[c] = true;
-                            //                    }
-                        }
-
-                        statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
-                        SaveTestResults(resultDerectory, i + 1, testCount, d, placeRes,
-                            placemetStatistics, sizes[i], bitmaps[i]);
-                    }
+                foreach (var c in d.components)
+                {
+                    tempAppr.placed[c] = true;
+                    //                    if (!placeRes.placed[c])
+                    //                    {
+                    //                        placeRes.x[c] = (int) approximate[i].x[c];
+                    //                        placeRes.y[c] = (int) approximate[i].y[c];
+                    //                        //placeRes.placed[c] = true;
+                    //                    }
                 }
 
+                statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
+                SaveTestResults(resultDerectory, i + 1, testCount, d, placeRes,
+                    placemetStatistics, sizes[i], bitmaps[i]);
             }
-            //Console.ReadLine();
+            st.Stop();
+            Console.WriteLine( "Операция выполнена за " + st.ElapsedMilliseconds.ToString() +
+                          " миллисекунд");
+
+            TimeSpan tSpan; tSpan = st.Elapsed;
+            Console.WriteLine(  "Время выполнения операции - " + tSpan.ToString());
+            //    }
+
+            //}
+            Console.ReadLine();
         }
 
         private static bool ReadInput(string[] args, out Design[] design, out PlacementGlobal[] approximate,
@@ -444,12 +455,12 @@ namespace TestRunner
             out Bitmap bitmap)
         {
             IGenerator generator = new DenseGenerator();
-            const int n = 30;       //число компонент
-            const int maxx = 4;       //размер по x
-            const int maxy = 4;       //размер по y
-            const int p = 75;       //процент заполнения
-            const int nets = 15;       //число сетей
-            const int maxNetSize = 5;       //длина цепей
+            const int n = 150;       //число компонент
+            const int maxx = 7;       //размер по x
+            const int maxy = 6;       //размер по y
+            const int p = 90;       //процент заполнения
+            const int nets = 25;       //число сетей
+            const int maxNetSize = 9;       //длина цепей
             generator.NextDesignWithPlacement(n, nets, maxNetSize, p, maxx, maxy, 0, 0, out design, out placement);
 
             const int scale = 20; //масштаб здесь, внутри должен быть рассчитан по исходным данным

@@ -34,7 +34,9 @@ namespace ChipSynthesys.Statistic.Statistics
 
             statisticResult.Add(new PlacedRow { Design = design, DetailPlacement = placement });
             statisticResult.Add(new ManhattanMetrikRow { Design = design, DetailPlacement = placement });
-
+            statisticResult.Add(new AreaOfIntersectionsRow { Design = design, DetailPlacement = placement });
+            statisticResult.Add(new CountOfCrossingsRow { Design = design, DetailPlacement = placement });
+           
             result = statisticResult;
         }
 

@@ -152,13 +152,36 @@ namespace ChipSynthesys.Common.Classes
 
         protected static int AreaOfCrossing(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2)
         {
-            var x11 = Math.Max(Math.Min(x1, x1 + w1), Math.Min(x2, x2 + w2));
-            var x12 = Math.Min(Math.Max(x1, x1 + w1), Math.Max(x2, x2 + w2));
-            var y11 = Math.Max(Math.Min(y1, y1 + h1), Math.Min(y2, y2 + h2));
-            var y12 = Math.Min(Math.Max(y1, y1 + h1), Math.Max(y2, y2 + h2));
-            if ((x12 - x11 > 0) && (y12 - y11 > 0))
-                return (x12 - x11) * (y12 - y11);
-            return 0;
+            if (x1 + w1 <= x2 || x2 + w2 <= x1 || y1 + h1 <= y2 || y2 + h2 <= y1)
+                return 0;
+            var minX = Math.Min(x1, x2);
+            var maxX = Math.Max(x1 + w1, x2 + w2);
+            var minY = Math.Min(y1, y2);
+            var maxY = Math.Max(y1 + h1, y2 + h2);
+
+            var Area = (w1 + w2 - (maxX - minX)) * (h1 + h2 - (maxY - minY));
+            return Area;
+        }
+
+        public static int CountOfCrossings(Design design, PlacementDetail placement)
+        {
+            var countOfCrossings = 0;
+            for (var i = 0; i < design.components.Length; i++)
+            {
+                var r1 = design.components[i];
+                var x1 = placement.x[r1];
+                var y1 = placement.y[r1];
+                for (var j = i + 1; j < design.components.Length; j++)
+                {
+                    var r2 = design.components[j];
+                    var x2 = placement.x[r2];
+                    var y2 = placement.y[r2];
+                    if (x1 + r1.sizex <= x2 || x2 + r2.sizex <= x1
+                        || y1 + r1.sizey <= y2 || y2 + r2.sizey <= y1) continue;
+                    countOfCrossings++;
+                }
+            }
+            return countOfCrossings;
         }
     }
 }
