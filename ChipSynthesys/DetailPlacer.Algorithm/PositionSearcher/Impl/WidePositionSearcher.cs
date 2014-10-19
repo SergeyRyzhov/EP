@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
-    public class WidePositionSearcher : IPositionSearcher
+    /*public class WidePositionSearcher : IPositionSearcher
     {
         private readonly int m_size;
 
@@ -243,5 +243,5 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 
             public int Height { get; private set; }
         }
-    }
+    }*/
 }

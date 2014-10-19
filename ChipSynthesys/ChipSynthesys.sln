@@ -21,6 +21,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Internal", "Internal", "{C6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRunner", "TestRunner\TestRunner.csproj", "{8AACA2CE-6ED2-4D3C-A54F-5AB6E5D67950}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B1D113D3-2A34-4BDE-A40C-F25DECEB0DF7}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -122,5 +127,8 @@ Global
 		{0019C9DD-A444-41C9-A4FA-1970F25C5141} = {C607D181-3A6D-42CD-9ED2-EED804484E72}
 		{351F8C6C-AC7C-4196-8BCC-ECD67EE71043} = {0F8C460E-549C-44C0-8444-BF6D7B2E228A}
 		{B772B461-D744-48CF-9578-754175A549D1} = {0F8C460E-549C-44C0-8444-BF6D7B2E228A}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

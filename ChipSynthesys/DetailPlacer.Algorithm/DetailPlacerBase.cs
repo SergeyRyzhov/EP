@@ -40,8 +40,8 @@ namespace DetailPlacer.Algorithm
 //                result.x[component] = (int)approximate.x[component];
 //                result.y[component] = (int)approximate.y[component];
             }
-            PositionHelper helper = new PositionHelper(design,result);
-            helper.Build();
+            Mask helper = new Mask(design,result);
+            helper.BuildUp();
             var notPalced = new List<Component>();
             Component[] unplacedComponents;
             do
@@ -71,14 +71,12 @@ namespace DetailPlacer.Algorithm
             }
         }
 
-        protected virtual void PlaceComponent(PositionHelper helper, Design design, PlacementGlobal approximate, Component current, PlacementDetail result, out bool placed)
+        protected virtual void PlaceComponent(Mask helper, Design design, PlacementGlobal approximate, Component current, PlacementDetail result, out bool placed)
         {
-            int[] x;
-            int[] y;
-            bool hasPosition;
+            int[] x = new int[m_positionSearcher.PositionAmount];
+            int[] y = new int[m_positionSearcher.PositionAmount];
 
-            m_positionSearcher.AlvailablePositions(helper, design, approximate, result, current, out x, out y, out hasPosition);
-            if (hasPosition)
+            if (m_positionSearcher.AlvailablePositions(helper, current, (int)(approximate.x[current]), (int)approximate.y[current], x, y))
             {
                 var perm = new int[x.Length];
                 m_positionsSorter.SortPositions(design, approximate, result, current, x, y, ref perm);
@@ -90,7 +88,7 @@ namespace DetailPlacer.Algorithm
                 result.y[current] = y[0];
                 result.placed[current] = true;
                 placed = true;
-                helper.MoveComponent(current, x[0], y[0]);
+                helper.PlaceComponent(current, x[0], y[0]);
             }
             else
             {
@@ -140,7 +138,7 @@ namespace DetailPlacer.Algorithm
     public class DetailPlacerImpl : DetailPlacerBase
     {
         public DetailPlacerImpl()
-            : base(new CompontsOrderer.Impl.CompontsOrderer(), new PositionSearcher.Impl.LinearPositionSearcher(), new PositionsSorter(new NetsPositionComparer()))
+            : base(new CompontsOrderer.Impl.CompontsOrderer(), new PositionSearcher.Impl.SpiralPositionSearcher(), new PositionsSorter(new NetsPositionComparer()))
         {
         }
 

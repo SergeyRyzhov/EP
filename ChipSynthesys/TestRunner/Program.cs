@@ -215,6 +215,8 @@ namespace TestRunner
         SaveTestResults(resultDerectory, i + 1, 0, design[i], approximate[i], sizes[i], bitmaps[i]);
       }
 
+
+      if(false) // сейчас мы не ипользуем эти эвристики
       foreach (Type comOrderType in componentsOrders)
       {
         ConstructorInfo comOrder = comOrderType.GetConstructor(masType);
@@ -293,11 +295,17 @@ namespace TestRunner
         }
       }
 
-      Type[] otherPlacers =
-          existingTypes.Where(
-              t =>
-                  typeof(IDetailPlacer).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract &&
-                  typeof(DetailPlacerImpl) != t).ToArray();
+        Type[] otherPlacers =
+//          existingTypes.Where(
+//              t =>
+//                  typeof(IDetailPlacer).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract &&
+//                  typeof(DetailPlacerImpl) != t).ToArray();
+        {
+            typeof (CrossReductPlacer),
+            typeof (ForceDirectedDetailPlacer),
+            typeof (CrossCompPlacer),
+            typeof (CrossComponentVariant2)
+        };
       foreach (Type otherPlacerType in otherPlacers)
       {
         ConstructorInfo info = otherPlacerType.GetConstructor(masType);
@@ -309,7 +317,6 @@ namespace TestRunner
 
           Stopwatch st = new Stopwatch();
           st.Start();
-          //var placer = new CrossCompPlacer();
           for (int i = 0; i < design.Length; i++)
           {
             Design d = design[i];
@@ -426,11 +433,11 @@ namespace TestRunner
         out Bitmap bitmap)
     {
       IGenerator generator = new DenseGenerator();
-      const int n = 50;       //число компонент
+      const int n = 250;       //число компонент
       const int maxx = 7;       //размер по x
       const int maxy = 6;       //размер по y
       const int p = 70;       //процент заполнения
-      const int nets = 25;       //число сетей
+      const int nets = 1000;       //число сетей
       const int maxNetSize = 9;       //длина цепей
       generator.NextDesignWithPlacement(n, nets, maxNetSize, p, maxx, maxy, 0, 0, out design, out placement);
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
-    public abstract class PositionSearcherBase : IPositionSearcher
+   /* public abstract class PositionSearcherBase : IPositionSearcher
     {
         public override string ToString()
         {
@@ -39,7 +39,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
             var mask = helper.GetMask();
             var addIfTheLimitIsNotExceeded = new Func<int, int, bool>((a, b) =>
             {
-                var av = IsAvailable(mask, w, h, a, b);
+                var av = IsAvailable(mask, current, a, b);
                 if (!av) return true;
 
                 lx.Add(a);
@@ -71,30 +71,11 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
         /// <param name="result"></param>
         /// <returns>true если искомое пчисло позиций найдено, false иначе</returns>
         protected abstract bool DetourPositions(Design design, PlacementGlobal approximate, PlacementDetail result,
-            Component current, int n, int m, int[,] mask, Func<int, int, bool> addIfTheLimitIsNotExceeded);
+            Component current, int n, int m, Mask mask, Func<int, int, bool> addIfTheLimitIsNotExceeded);
 
-       
-
-        protected virtual bool IsAvailable(int[,] mask, int width, int heigth, int x, int y)
+        protected virtual bool IsAvailable(Mask mask, Component c, int x, int y)
         {
-            for (int k = 0; k < heigth; k++)
-            {
-                for (int l = 0; l < width; l++)
-                {
-                    try
-                    {
-                        if (mask[x + l, y + k] == 1)
-                        {
-                            return false;
-                        }
-                    }
-                    catch (IndexOutOfRangeException)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
+            return mask.CanPlaceH(c, x, y);
         }
-    }
+    }*/
 }

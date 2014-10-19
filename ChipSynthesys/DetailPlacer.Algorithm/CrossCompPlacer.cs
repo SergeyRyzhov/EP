@@ -1,15 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using DetailPlacer.Algorithm.CompontsOrderer;
-using DetailPlacer.Algorithm.PositionSearcher;
-using DetailPlacer.Algorithm.PositionSearcher.Impl;
-using DetailPlacer.Algorithm.PositionSorter;
-using DetailPlacer.Algorithm.PositionSorter.Impl;
-using DetailPlacer.Algorithm.PositionSorter.PositionComparer;
-using DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl;
-using DetailPlacer.Algorithm.CriterionPositionSearcher;
 using PlaceModel;
 using ChipSynthesys.Common.Classes;
 using System.Drawing;
