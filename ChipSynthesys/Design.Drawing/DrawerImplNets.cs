@@ -1,4 +1,5 @@
-﻿using PlaceModel;
+﻿using System.Drawing.Drawing2D;
+using PlaceModel;
 using System.Drawing;
 
 namespace ChipSynthesys.Draw
@@ -14,9 +15,10 @@ namespace ChipSynthesys.Draw
         public override void Draw(PlaceModel.Design design, PlacementGlobal placement, Size size,
             System.Drawing.Graphics canvas)
         {
-            int scaling = size.Width / design.field.cellsx < size.Height / design.field.cellsy
-                              ? size.Width / design.field.cellsx
-                              : size.Height / design.field.cellsy;
+            float scaling = size.Width / design.field.cellsx < size.Height / design.field.cellsy
+                              ? (float)size.Width / design.field.cellsx
+                              : (float)size.Height / design.field.cellsy;
+            //scaling = scaling < 2 ? 2 : scaling;
 
             Brush br = new SolidBrush(Color.LightGray);
             Pen pen = new Pen(Color.Red, PenThickness);
@@ -116,9 +118,9 @@ namespace ChipSynthesys.Draw
         public override void Draw(PlaceModel.Design design, PlacementDetail placement, Size size,
                                   System.Drawing.Graphics canvas)
         {
-            int scaling = size.Width / design.field.cellsx < size.Height / design.field.cellsy
-                              ? size.Width / design.field.cellsx
-                              : size.Height / design.field.cellsy;
+            float scaling = size.Width / design.field.cellsx < size.Height / design.field.cellsy
+                              ? (float)size.Width / design.field.cellsx
+                              : (float)size.Height / design.field.cellsy;
 
             Brush br = new SolidBrush(Color.LightGray);
             Pen pen = new Pen(Color.Red, PenThickness);
@@ -130,7 +132,7 @@ namespace ChipSynthesys.Draw
             int[] drawnNetsY = new int[design.nets.Length];
 
             // рисуем границу
-            canvas.DrawRectangle(framePen, 0, 0, design.field.cellsx * scaling - 1, design.field.cellsy * scaling - 1);
+            canvas.DrawRectangle(framePen, 0f, 0f, design.field.cellsx * scaling - 1, design.field.cellsy * scaling - 1);
 
             // рисуем элементы
             foreach (var c in design.components)
@@ -175,8 +177,8 @@ namespace ChipSynthesys.Draw
                     continue;
                 }
                 // для определения границ по х центральной линии масс
-                int xMin = design.field.cellsx * scaling;
-                int xMax = 0;
+                float xMin = design.field.cellsx * scaling;
+                float xMax = 0;
 
                 // сколько разместили
                 int placeInNet = 0;
@@ -185,10 +187,14 @@ namespace ChipSynthesys.Draw
                 {
                     if (placement.placed[comp])
                     {
-                        if (placement.x[comp] * scaling + comp.sizex * scaling / 2 < xMin)
+                        if (placement.x[comp]*scaling + comp.sizex*scaling/2 < xMin)
+                        {
                             xMin = placement.x[comp] * scaling + comp.sizex * scaling / 2;
-                        if (placement.x[comp] * scaling + comp.sizex * scaling / 2 > xMax)
+                        }
+                        if (placement.x[comp]*scaling + comp.sizex*scaling/2 > xMax)
+                        {
                             xMax = placement.x[comp] * scaling + comp.sizex * scaling / 2;
+                        }
                     }
 
                     drawnNetsY[i] += placement.y[comp];
@@ -196,7 +202,7 @@ namespace ChipSynthesys.Draw
                 }
 
                 // сосчитали среднее для одной цепи => ищем среднее
-                drawnNetsY[i] = drawnNetsY[i] / placeInNet * scaling;
+                drawnNetsY[i] = (int)(drawnNetsY[i]  * scaling / placeInNet);
 
                 // рисуем линию горизонтальную, проходящую через центр масс
                 canvas.DrawLine(framePen, xMin, drawnNetsY[i], xMax, drawnNetsY[i]);
