@@ -304,7 +304,7 @@ namespace TestRunner
             typeof (CrossReductPlacer),
             typeof (ForceDirectedDetailPlacer),
             typeof (CrossCompPlacer),
-            typeof (CrossComponentVariant2)
+            //typeof (CrossComponentVariant2)
         };
       foreach (Type otherPlacerType in otherPlacers)
       {

@@ -4,7 +4,7 @@ using PlaceModel;
 
 namespace DetailPlacer.Algorithm
 {
-    public class CrossComponentVariant2 : CrossCompPlacer, IDetailPlacer
+    /*public class CrossComponentVariant2 : CrossCompPlacer, IDetailPlacer
     {
         public override string ToString()
         {
@@ -42,5 +42,5 @@ namespace DetailPlacer.Algorithm
                 Clear(qtcells, ValueCell, compInCell);
             }
         }
-    }
+    }*/
 }
