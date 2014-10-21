@@ -88,6 +88,9 @@ namespace DetailPlacer.Algorithm.PositionSearcher
 
         public void PlaceComponent(Component c, int x, int y)
         {
+            x -= m_design.field.beginx;
+            y -= m_design.field.beginy;
+
             var h = c.sizey;
             var w = c.sizex;
 
@@ -111,15 +114,18 @@ namespace DetailPlacer.Algorithm.PositionSearcher
 
         public bool CanPlaceH(Component c, int x, int y)
         {
+            x -= m_design.field.beginx;
+            y -= m_design.field.beginy;
+
             var h = c.sizey;
             var w = c.sizex;
 
-            if (x < 0 || m_vMask.Length < x + w)
+            if (x < 0 || Width < x + w)
             {
                 return false;
             }
 
-            if (y < 0 || m_hMask.Length < y + h)
+            if (y < 0 || Height < y + h)
             {
                 return false;
             }
@@ -138,15 +144,18 @@ namespace DetailPlacer.Algorithm.PositionSearcher
 
         public bool CanPlaceV(Component c, int x, int y)
         {
+            x -= m_design.field.beginx;
+            y -= m_design.field.beginy;
+
             var h = c.sizey;
             var w = c.sizex;
 
-            if (x < 0 || m_vMask.Length < x + w)
+            if (x < 0 || Width < x + w)
             {
                 return false;
             }
 
-            if (y < 0 || m_hMask.Length < y + h)
+            if (y < 0 || Height < y + h)
             {
                 return false;
             }

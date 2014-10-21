@@ -100,7 +100,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
             {
                 for (int i = sx - side; i <= sx + side - 1; i++)
                 {
-                    if (i >= 0 && sy - side >= 0)
+                    //if (i >= 0 && sy - side >= 0)
                     {
                         if (mask.CanPlaceH(current, i, sy - side))
                         {
@@ -117,7 +117,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
                 }
                 for (int j = sy - side; j <= sy + side - 1; j++)
                 {
-                    if (sx + side >= 0 && j >= 0)
+                    //if (sx + side >= 0 && j >= 0)
                     {
                         if (mask.CanPlaceV(current, sx + side, j))
                         {
@@ -133,7 +133,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
                 }
                 for (int i = sx + side; i >= sx - side + 1; i--)
                 {
-                    if (i >= 0 && sy + side >= 0)
+                    //if (i >= 0 && sy + side >= 0)
                     {
                         if (mask.CanPlaceH(current, i, sy + side))
                         {
@@ -149,7 +149,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
                 }
                 for (int j = sy + side; j >= sy - side + 1; j--)
                 {
-                    if (sx - side >= 0 && j >= 0)
+                    //if (sx - side >= 0 && j >= 0)
                     {
                         if (mask.CanPlaceV(current, sx - side, j))
                         {
