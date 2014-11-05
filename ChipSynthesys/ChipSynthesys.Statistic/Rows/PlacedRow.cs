@@ -1,7 +1,9 @@
-﻿using ChipSynthesys.Statistic.Common;
+﻿using System.Linq;
+
+using ChipSynthesys.Statistic.Common;
 using ChipSynthesys.Statistic.Interfaces;
+
 using PlaceModel;
-using System.Linq;
 
 namespace ChipSynthesys.Statistic.Rows
 {
@@ -26,6 +28,7 @@ namespace ChipSynthesys.Statistic.Rows
             {
                 return Design.components.Count(component => DetailPlacement.placed[component]);
             }
+
             return Design.components.Count(component => GlobalPlacement.placed[component]);
         }
     }

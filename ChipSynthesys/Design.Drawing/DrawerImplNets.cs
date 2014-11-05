@@ -225,7 +225,7 @@ namespace ChipSynthesys.Draw
         public override void DrawRect(PlaceModel.Design design, PlacementDetail placement, Size size,
                                     System.Drawing.Graphics canvas, int x, int y, int width, int height)
         {
-            int scaling = size.Width / width < size.Height / height ? size.Width / width : size.Height / height;
+            float scaling = size.Width / width < size.Height / height ? size.Width / width : size.Height / height;
             float penBorderDepth = 1;
 
             Brush br = new SolidBrush(Color.LightGray);
@@ -264,7 +264,7 @@ namespace ChipSynthesys.Draw
         public override void DrawRect(Design design, PlacementGlobal placement, Size size, Graphics canvas, int x, int y, int width, int height)
         {
 
-            int scaling = size.Width / width < size.Height / height ? size.Width / width : size.Height / height;
+            float scaling = size.Width / width < size.Height / height ? size.Width / width : size.Height / height;
             float penBorderDepth = 1;
 
             Brush br = new SolidBrush(Color.LightGray);

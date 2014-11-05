@@ -23,8 +23,22 @@ namespace ChipSynthesys.Statistic.Statistics
             var statisticResult = new StatisticResult();
 
             statisticResult.Add(new PlacedRow { Design = design, GlobalPlacement = placement });
-            statisticResult.Add(new ManhattanMetrikRow { Design = design, GlobalPlacement = placement });
+            var detail = new PlacementDetail(design);
+            foreach (var component in design.components)
+            {
+                detail.placed[component] = placement.placed[component];
+                detail.x[component] = (int)placement.x[component];
+                detail.y[component] = (int)placement.y[component];
+                placement.placed[component] = true;
+            }
 
+            statisticResult.Add(new ManhattanMetrikRow { Design = design, GlobalPlacement = placement });
+            statisticResult.Add(new AreaOfIntersectionsRow { Design = design, DetailPlacement = detail });
+            statisticResult.Add(new CountOfCrossingsRow { Design = design, DetailPlacement = detail });
+            foreach (var component in design.components)
+            {
+                placement.placed[component] = detail.placed[component];
+            }
             result = statisticResult;
         }
 

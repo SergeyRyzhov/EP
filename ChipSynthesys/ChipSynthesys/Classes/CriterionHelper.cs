@@ -32,11 +32,13 @@ namespace ChipSynthesys.Common.Classes
                     {
                         continue;
                     }
+
                     l = Math.Min(l, placement.x[c]);
                     r = Math.Max(r, placement.x[c] + c.sizex);
                     t = Math.Min(t, placement.y[c]);
                     b = Math.Min(b, placement.y[c] + c.sizey);
                 }
+
                 summ += (r - l) + (b - t);
             }
 
@@ -67,11 +69,13 @@ namespace ChipSynthesys.Common.Classes
                     {
                         continue;
                     }
+
                     l = Math.Min(l, placement.x[c]);
                     r = Math.Max(r, placement.x[c] + c.sizex);
                     t = Math.Min(t, placement.y[c]);
                     b = Math.Min(b, placement.y[c] + c.sizey);
                 }
+
                 summ += (r - l) + (b - t);
             }
 
@@ -147,6 +151,7 @@ namespace ChipSynthesys.Common.Classes
                 area += AreaOfCrossing(x, y, current.sizex, current.sizey, placement.x[other], placement.y[other],
                     other.sizex, other.sizey);
             }
+
             return area;
         }
 

@@ -8,7 +8,7 @@ using PlaceModel;
 
 namespace TestRunner
 {
-    public class BookshlfParser
+    public class BookshelfParser
     {
         public ChipTask Parse(string directory)
         {
