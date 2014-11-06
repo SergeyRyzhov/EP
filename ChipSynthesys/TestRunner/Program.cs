@@ -138,7 +138,11 @@ namespace TestRunner
             int testCount = 0;
             var masType = new Type[] { };
 
-            RunCommonTests(design, statistic, resultDirectory, approximate, sizes, bitmaps, testCount);
+            //пока не используются
+            if (false)
+            {
+                RunCommonTests(design, statistic, resultDirectory, approximate, sizes, bitmaps, testCount);
+            }
 
             Type[] otherPlacers =
                 
@@ -218,8 +222,7 @@ namespace TestRunner
         {
             string fileName = args[1];
             int index = fileName.LastIndexOf('\\');
-            index = index > 0 ? index : 0;
-            string taskName = fileName.Substring(index);
+            string taskName = fileName.Substring(index + 1);
             ChipTask task = ChipTask.Load(fileName);
             Console.WriteLine(@"Task was drawed by frame");
             int w = task.Design.field.cellsx;
