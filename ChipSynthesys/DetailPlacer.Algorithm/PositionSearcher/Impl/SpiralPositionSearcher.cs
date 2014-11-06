@@ -56,6 +56,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
             m_twisting = enableTwisting;
         }
     }*/
+    
     public class SpiralPositionSearcher : IPositionSearcher
     {
         public SpiralPositionSearcher()
