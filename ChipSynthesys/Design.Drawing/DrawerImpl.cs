@@ -1,5 +1,6 @@
 ﻿using PlaceModel;
 using System.Drawing;
+using System;
 
 namespace ChipSynthesys.Draw
 {
@@ -10,7 +11,7 @@ namespace ChipSynthesys.Draw
 
         public override void Draw(Design design, PlacementGlobal placement, Size size, Graphics canvas)
         {
-            int scaling = size.Width / design.field.cellsx < size.Height / design.field.cellsy ? size.Width / design.field.cellsx : size.Height / design.field.cellsy;
+            float scaling = size.Width / design.field.cellsx < size.Height / design.field.cellsy ? size.Width / design.field.cellsx : size.Height / design.field.cellsy;
             Brush br = new SolidBrush(Color.LightGray);
             Pen pen = new Pen(Color.Red, PenThickness);
             Brush brBlack = new SolidBrush(Color.Black);
@@ -39,7 +40,7 @@ namespace ChipSynthesys.Draw
 
         public override void Draw(Design design, PlacementDetail placement, Size size, Graphics canvas)
         {
-            int scaling = size.Width / design.field.cellsx < size.Height / design.field.cellsy ? size.Width / design.field.cellsx : size.Height / design.field.cellsy;
+            float scaling = size.Width / design.field.cellsx < size.Height / design.field.cellsy ? size.Width / design.field.cellsx : size.Height / design.field.cellsy;
             Brush br = new SolidBrush(Color.LightGray);
             Pen pen = new Pen(Color.Red, PenThickness);
             Brush brBlack = new SolidBrush(Color.Black);
@@ -70,7 +71,7 @@ namespace ChipSynthesys.Draw
         public override void DrawRect(PlaceModel.Design design, PlacementDetail placement, Size size,
                                   System.Drawing.Graphics canvas, int x, int y, int width, int height)
         {
-            int scaling = size.Width / width < size.Height / height ? size.Width / width : size.Height / height;
+            float scaling = getScaling(size.Width, size.Height, width, height);
             float penBorderDepth = 1;
 
             Brush br = new SolidBrush(Color.LightGray);
@@ -109,7 +110,8 @@ namespace ChipSynthesys.Draw
         public override void DrawRect(PlaceModel.Design design, PlacementGlobal placement, Size size,
                                   System.Drawing.Graphics canvas, int x, int y, int width, int height)
         {
-            int scaling = size.Width / width < size.Height / height ? size.Width / width : size.Height / height;
+
+            float scaling = getScaling(size.Width, size.Height, width, height);
             float penBorderDepth = 1;
 
             Brush br = new SolidBrush(Color.LightGray);
@@ -129,13 +131,19 @@ namespace ChipSynthesys.Draw
 
                     if (scaleRect.IntersectsWith(currentComponent))
                     {
+                        float xFloat = (float)(placement.x[c] - x) * scaling;
+                        float yFloat = (float)(placement.y[c] - y) * scaling;
 
-                        canvas.DrawRectangle(pen, (int)(placement.x[c] - x) * scaling,
-                        (int)(placement.y[c] - y) * scaling, c.sizex * scaling, c.sizey * scaling);
+                        float xSize = c.sizex * scaling;
+                        float ySize = c.sizey * scaling;
+ 
+
+                        canvas.DrawRectangle(pen, (float)(placement.x[c] - x) * scaling,
+                        (float)(placement.y[c] - y) * scaling, c.sizex * scaling, c.sizey * scaling);
 
                         canvas.FillRectangle(br,
-                            (int)(placement.x[c] - x) * scaling + penBorderDepth,
-                            (int)(placement.y[c] - y) * scaling + penBorderDepth,
+                            (float)(placement.x[c] - x) * scaling + penBorderDepth,
+                            (float)(placement.y[c] - y) * scaling + penBorderDepth,
                             c.sizex * scaling - penBorderDepth,
                             c.sizey * scaling - penBorderDepth);
 
@@ -143,6 +151,11 @@ namespace ChipSynthesys.Draw
                     }
                 }
             }
+        }
+
+        private float getScaling(float swidth, float sheight, float width, float height) {
+            float scaling = swidth / width < sheight / height ? swidth / width : sheight / height;
+            return scaling;
         }
     
     }
