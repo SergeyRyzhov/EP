@@ -93,12 +93,6 @@ namespace DetailPlacer.Algorithm
                     Component bestComp = GetComponentWithMaxSquare(compInCell[indCell], result);
                     if (bestComp != null)
                     {
-                        List<int> array = new List<int>();
-                        for (int i = 0; i < QtCells; i++)
-                        {
-                            if (ValueCell[i] == 0) { array.Add(i); }
-                        }
-                        int[] arraycell = array.ToArray();
                         // выбор лучшей позиции 
                         int bestCoord = GetBestCellWitnComponentSearcher(helper,design,approximate,bestComp,result, XCellCoord, YCellCoord, ValueCell);                        
                         ClearCells(ValueCell, design, approximate, XCellCoord, YCellCoord, bestComp, compInCell);
@@ -109,11 +103,10 @@ namespace DetailPlacer.Algorithm
                         result.placed[bestComp] = true;
 
                         // очищение ячейки 
-                        if (ValueCell[indCell] <= 2)
-                        {
-                            ValueCell[indCell] = -1;
-                            compInCell[indCell].Clear();
-                        }
+                        
+                        ValueCell[indCell] = -1;
+                        compInCell[indCell].Clear();
+                        
                         // удаление и добавление значений для компоненты в ячейки
 
                         AddCells(ValueCell, design, result, bestCoord, XCellCoord, YCellCoord, bestComp, compInCell);
@@ -133,15 +126,6 @@ namespace DetailPlacer.Algorithm
             {
                 if (result.placed[comp] == false)
                 {
-                    List<int> array = new List<int>();
-
-                    for (int i = 0; i < QtCells; i++)
-                    {
-                        if (ValueCell[i] == 0) { array.Add(i); }
-                    }
-
-                    int[] arraycell = array.ToArray();
-
                     int indCurrent = GetNomberCell(XCellCoord, YCellCoord, (int)approximate.x[comp], (int)approximate.y[comp]);
 
                     int bestCell = GetBestCellWitnComponentSearcher(helper, design, approximate, comp, result, XCellCoord, YCellCoord, ValueCell);
