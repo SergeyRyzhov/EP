@@ -14,7 +14,11 @@ namespace ChipSynthesys.Statistic.Results
 
         internal void Add(ISatisticRow<double> row)
         {
+            System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+            timer.Start();
             Add(row.Key, row.Compute());
+            timer.Stop();
+            //Console.WriteLine("Statistic {0} computed for {1}", row.Key, timer.Elapsed);
         }
 
         internal double this[string row]

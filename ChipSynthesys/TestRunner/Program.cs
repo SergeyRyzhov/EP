@@ -139,9 +139,21 @@ namespace TestRunner
             var masType = new Type[] { };
 
             //пока не используются
-            if (false)
+            //if (false)
+            //{
+            //    RunCommonTests(design, statistic, resultDirectory, approximate, sizes, bitmaps, testCount);
+            //}
+
+            for (int i = 0; i < design.Length; i++)
             {
-                RunCommonTests(design, statistic, resultDirectory, approximate, sizes, bitmaps, testCount);
+                IStatisticResult<double> designStatistics;
+                statistic.DesignStatistic(design[i], out designStatistics);
+                SaveDesignsInfo(resultDirectory, i + 1, designStatistics);
+            }
+
+            for (int i = 0; i < design.Length; i++)
+            {
+                SaveTestResults(resultDirectory, i + 1, 0, design[i], approximate[i], sizes[i], bitmaps[i]);
             }
 
             Type[] otherPlacers =
@@ -150,7 +162,7 @@ namespace TestRunner
                 //              t =>
                 { //                  typeof(IDetailPlacer).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract &&
                     //                  typeof(DetailPlacerImpl) != t).ToArray();
-                    typeof(CrossReductPlacer), typeof(ForceDirectedDetailPlacer), typeof(CrossCompPlacer)
+                    typeof(CrossReductPlacer)//, typeof(ForceDirectedDetailPlacer), typeof(CrossCompPlacer)
                     
                     //typeof (CrossComponentVariant2)
                 };
