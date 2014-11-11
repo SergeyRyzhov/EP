@@ -24,6 +24,8 @@ namespace DetailPlacer.Algorithm
         public int Width;
         public int Height;
         public int QtCells;
+        public int CoordX;
+        public int CoordY;
         public void CreateCells(Design design, out int[] XCellCoord, out int[] YCellCoord)
         {
             var coord_x = design.field.beginx;
@@ -67,87 +69,74 @@ namespace DetailPlacer.Algorithm
             return result;
         }
 
-        public int GetNomberCell( int[] XCellCoord, int[] YCellCoord, int x, int y)
-        {
-            var result=0;
-            for ( int i = 0; i < QtCells; i++)
-            {
-             if (XCellCoord[i] == x && YCellCoord[i] == y)
-             { result = i; break; }              
-            }
-            return result;
-        }
-
-        public void FillCells(Design design, PlacementGlobal myApproximate,PlacementDetail result, int[] XCellCoord, int[] YCellCoord,int[] ValueCell, List<List<Component>> CompInCell)
+        public void FillCells(Design design, PlacementGlobal myApproximate, PlacementDetail result, int[] XCellCoord, int[] YCellCoord, int[] ValueCell, List<List<Component>> CompInCell)
         {
 
             double xCoord;
             double yCoord;
             int sizex;
             int sizey;
-            int index;            
+            int index;
 
-            for (int i = 0; i < QtCells; i++)
-            {
-                ValueCell[i] = 0;
-            }
-                        
             foreach (Component comp in design.components)
             {
                 if (result.placed[comp] == false)
                 {
                     xCoord = myApproximate.x[comp];
                     yCoord = myApproximate.y[comp];
-                }
-                else
-                {
-                    xCoord = result.x[comp];
-                    yCoord = result.y[comp];
-                }
-                sizex = comp.sizex;
-                sizey = comp.sizey;                
 
-                index = GetNomberCell(XCellCoord, YCellCoord, (int)xCoord, (int)yCoord);
 
-                if ((int)xCoord < xCoord)
-                { sizex++; }
-                if ((int)yCoord < yCoord)
-                { sizey++; }
+                    sizex = comp.sizex;
+                    sizey = comp.sizey;
 
-                for (int j = 0; j < sizey; j++)
-                {
-                    for (int k = 0; k < sizex; k++)
+                    if (OutOfField(design, (int)xCoord, (int)yCoord))
+                        continue;
+
+                    index = ((int)xCoord - design.field.beginx) + ((int)yCoord - design.field.beginy) * design.field.cellsx;
+
+                    if ((int)xCoord < xCoord)
+                    { sizex++; }
+                    if ((int)yCoord < yCoord)
+                    { sizey++; }
+
+                    for (int j = 0; j < sizey; j++)
                     {
-                        if (xCoord + k <= Width && xCoord + k >= design.field.beginx && yCoord + j <= Height && yCoord + j >= design.field.beginy)
-                        {                           
-                            ValueCell[index + j * Width + k]++;
-                            CompInCell[index + j * Width + k].Add(comp);
+                        for (int k = 0; k < sizex; k++)
+                        {
+                            if (xCoord + k <= Width + design.field.beginx
+                                && xCoord >= design.field.beginx
+                                && yCoord + j <= Height + design.field.beginy
+                                && yCoord >= design.field.beginy)
+                            {
+                                ValueCell[index + j * Width + k]++; //лишнее
+                                CompInCell[index + j * Width + k].Add(comp);
+                            }
                         }
                     }
-                }
 
-            }         
+                }
+            }
 
         }
-
-       
-
         public void ClearCells(int[] ValueCells, Design design, PlacementGlobal myApproximate, int[] XCellCoord, int[] YCellCoord, Component current, List<List<Component>> CompInCell)
         {
 
             double xCoord = myApproximate.x[current];
-            double yCoord = myApproximate.y[current];          
-            int indexfirst = GetNomberCell(XCellCoord, YCellCoord, (int)xCoord, (int)yCoord);
+            double yCoord = myApproximate.y[current];
             int sizex = current.sizex;
             int sizey = current.sizey;
+            int indexfirst = ((int)xCoord - design.field.beginx) + ((int)yCoord - design.field.beginy) * design.field.cellsx;
 
             for (int i = 0; i < sizey; i++)
             {
                 for (int j = 0; j < sizex; j++)
                 {
-                    if (ValueCells[indexfirst + j + i * Width] > 0)
+                    if (xCoord + j <= Width + design.field.beginx
+                        && xCoord >= design.field.beginx
+                        && yCoord + i <= Height + design.field.beginy
+                        && yCoord >= design.field.beginy)
                     {
-                        if (xCoord + j <= Width && xCoord + j >= design.field.beginx && yCoord + i <= Height && yCoord + i >= design.field.beginy)
+                        if (ValueCells[indexfirst + j + i * Width] > 0)
                         {
                             ValueCells[indexfirst + j + i * Width]--;
                             CompInCell[indexfirst + j + i * Width].Remove(current);
@@ -156,7 +145,7 @@ namespace DetailPlacer.Algorithm
 
                 }
             }
-           
+
         }
         public void AddCells(int[] ValueCells, Design design, PlacementDetail result, int indexbest, int[] XCellCoord, int[] YCellCoord, Component current, List<List<Component>> CompInCell)
         {
@@ -165,19 +154,19 @@ namespace DetailPlacer.Algorithm
 
             int sizex = current.sizex;
             int sizey = current.sizey;
-            
+
             for (int i = 0; i < sizey; i++)
             {
                 for (int j = 0; j < sizex; j++)
                 {
-                    if (ValueCells[indexbest + j + i * Width] != -1 && xCoord + j <= Width && xCoord + j >= design.field.beginx && yCoord + i <= Height && yCoord + i >= design.field.beginy)
+                    if (ValueCells[indexbest + j + i * Width] != -1 && xCoord + j <= Width + design.field.beginx && xCoord >= design.field.beginx && yCoord + i <= Height + design.field.beginy && yCoord >= design.field.beginy)
                     {
                         ValueCells[indexbest + j + i * Width]++;
                         CompInCell[indexbest + j + i * Width].Add(current);
                     }
                 }
             }
-            
+
         }
 
 
@@ -187,29 +176,29 @@ namespace DetailPlacer.Algorithm
             Width = design.field.cellsx;
             Height = design.field.cellsy;
             QtCells = Width * Height;
-                       
+
             int[] XCellCoord;
             int[] YCellCoord;
-            
+
             int enumerator;
             int indCell = 0;
 
-            
+
             List<List<Component>> compInCell = InitCompInCell(QtCells);
             List<Component> fixedComponents = new List<Component>();
             CreateCells(design, out XCellCoord, out YCellCoord);
             int[] ValueCell = CreatCompValueCells(QtCells);
             result = new PlacementDetail(design);
 
-            FillCells(design, approximate,result, XCellCoord, YCellCoord, ValueCell, compInCell);
+            FillCells(design, approximate, result, XCellCoord, YCellCoord, ValueCell, compInCell);
             do
-            {                  
-                enumerator = ValueCell.Max();                
+            {
+                enumerator = ValueCell.Max();
                 indCell = Array.IndexOf(ValueCell, enumerator);
 
                 if (enumerator > 1)
-                {  
-                
+                {
+
                     Component bestComp = GetComponentWithMaxSquare(compInCell[indCell], result);
                     if (bestComp != null)
                     {
@@ -220,7 +209,7 @@ namespace DetailPlacer.Algorithm
                         }
                         int[] arraycell = array.ToArray();
                         // выбор лучшей позиции 
-                        int bestCoord = GetBestCell(XCellCoord, YCellCoord, ValueCell, bestComp, design, approximate,result, arraycell);
+                        int bestCoord = GetBestCell(XCellCoord, YCellCoord, ValueCell, bestComp, design, approximate, result, arraycell);
                         ClearCells(ValueCell, design, approximate, XCellCoord, YCellCoord, bestComp, compInCell);
                         // поиск позиции текущего компонента 
                         result.x[bestComp] = XCellCoord[bestCoord];
@@ -237,7 +226,7 @@ namespace DetailPlacer.Algorithm
                         // удаление и добавление значений для компоненты в ячейки
 
                         AddCells(ValueCell, design, result, bestCoord, XCellCoord, YCellCoord, bestComp, compInCell);
-                       
+
                         // фиксация компонента                      
                         fixedComponents.Add(bestComp);
 
@@ -250,27 +239,27 @@ namespace DetailPlacer.Algorithm
             // размещение не размещенных компонентов
 
             foreach (Component comp in design.components)
-            {                
+            {
                 if (result.placed[comp] == false)
                 {
                     List<int> array = new List<int>();
-                    
+
                     for (int i = 0; i < QtCells; i++)
                     {
-                        if (ValueCell[i] == 0) { array.Add(i); }                        
+                        if (ValueCell[i] == 0) { array.Add(i); }
                     }
 
                     int[] arraycell = array.ToArray();
 
-                    int indCurrent = GetNomberCell(XCellCoord, YCellCoord, (int)approximate.x[comp], (int)approximate.y[comp]);
+                    int indCurrent = ((int)approximate.x[comp] - design.field.beginx) + ((int)approximate.y[comp] - design.field.beginy) * design.field.cellsx;
 
                     int bestCell = GetBestCell(XCellCoord, YCellCoord, ValueCell, comp, design, approximate, result, arraycell);
                     ClearCells(ValueCell, design, approximate, XCellCoord, YCellCoord, comp, compInCell);
-                    
-                    
+
+
                     ValueCell[indCurrent] = -1;
-                    compInCell[indCurrent].Clear();                      
-                    
+                    compInCell[indCurrent].Clear();
+
                     result.x[comp] = XCellCoord[bestCell];
                     result.y[comp] = YCellCoord[bestCell];
                     result.placed[comp] = true;
@@ -305,11 +294,11 @@ namespace DetailPlacer.Algorithm
             return bestComponent;
         }
 
-        public int GetBestCell(int[] XCellCoord, int[] YCellCoord, int[] ValueCell, Component Current, Design design, PlacementGlobal myApproximate,PlacementDetail result, int[] array )
+        public int GetBestCell(int[] XCellCoord, int[] YCellCoord, int[] ValueCell, Component Current, Design design, PlacementGlobal myApproximate, PlacementDetail result, int[] array)
         {
             var part = array.Length / 2;
 
-            Task<double[]> task1 = new Task<double[]>(() => GetBestCoord(XCellCoord, YCellCoord, ValueCell, Current, design, myApproximate, result,array, 0, part - 1));
+            Task<double[]> task1 = new Task<double[]>(() => GetBestCoord(XCellCoord, YCellCoord, ValueCell, Current, design, myApproximate, result, array, 0, part - 1));
             Task<double[]> task2 = new Task<double[]>(() => GetBestCoord(XCellCoord, YCellCoord, ValueCell, Current, design, myApproximate, result, array, part, array.Length - 1));
 
             task1.Start();
@@ -319,7 +308,7 @@ namespace DetailPlacer.Algorithm
             double[] massdata1 = task1.Result;
             double[] massdata2 = task2.Result;
 
-          //  double[] first = GetBestCoord(XCellCoord, YCellCoord, ValueCell, Current, design, myApproximate, array, 0, array.Length - 1);
+            //  double[] first = GetBestCoord(XCellCoord, YCellCoord, ValueCell, Current, design, myApproximate, array, 0, array.Length - 1);
             double[] first = GetBestIndex(massdata1, massdata2);
 
 
@@ -327,79 +316,74 @@ namespace DetailPlacer.Algorithm
             return indexOfBest;
 
         }
-        
-        public double[] GetBestCoord(int[] XCellCoord, int[] YCellCoord, int[] ValueCell, Component Current, Design design, PlacementGlobal myApproximate,PlacementDetail result,int[] array, int first, int end)
+
+        public double[] GetBestCoord(int[] XCellCoord, int[] YCellCoord, int[] ValueCell, Component Current, Design design, PlacementGlobal myApproximate, PlacementDetail result, int[] array, int first, int end)
         {
             var Result = new double[4];
             var indexOfBest = array[first];
 
-            //while (CanNotBePlaced(ValueCell[indexOfBest], XCellCoord[indexOfBest], YCellCoord[indexOfBest], Current, design))
-            //{
-            //    indexOfBest = array[first];
-            //    first++;
-            //}
             double percentBest = PercentCross(XCellCoord[indexOfBest], YCellCoord[indexOfBest], Current, design, myApproximate, result);
             double areaBest = CloselyCell(myApproximate, Current, XCellCoord[indexOfBest], YCellCoord[indexOfBest]);
             double area2Best = NearNet(Current, myApproximate, design, XCellCoord[indexOfBest], YCellCoord[indexOfBest], result);
 
             first++;
             for (var i = first; i < end; i++)
-            {              
-                var ind  = array [i];
+            {
+                var ind = array[i];
                 if (CanNotBePlaced(ValueCell[ind], XCellCoord[ind], YCellCoord[ind], Current, design))
                     continue;
 
-                    double percentCurrent = PercentCross(XCellCoord[ind], YCellCoord[ind], Current, design, myApproximate,result);
-                    double areaCurrent = 0;
-                    double area2Current = 0;
+                double percentCurrent = PercentCross(XCellCoord[ind], YCellCoord[ind], Current, design, myApproximate, result);
+                double areaCurrent = 0;
+                double area2Current = 0;
 
-                    if (percentCurrent < percentBest)
+                if (percentCurrent < percentBest)
+                {
+                    areaCurrent = CloselyCell(myApproximate, Current, XCellCoord[ind], YCellCoord[ind]);
+                    area2Current = NearNet(Current, myApproximate, design, XCellCoord[ind], YCellCoord[ind], result);
+                    percentBest = percentCurrent;
+                    areaBest = areaCurrent;
+                    area2Best = area2Current;
+                    indexOfBest = ind;
+                    continue;
+                }
+                if (percentCurrent == percentBest)
+                {
+                    area2Current = NearNet(Current, myApproximate, design, XCellCoord[ind], YCellCoord[ind], result);
+                    areaCurrent = CloselyCell(myApproximate, Current, XCellCoord[ind], YCellCoord[ind]);
+                    if (area2Current < area2Best)
                     {
-                        areaCurrent = CloselyCell(myApproximate, Current, XCellCoord[ind], YCellCoord[ind]);
-                        area2Current = NearNet(Current, myApproximate, design, XCellCoord[ind], YCellCoord[ind], result);
                         percentBest = percentCurrent;
                         areaBest = areaCurrent;
                         area2Best = area2Current;
                         indexOfBest = ind;
                         continue;
                     }
-                    if (percentCurrent == percentBest)
+
+                    if (area2Current == area2Best)
                     {
-                        area2Current = NearNet(Current, myApproximate, design, XCellCoord[ind], YCellCoord[ind], result);
-                        areaCurrent = CloselyCell(myApproximate, Current, XCellCoord[ind], YCellCoord[ind]);
-                        if (area2Current < area2Best)
-                        {                           
+                        if (areaCurrent <= areaBest)
+                        {
                             percentBest = percentCurrent;
                             areaBest = areaCurrent;
                             area2Best = area2Current;
                             indexOfBest = ind;
                             continue;
                         }
-
-                        if (area2Current == area2Best)
-                        {                            
-                            if (areaCurrent <= areaBest)
-                            {
-                                percentBest = percentCurrent;
-                                areaBest = areaCurrent;
-                                area2Best = area2Current;
-                                indexOfBest = ind;
-                                continue;
-                            }
-                        }
                     }
-                    if (percentCurrent > percentBest)
-                    { continue; }  
-                                 
-            }
-           Result[0] = indexOfBest;
-           Result[1] = percentBest;
-           Result[2] = areaBest;
-           Result[3] = area2Best;
+                }
+                if (percentCurrent > percentBest)
+                { continue; }
 
-           return Result;
+            }
+            Result[0] = indexOfBest;
+            Result[1] = percentBest;
+            Result[2] = areaBest;
+            Result[3] = area2Best;
+
+            return Result;
         }
-       
+
         private double[] GetBestIndex(double[] mass1, double[] mass2)
         {
             if (mass2[1] < mass1[1])
@@ -435,22 +419,21 @@ namespace DetailPlacer.Algorithm
             var maxXcurrent = XCellCoord + Current.sizex;
             var minYcurrent = YCellCoord;
             var maxYcurrent = YCellCoord + Current.sizey;
-            //double currentpercent = 0;
-            double percent = 0;            
+            double percent = 0;
             double minXnext;
             double maxXnext;
             double minYnext;
             double maxYnext;
             foreach (Component next in design.components)
             {
-                if( next!=Current && result.placed[next] == true)
+                if (next != Current && result.placed[next] == true)
                 {
-                  
+
                     minXnext = result.x[next];
                     maxXnext = result.x[next] + next.sizex;
                     minYnext = result.y[next];
                     maxYnext = result.y[next] + next.sizey;
-                  
+
                     double minX = Math.Min(minXcurrent, minXnext);
                     double maxX = Math.Max(maxXcurrent, maxXnext);
                     double minY = Math.Min(minYcurrent, minYnext);
@@ -458,10 +441,7 @@ namespace DetailPlacer.Algorithm
 
                     if (maxX - minX < Current.sizex + next.sizex && maxY - minY < Current.sizey + next.sizey)
                     {
-                        //var Scurrent = (maxYcurrent - minYcurrent) * (maxXcurrent - minXcurrent);
-                      //  double Scross = (maxX - minX) * (maxY - minY);
                         percent = ((maxX - minX) * (maxY - minY) * 100) / ((maxYcurrent - minYcurrent) * (maxXcurrent - minXcurrent));
-                       // currentpercent = AreaCross(minXcurrent, maxXcurrent, minYcurrent, maxYcurrent, minX, maxX, minY, maxY);
                         Result = percent + Result;
                         continue;
                     }
@@ -470,17 +450,6 @@ namespace DetailPlacer.Algorithm
             return Result;
         }
 
-        //public double AreaCross(int minXcurrent, int maxXcurrent, int minYcurrent, int maxYcurrent, double minX, double maxX, double minY, double maxY)
-        //{
-        //    //double minX = Math.Max(minXcurrent, minXnext);
-        //    //double minY = Math.Max(minYcurrent, minYnext);
-        //    //double maxX = Math.Min(maxXcurrent, maxXnext);
-        //    //double maxY = Math.Min(maxYcurrent, maxYnext);
-        //    //var Scurrent = (maxYcurrent - minYcurrent) * (maxXcurrent - minXcurrent);
-        //    //double Scross = (maxX - minX) * (maxY - minY);
-        //    //double percent = (Scross * 100) / Scurrent;
-        //    //return percent;
-        //}
 
         public double CloselyCell(PlacementGlobal myApproximate, Component current, int XcurrCoord, int YcurrCoord)
         {
@@ -511,10 +480,10 @@ namespace DetailPlacer.Algorithm
                     {
                         if (next != Current && result.placed[next] == true)
                         {
-                          minX = Math.Min(minX, result.x[next]);
-                          maxX = Math.Max(maxX, result.x[next]);
-                          minY = Math.Min(minY, result.y[next]);
-                          maxY = Math.Max(maxY, result.y[next]);                           
+                            minX = Math.Min(minX, result.x[next]);
+                            maxX = Math.Max(maxX, result.x[next]);
+                            minY = Math.Min(minY, result.y[next]);
+                            maxY = Math.Max(maxY, result.y[next]);
                         }
                     }
                 }
@@ -523,39 +492,25 @@ namespace DetailPlacer.Algorithm
             return area;
 
         }
-                
+
         private bool CanNotBePlaced(int cell, int x, int y, Component component, Design design)
         {
             var field = design.field;
-            
-            return  cell < 0 ||          
-                x + component.sizex >field.cellsx + field.beginx ||
-                y + component.sizey >field.cellsy + field.beginy;
+
+            return cell < 0 ||
+                x + component.sizex > field.cellsx + field.beginx ||
+                y + component.sizey > field.cellsy + field.beginy;
         }
 
-        public PlacementGlobal CreateMyApproximate(PlacementGlobal approximate, Design design)
+        public bool OutOfField(Design design, int xCoord, int yCoord)
         {
-            var myApproximate = new PlacementGlobal(design);
-            foreach (Component c in design.components)
-            {
-                myApproximate.x[c] = approximate.x[c];
-                myApproximate.y[c] = approximate.y[c];
-                myApproximate.placed[c] = approximate.placed[c];
-            }
-            return myApproximate;
+            return xCoord < design.field.beginx ||
+                yCoord < design.field.beginy ||
+                xCoord >= Width - design.field.beginx ||
+                yCoord >= Height - design.field.beginy;
         }
 
-        public PlacementGlobal CreateMyApproximate(PlacementDetail detail, Design design) //не используетя
-        {
-            var myApproximate = new PlacementGlobal(design);
-            foreach (Component c in design.components)
-            {
-                myApproximate.x[c] = detail.x[c];
-                myApproximate.y[c] = detail.y[c];
-                myApproximate.placed[c] = detail.placed[c];
-            }
-            return myApproximate;
-        }
+
     }
 
 }

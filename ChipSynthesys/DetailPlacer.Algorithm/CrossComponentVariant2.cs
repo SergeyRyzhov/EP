@@ -40,7 +40,7 @@ namespace DetailPlacer.Algorithm
                 Array = new int[x.Length];
                 for (int i = 0; i < x.Length; i++)
                 {
-                    int index = GetNomberCell(XCellCoord, YCellCoord, x[i], y[i]);
+                    int index = (x[i] - design.field.beginx) + (y[i] - design.field.beginy) * design.field.cellsx;
                     Array[i] = index;
                 }
 
@@ -49,101 +49,79 @@ namespace DetailPlacer.Algorithm
             }
             else
             {
-                bestCoord = GetNomberCell(XCellCoord, YCellCoord, (int)approximate.x[bestComp], (int)approximate.y[bestComp]);
+                bestCoord = ((int)approximate.x[bestComp] - design.field.beginx) + ((int)approximate.y[bestComp] - design.field.beginy) * design.field.cellsx;
                 helper.PlaceComponent(bestComp, XCellCoord[bestCoord], YCellCoord[bestCoord]);
             }
-
-            
-
             return bestCoord;
         }
 
-        public virtual void Place(Design design, PlacementGlobal approximate, out PlacementDetail result)
+        public void Place(Design design, PlacementGlobal approximate, out PlacementDetail result)
         {
             Width = design.field.cellsx;
             Height = design.field.cellsy;
             QtCells = Width * Height;
-
             int[] XCellCoord;
             int[] YCellCoord;
-
-            int enumerator;
+            int enumerator = 0;
             int indCell = 0;
-
-
+            int fixcomp = 0;
             List<List<Component>> compInCell = InitCompInCell(QtCells);
-            List<Component> fixedComponents = new List<Component>();
-           
             CreateCells(design, out XCellCoord, out YCellCoord);
             int[] ValueCell = CreatCompValueCells(QtCells);
             result = new PlacementDetail(design);
-
             Mask helper = new Mask(design, result);
             helper.BuildUp();
+            FillCells(design, approximate, result, XCellCoord, YCellCoord, ValueCell, compInCell);
 
-            FillCells(design, approximate,result, XCellCoord, YCellCoord, ValueCell, compInCell);
             do
             {
-                enumerator = ValueCell.Max();
-                indCell = Array.IndexOf(ValueCell, enumerator);
+                enumerator = 0;
+                for (int i = 0; i < QtCells; i++)
+                {
+                    if (ValueCell[i] > enumerator && ValueCell[i] > 1)
+                    {
+                        enumerator = ValueCell[i];
+                        indCell = i;
+                    }
+                }
 
                 if (enumerator > 1)
                 {
-
                     Component bestComp = GetComponentWithMaxSquare(compInCell[indCell], result);
                     if (bestComp != null)
                     {
-                        // выбор лучшей позиции 
-                        int bestCoord = GetBestCellWitnComponentSearcher(helper,design,approximate,bestComp,result, XCellCoord, YCellCoord, ValueCell);                        
-                        ClearCells(ValueCell, design, approximate, XCellCoord, YCellCoord, bestComp, compInCell);
 
-                        // размещение  текущего компонента 
+                        ClearCells(ValueCell, design, approximate, XCellCoord, YCellCoord, bestComp, compInCell);
+                        int bestCoord = GetBestCellWitnComponentSearcher(helper, design, approximate, bestComp, result, XCellCoord, YCellCoord, ValueCell);
+
                         result.x[bestComp] = XCellCoord[bestCoord];
-                        result.y[bestComp] = YCellCoord[bestCoord];                      
+                        result.y[bestComp] = YCellCoord[bestCoord];
                         result.placed[bestComp] = true;
 
-                        // очищение ячейки 
-                        
                         ValueCell[indCell] = -1;
                         compInCell[indCell].Clear();
-                        
-                        // удаление и добавление значений для компоненты в ячейки
 
-                        AddCells(ValueCell, design, result, bestCoord, XCellCoord, YCellCoord, bestComp, compInCell);
-
-                        // фиксация компонента                      
-                        fixedComponents.Add(bestComp);
+                        fixcomp++;
 
                     }
                     else
                     { ValueCell[indCell] = -1; compInCell[indCell].Clear(); }
-                }
-            } while (fixedComponents.Count() != design.components.Count() && enumerator != 1);
 
-            // размещение не размещенных компонентов
+                }
+            } while (fixcomp != design.components.Count() && enumerator != 0);
+
 
             foreach (Component comp in design.components)
             {
                 if (result.placed[comp] == false)
                 {
-                    int indCurrent = GetNomberCell(XCellCoord, YCellCoord, (int)approximate.x[comp], (int)approximate.y[comp]);
-
                     int bestCell = GetBestCellWitnComponentSearcher(helper, design, approximate, comp, result, XCellCoord, YCellCoord, ValueCell);
-                    ClearCells(ValueCell, design, approximate, XCellCoord, YCellCoord, comp, compInCell);
-
-
-                    ValueCell[indCurrent] = -1;
-                    compInCell[indCurrent].Clear();
-
                     result.x[comp] = XCellCoord[bestCell];
                     result.y[comp] = YCellCoord[bestCell];
                     result.placed[comp] = true;
-
-
-                    AddCells(ValueCell, design, result, bestCell, XCellCoord, YCellCoord, comp, compInCell);
                 }
             }
         }
     }
-        
+
 }
