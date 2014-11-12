@@ -175,10 +175,11 @@ namespace TestRunner
                         continue;
                     }
 
-                    var st = new Stopwatch();
-                    st.Start();
+
                     for (int i = 0; i < design.Length; i++)
                     {
+                        var st = new Stopwatch();
+                        st.Start();
                         Design d = design[i];
                         PlacementDetail placeRes;
 
@@ -208,10 +209,10 @@ namespace TestRunner
                             placemetStatistics,
                             sizes[i],
                             bitmaps[i]);
+                        st.Stop();
+                        Console.WriteLine(@"Время выполнения {0} - {1}", placer, st.Elapsed);
                     }
 
-                    st.Stop();
-                    Console.WriteLine(@"Время выполнения {0} - {1}", placer, st.Elapsed);
                 }
             }
         }
