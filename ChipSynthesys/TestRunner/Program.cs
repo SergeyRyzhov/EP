@@ -119,7 +119,7 @@ namespace TestRunner
             Size[] sizes;
             Bitmap[] bitmaps;
 
-            string resultDirectory = args.Length > 0 ? args[0] + @"\Tests\" : @"D:\TestResults\"; //args[?]
+            string resultDirectory = args.Length > 0 ? args[0] + @"\Tests\" : @"D:\TestResults\";
             Directory.CreateDirectory(resultDirectory);
 
             if (ReadInput(args, out design, out approximate, out sizes, out bitmaps))
@@ -157,15 +157,13 @@ namespace TestRunner
             }
 
             Type[] otherPlacers =
-                
-                //          existingTypes.Where(
-                //              t =>
-                { //                  typeof(IDetailPlacer).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract &&
-                    //                  typeof(DetailPlacerImpl) != t).ToArray();
-                    typeof(CrossReductPlacer)//, typeof(ForceDirectedDetailPlacer), typeof(CrossCompPlacer)
-                    
-                    //typeof (CrossComponentVariant2)
+                {
+                    typeof(CrossReductPlacer),
+                    typeof(CrossComponentVariant2),
+                    typeof(CrossCompPlacer),
+                    typeof(ForceDirectedDetailPlacer), 
                 };
+
             foreach (Type otherPlacerType in otherPlacers)
             {
                 ConstructorInfo info = otherPlacerType.GetConstructor(masType);
@@ -177,38 +175,27 @@ namespace TestRunner
                         continue;
                     }
 
-                    var st = new Stopwatch();
-                    st.Start();
+
                     for (int i = 0; i < design.Length; i++)
                     {
+                        var st = new Stopwatch();
+                        st.Start();
                         Design d = design[i];
                         PlacementDetail placeRes;
-
-                        //todo исправить другие части чтобы всё рисовали здесь
-                        //формирую пустое приближённое решение
-                        PlacementGlobal tempAppr = approximate[i];
-                        foreach (Component c in d.components)
-                        {
-                            tempAppr.placed[c] = false;
-                        }
 
                         testCount++;
                         SaveTestInfo(resultDirectory, testCount, placer);
 
-                        //placer.Place(d, approximate[i], out placeRes);
-
-                        placer.Place(d, tempAppr, out placeRes);
+                        placer.Place(d, approximate[i], out placeRes);
 
                         foreach (Component c in d.components)
                         {
-                            tempAppr.placed[c] = true;
-
-                            //                    if (!placeRes.placed[c])
-                            //                    {
-                            //                        placeRes.x[c] = (int) approximate[i].x[c];
-                            //                        placeRes.y[c] = (int) approximate[i].y[c];
-                            //                        //placeRes.placed[c] = true;
-                            //                    }
+                            if (!placeRes.placed[c])
+                            {
+                                placeRes.x[c] = (int)approximate[i].x[c];
+                                placeRes.y[c] = (int)approximate[i].y[c];
+                                placeRes.placed[c] = true;
+                            }
                         }
 
                         IStatisticResult<double> placemetStatistics;
@@ -222,10 +209,10 @@ namespace TestRunner
                             placemetStatistics,
                             sizes[i],
                             bitmaps[i]);
+                        st.Stop();
+                        Console.WriteLine(@"Время выполнения {0} - {1}", placer, st.Elapsed);
                     }
 
-                    st.Stop();
-                    Console.WriteLine(@"Время выполнения {0} - {1}", placer, st.Elapsed);
                 }
             }
         }
@@ -261,7 +248,6 @@ namespace TestRunner
                             task.Design,
                             task.Approximate,
                             new Size(size, size),
-                            //task.Width, task.Height), должно быть так
                             canvas,
                             x,
                             y,
@@ -355,8 +341,6 @@ namespace TestRunner
             }
 
             {
-                //if (false)
-                // сейчас мы не ипользуем эти эвристики
                 foreach (Type comOrderType in componentsOrders)
                 {
                     ConstructorInfo comOrder = comOrderType.GetConstructor(masType);
@@ -431,31 +415,20 @@ namespace TestRunner
                 Design d = design[i];
                 PlacementDetail placeRes;
 
-                //todo исправить другие части чтобы всё рисовали здесь
-                //формирую пустое приближённое решение
-                PlacementGlobal tempAppr = approximate[i];
-                foreach (Component c in d.components)
-                {
-                    tempAppr.placed[c] = false;
-                }
-
                 var st = new Stopwatch();
                 st.Start();
 
-                //placer.Place(d, approximate[i], out placeRes);
-                placer.Place(d, tempAppr, out placeRes);
+                placer.Place(d, approximate[i], out placeRes);
                 st.Stop();
                 Console.WriteLine(@"Время выполнения {0} - {1}", placer, st.Elapsed);
                 foreach (Component c in d.components)
                 {
-                    tempAppr.placed[c] = true;
-
-                    //                                                    if (!placeRes.placed[c])
-                    //                                                    {
-                    //                                                        placeRes.x[c] = (int) approximate[i].x[c];
-                    //                                                        placeRes.y[c] = (int) approximate[i].y[c];
-                    //                                                        //placeRes.placed[c] = true;
-                    //                                                    }
+                    if (!placeRes.placed[c])
+                    {
+                        placeRes.x[c] = (int)approximate[i].x[c];
+                        placeRes.y[c] = (int)approximate[i].y[c];
+                        placeRes.placed[c] = true;
+                    }
                 }
 
                 IStatisticResult<double> placemetStatistics;
