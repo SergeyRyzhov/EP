@@ -121,17 +121,19 @@ namespace DetailPlacer.Algorithm
                 }
                 result.x[current] = x[bestCoordInd];
                 result.y[current] = y[bestCoordInd];
-                result.placed[current] = true;
+               
 
-                helper.PlaceComponent(current, x[bestCoordInd], y[bestCoordInd]);
+                helper.PlaceComponent(current, x[bestCoordInd], y[bestCoordInd]); 
+                result.placed[current] = true;
 
             }
             else
             {
-                result.placed[current] = true;
+                
                 result.x[current] = (int)Math.Round(approximate.x[current]);
                 result.y[current] = (int)Math.Round(approximate.y[current]);
                 helper.PlaceComponent(current, result.x[current], result.y[current]);
+                result.placed[current] = true;
             }
         }
 
@@ -163,6 +165,22 @@ namespace DetailPlacer.Algorithm
                 CulcValuesInRegions(design, approximate, result, regsInComp, valuesInRegions, ref compsToUpdate);
 
             } while (true);
+
+            foreach (var comp in design.components)
+            {
+                if(result.placed[comp])continue;
+                result.x[comp] = (int)Math.Round(approximate.x[comp]);
+                result.y[comp] = (int)Math.Round(approximate.y[comp]);
+                result.placed[comp] = true;
+                try
+                {
+                  helper.PlaceComponent(comp, result.x[comp], result.y[comp]);
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    result.placed[comp] = false;
+                }
+            }
 
         }
     }
