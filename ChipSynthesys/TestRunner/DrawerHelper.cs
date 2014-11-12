@@ -12,8 +12,9 @@ namespace TestRunner
             {
                 IDrawer drawer = new DrawerImplNets();
                 canvas.Clear(Color.Empty);
-                drawer.Draw(design, resultPlacement, size, canvas);
+                drawer.DrawRect(design, resultPlacement, size, canvas, 0, 0, design.field.cellsx, design.field.cellsy);
             }
+
             bitmap.Save(fileName);
         }
 
@@ -23,8 +24,9 @@ namespace TestRunner
             {
                 IDrawer drawer = new DrawerImplNets();
                 canvas.Clear(Color.Empty);
-                drawer.Draw(design, resultPlacement, size, canvas);
+                drawer.DrawRect(design, resultPlacement, size, canvas, 0, 0, design.field.cellsx, design.field.cellsy);
             }
+
             bitmap.Save(fileName);
         }
     }
