@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 using PlaceModel;
 
@@ -23,7 +22,7 @@ namespace ChipSynthesys.Draw
 
                 if (scaleRect.IntersectsWith(currentComponent))
                 {
-                    DrawComponent(canvas, placement, c, scaling, 0, 0);
+                    DrawComponent(canvas, placement, c, scaling, design.field.beginx, design.field.beginy);
                 }
             }
         }
@@ -44,7 +43,7 @@ namespace ChipSynthesys.Draw
 
                 if (scaleRect.IntersectsWith(currentComponent))
                 {
-                    DrawComponent(canvas, placement, c, scaling, 0, 0);
+                    DrawComponent(canvas, placement, c, scaling, design.field.beginx, design.field.beginy);
                 }
             }
         }

@@ -32,7 +32,7 @@ namespace ChipSynthesys.Draw
                 }
 
                 float xMin = design.field.cellsx * scaling;
-                float xMax = 0;
+                float xMax = design.field.beginx;
 
 
                 foreach (Component comp in design.nets[i].items)
@@ -84,7 +84,7 @@ namespace ChipSynthesys.Draw
                 }
 
                 float xMin = design.field.cellsx * scaling;
-                float xMax = 0;
+                float xMax = design.field.beginx;
 
 
                 foreach (Component comp in design.nets[i].items)
