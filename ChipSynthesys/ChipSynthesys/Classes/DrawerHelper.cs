@@ -10,10 +10,11 @@ namespace ChipSynthesys.Common.Classes
         {
             using (Graphics canvas = Graphics.FromImage(bitmap))
             {
-                IDrawer drawer = new DrawerImplNets();
+                IDrawer drawer = new DrawerImpl();
                 canvas.Clear(Color.Empty);
                 drawer.Draw(design, resultPlacement, size, canvas);
             }
+
             bitmap.Save(fileName);
         }
 
@@ -21,7 +22,7 @@ namespace ChipSynthesys.Common.Classes
         {
             using (Graphics canvas = Graphics.FromImage(bitmap))
             {
-                IDrawer drawer = new DrawerImplNets();
+                IDrawer drawer = new DrawerImpl();
                 canvas.Clear(Color.Empty);
                 drawer.Draw(design, resultPlacement, size, canvas);
             }
