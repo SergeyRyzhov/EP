@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 
 using PlaceModel;
 
@@ -14,7 +15,7 @@ namespace ChipSynthesys.Draw
 
         public DrawerImplNets()
         {
-            this.NetPen = new Pen(Color.FromArgb(64, Color.Black), 1);
+            this.NetPen = new Pen(Color.FromArgb(48, Color.DarkBlue), 1);
         }
 
         public override void Draw(Design design, PlacementGlobal placement, Size size, Graphics canvas)
@@ -43,7 +44,21 @@ namespace ChipSynthesys.Draw
 
         protected virtual void DrawNet(Design design, Func<Component, float> xGetter, Func<Component, float> yGetter, Graphics canvas, Net net, float scaling)
         {
-            double average = 0.0;
+            const bool drawSpline = true;
+            if (drawSpline)
+            {
+                const float beta = 0.75f;
+                const float step = 0.01f;
+                canvas.DrawBSpline(
+                    NetPen,
+                    net.items.Select(c => new PointF(xGetter(c), yGetter(c))).ToArray(),
+                    beta,
+                    step);
+                return;
+            }
+
+            double averageOy = 0.0;
+            double averageOx = 0.0;
             if (net.items.Length == 0)
             {
                 return;
@@ -66,12 +81,14 @@ namespace ChipSynthesys.Draw
                     xMax = position;
                 }
 
-                average += yGetter(comp);
+                averageOy += yGetter(comp);
+                averageOx += xGetter(comp);
             }
 
-            average = average / net.items.Length * scaling;
+            averageOy = averageOy / net.items.Length * scaling;
+            averageOx = averageOx / net.items.Length * scaling;
 
-            canvas.DrawLine(this.NetPen, xMin, (int)average, xMax, (int)average);
+            canvas.DrawLine(this.NetPen, xMin, (int)averageOy, xMax, (int)averageOy);
 
             foreach (Component comp in net.items)
             {
@@ -81,7 +98,7 @@ namespace ChipSynthesys.Draw
                 float x = (xGetter(comp) + halfSizeOx) * scaling;
                 float y = (yGetter(comp) + halfSizeOy) * scaling;
 
-                canvas.DrawLine(this.NetPen, x, y, x, (float)average);
+                canvas.DrawLine(this.NetPen, x, y, (float)x, (float)averageOy);
 
                 this.MarkComponent(canvas, xGetter, yGetter, comp, scaling, 0, 0);
             }

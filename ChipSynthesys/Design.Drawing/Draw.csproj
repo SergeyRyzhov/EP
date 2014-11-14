@@ -38,6 +38,7 @@
     <Compile Include="DrawerBase.cs" />
     <Compile Include="DrawerImpl.cs" />
     <Compile Include="DrawerImplNets.cs" />
+    <Compile Include="GraphicsExtension.cs" />
     <Compile Include="IDetailDrawer.cs" />
     <Compile Include="IDrawer.cs" />
     <Compile Include="IGlobalDrawer.cs" />
