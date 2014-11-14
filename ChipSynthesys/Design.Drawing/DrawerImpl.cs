@@ -11,9 +11,9 @@ namespace ChipSynthesys.Draw
             float scaling = GetScaling(size.Width, size.Height, design.field.cellsx, design.field.cellsy);
 
             var scaleRect = new Rectangle(
-                design.field.beginx, 
-                design.field.beginy, 
-                design.field.cellsx, 
+                design.field.beginx,
+                design.field.beginy,
+                design.field.cellsx,
                 design.field.cellsy);
 
             foreach (var c in design.components)
@@ -32,9 +32,9 @@ namespace ChipSynthesys.Draw
             float scaling = GetScaling(size.Width, size.Height, design.field.cellsx, design.field.cellsy);
 
             var scaleRect = new Rectangle(
-                design.field.beginx, 
-                design.field.beginy, 
-                design.field.cellsx, 
+                design.field.beginx,
+                design.field.beginy,
+                design.field.cellsx,
                 design.field.cellsy);
 
             foreach (var c in design.components)
@@ -49,13 +49,13 @@ namespace ChipSynthesys.Draw
         }
 
         public override void DrawRect(
-            Design design, 
-            PlacementDetail placement, 
-            Size size, 
-            Graphics canvas, 
-            int x, 
-            int y, 
-            int width, 
+            Design design,
+            PlacementDetail placement,
+            Size size,
+            Graphics canvas,
+            int x,
+            int y,
+            int width,
             int height)
         {
             float scaling = GetScaling(size.Width, size.Height, width, height);
@@ -74,13 +74,13 @@ namespace ChipSynthesys.Draw
         }
 
         public override void DrawRect(
-            Design design, 
-            PlacementGlobal placement, 
-            Size size, 
-            Graphics canvas, 
-            int x, 
-            int y, 
-            int width, 
+            Design design,
+            PlacementGlobal placement,
+            Size size,
+            Graphics canvas,
+            int x,
+            int y,
+            int width,
             int height)
         {
             float scaling = GetScaling(size.Width, size.Height, width, height);

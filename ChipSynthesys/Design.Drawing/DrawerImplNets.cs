@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 using PlaceModel;
 
@@ -9,11 +10,11 @@ namespace ChipSynthesys.Draw
     /// </summary>
     public class DrawerImplNets : DrawerImpl
     {
-        private Pen netPen;
+        protected Pen NetPen;
 
         public DrawerImplNets()
         {
-            netPen = new Pen(Color.FromArgb(64, Color.Black), 1);
+            this.NetPen = new Pen(Color.FromArgb(64, Color.Black), 1);
         }
 
         public override void Draw(Design design, PlacementGlobal placement, Size size, Graphics canvas)
@@ -22,49 +23,9 @@ namespace ChipSynthesys.Draw
 
             float scaling = GetScaling(size.Width, size.Height, design.field.cellsx, design.field.cellsy);
 
-
-            for (int i = 0; i < design.nets.Length; i++)
+            foreach (Net net in design.nets)
             {
-                double drawnNetsY = 0.0;
-                if (design.nets[i].items.Length == 0)
-                {
-                    continue;
-                }
-
-                float xMin = design.field.cellsx * scaling;
-                float xMax = design.field.beginx;
-
-
-                foreach (Component comp in design.nets[i].items)
-                {
-                    if (placement.x[comp] * scaling + comp.sizex * scaling / 2 < xMin)
-                    {
-                        xMin = (float)placement.x[comp] * scaling + comp.sizex * scaling / 2;
-                    }
-
-                    if (placement.x[comp] * scaling + comp.sizex * scaling / 2 > xMax)
-                    {
-                        xMax = (float)placement.x[comp] * scaling + comp.sizex * scaling / 2;
-                    }
-
-                    drawnNetsY += placement.y[comp];
-                }
-
-                drawnNetsY = drawnNetsY / design.nets[i].items.Length * scaling;
-
-                canvas.DrawLine(netPen, xMin, (int)drawnNetsY, xMax, (int)drawnNetsY);
-
-                foreach (Component comp in design.nets[i].items)
-                {
-                    canvas.DrawLine(
-                        netPen,
-                        (float)placement.x[comp] * scaling + (float)comp.sizex / 2 * scaling,
-                        (float)placement.y[comp] * scaling + (float)comp.sizey / 2 * scaling,
-                        (float)placement.x[comp] * scaling + (float)comp.sizex / 2 * scaling,
-                        (float)drawnNetsY);
-
-                    MarkComponent(canvas, placement, comp, scaling, 0, 0);
-                }
+                this.DrawNet(design, c => (float)placement.x[c], c => (float)placement.y[c], canvas, net, scaling);
             }
         }
 
@@ -74,51 +35,78 @@ namespace ChipSynthesys.Draw
 
             float scaling = GetScaling(size.Width, size.Height, design.field.cellsx, design.field.cellsy);
 
-
-            for (int i = 0; i < design.nets.Length; i++)
+            foreach (Net net in design.nets)
             {
-                double drawnNetsY = 0.0;
-                if (design.nets[i].items.Length == 0)
-                {
-                    continue;
-                }
-
-                float xMin = design.field.cellsx * scaling;
-                float xMax = design.field.beginx;
-
-
-                foreach (Component comp in design.nets[i].items)
-                {
-                    if (placement.x[comp] * scaling + comp.sizex * scaling / 2 < xMin)
-                    {
-                        xMin = placement.x[comp] * scaling + comp.sizex * scaling / 2;
-                    }
-
-                    if (placement.x[comp] * scaling + comp.sizex * scaling / 2 > xMax)
-                    {
-                        xMax = placement.x[comp] * scaling + comp.sizex * scaling / 2;
-                    }
-
-                    drawnNetsY += placement.y[comp];
-                }
-
-                drawnNetsY = drawnNetsY / design.nets[i].items.Length * scaling;
-
-                canvas.DrawLine(netPen, xMin, (int)drawnNetsY, xMax, (int)drawnNetsY);
-
-                foreach (Component comp in design.nets[i].items)
-                {
-                    canvas.DrawLine(
-                        netPen,
-                        placement.x[comp] * scaling + (float)comp.sizex / 2 * scaling,
-                        placement.y[comp] * scaling + (float)comp.sizey / 2 * scaling,
-                        placement.x[comp] * scaling + (float)comp.sizex / 2 * scaling,
-                        (float)drawnNetsY);
-
-                    MarkComponent(canvas, placement, comp, scaling, 0, 0);
-                }
+                this.DrawNet(design, c => placement.x[c], c => placement.y[c], canvas, net, scaling);
             }
         }
 
+        protected virtual void DrawNet(Design design, Func<Component, float> xGetter, Func<Component, float> yGetter, Graphics canvas, Net net, float scaling)
+        {
+            double average = 0.0;
+            if (net.items.Length == 0)
+            {
+                return;
+            }
+
+            float xMin = design.field.cellsx * scaling;
+            float xMax = design.field.beginx;
+
+            foreach (Component comp in net.items)
+            {
+                int halfSize = comp.sizex / 2;
+                float position = (xGetter(comp) + halfSize) * scaling;
+                if (position < xMin)
+                {
+                    xMin = position;
+                }
+
+                if (position > xMax)
+                {
+                    xMax = position;
+                }
+
+                average += yGetter(comp);
+            }
+
+            average = average / net.items.Length * scaling;
+
+            canvas.DrawLine(this.NetPen, xMin, (int)average, xMax, (int)average);
+
+            foreach (Component comp in net.items)
+            {
+                int halfSizeOx = comp.sizex / 2;
+                int halfSizeOy = comp.sizey / 2;
+
+                float x = (xGetter(comp) + halfSizeOx) * scaling;
+                float y = (yGetter(comp) + halfSizeOy) * scaling;
+
+                canvas.DrawLine(this.NetPen, x, y, x, (float)average);
+
+                this.MarkComponent(canvas, xGetter, yGetter, comp, scaling, 0, 0);
+            }
+        }
+
+        protected void MarkComponent(
+            Graphics canvas,
+            Func<Component, float> xGetter,
+            Func<Component, float> yGetter,
+            Component component,
+            float scaling,
+            float offsetOx,
+            float offsetOy)
+        {
+            float x = (xGetter(component) - offsetOx) * scaling;
+            float y = (yGetter(component) - offsetOy) * scaling;
+
+            int half = this.ComponentMarkRadius / 2;
+
+            canvas.FillEllipse(
+                this.ComponentMarkBrush,
+                x - half,
+                y - half,
+                this.ComponentMarkRadius,
+                this.ComponentMarkRadius);
+        }
     }
 }
