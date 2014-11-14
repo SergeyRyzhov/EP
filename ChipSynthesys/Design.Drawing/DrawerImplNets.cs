@@ -15,7 +15,7 @@ namespace ChipSynthesys.Draw
 
         public DrawerImplNets()
         {
-            this.NetPen = new Pen(Color.FromArgb(48, Color.DarkBlue), 1);
+            this.NetPen = new Pen(Color.FromArgb(48, Color.DarkBlue), 1.25f);
         }
 
         public override void Draw(Design design, PlacementGlobal placement, Size size, Graphics canvas)
