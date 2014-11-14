@@ -27,7 +27,7 @@ namespace DetailPlacer.Algorithm
 
         public CrossComponentVariant2()
         {
-            m_positionSearcher = new SpiralPositionSearcher();
+            m_positionSearcher = new SpiralPositionSearcher(40);
         }
         public virtual int GetBestCellWitnComponentSearcher(Mask helper, Design design, PlacementGlobal approximate, Component bestComp, PlacementDetail result, int[] XCellCoord, int[] YCellCoord, int[] ValueCell)
         {

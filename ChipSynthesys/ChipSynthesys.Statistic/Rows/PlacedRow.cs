@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using ChipSynthesys.Statistic.Common;
 using ChipSynthesys.Statistic.Interfaces;

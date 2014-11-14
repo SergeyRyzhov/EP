@@ -91,6 +91,11 @@ namespace DetailPlacer.Algorithm.PositionSearcher
             x -= m_design.field.beginx;
             y -= m_design.field.beginy;
 
+            if (!CanPlace(c, x, y))
+            {
+                return;
+            }
+
             var h = c.sizey;
             var w = c.sizex;
 
@@ -110,6 +115,23 @@ namespace DetailPlacer.Algorithm.PositionSearcher
                 }
             }
             //PrintMask();
+        }
+        private bool CanPlace(Component c, int x, int y)
+        {
+            var h = c.sizey;
+            var w = c.sizex;
+
+            if (x < 0 || Width < x + w)
+            {
+                return false;
+            }
+
+            if (y < 0 || Height < y + h)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public bool CanPlaceH(Component c, int x, int y)

@@ -26,7 +26,8 @@ namespace ChipSynthesys.Draw
 
             foreach (Net net in design.nets)
             {
-                this.DrawNet(design, c => (float)placement.x[c], c => (float)placement.y[c], canvas, net, scaling);
+                this.DrawNet(design, c => (float) placement.x[c] - design.field.beginx,
+                    c => (float) placement.y[c] - design.field.beginy, canvas, net, scaling);
             }
         }
 
@@ -38,7 +39,8 @@ namespace ChipSynthesys.Draw
 
             foreach (Net net in design.nets)
             {
-                this.DrawNet(design, c => placement.x[c], c => placement.y[c], canvas, net, scaling);
+                this.DrawNet(design, c => (float)placement.x[c] - design.field.beginx,
+                    c => (float)placement.y[c] - design.field.beginy, canvas, net, scaling);
             }
         }
 
@@ -51,7 +53,7 @@ namespace ChipSynthesys.Draw
                 const float step = 0.01f;
                 canvas.DrawBSpline(
                     NetPen,
-                    net.items.Select(c => new PointF(xGetter(c), yGetter(c))).ToArray(),
+                    net.items.Select(c => new PointF((xGetter(c) + c.sizex / 2) * scaling, (yGetter(c) + c.sizey / 2) * scaling)).ToArray(),
                     beta,
                     step);
                 return;

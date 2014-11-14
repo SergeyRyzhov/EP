@@ -26,8 +26,8 @@ namespace ChipSynthesys.Draw
             this.UnplacedComponentBrush = new SolidBrush(Color.Black);
             this.ComponentMarkBrush = new SolidBrush(Color.Black);
             this.ComponentPenBorderDepth = 1;
-            this.ComponentMarkRadius = 8;
-            const int componentPenThickness = 8;
+            this.ComponentMarkRadius = 1;
+            const int componentPenThickness = 1;
             this.ComponentPen = new Pen(Color.Green, componentPenThickness);
             this.UnplacedComponentPen = new Pen(Color.Red, componentPenThickness);
         }
@@ -88,18 +88,20 @@ namespace ChipSynthesys.Draw
 
         protected virtual void DrawPlacedComponent(Graphics canvas, float x, float y, float width, float height)
         {
-            int border = ComponentPenBorderDepth;
+            int border = 0; //ComponentPenBorderDepth;
+            int bottomBorder = 0;//border + (int)ComponentPen.Width -1 ;
 
+            canvas.FillRectangle(ComponentBrush, x + border, y + border, width - bottomBorder, height - bottomBorder);
             canvas.DrawRectangle(ComponentPen, x, y, width, height);
-            canvas.FillRectangle(ComponentBrush, x + border, y + border, width - border, height - border);
         }
 
         protected virtual void DrawUnplacedComponent(Graphics canvas, float x, float y, float width, float height)
         {
-            int border = ComponentPenBorderDepth;
+            int border = 0; //ComponentPenBorderDepth;
+            int bottomBorder = 0;//border + (int)ComponentPen.Width -1 ;
 
+            canvas.FillRectangle(ComponentBrush, x + border, y + border, width - bottomBorder, height - bottomBorder);
             canvas.DrawRectangle(ComponentPen, x, y, width, height);
-            canvas.FillRectangle(ComponentBrush, x + border, y + border, width - border, height - border);
         }
     }
 }

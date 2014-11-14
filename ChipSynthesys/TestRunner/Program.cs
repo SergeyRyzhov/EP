@@ -188,7 +188,7 @@ namespace TestRunner
 
                         placer.Place(d, approximate[i], out placeRes);
 
-                        foreach (Component c in d.components)
+                        /*foreach (Component c in d.components)
                         {
                             if (!placeRes.placed[c])
                             {
@@ -196,7 +196,7 @@ namespace TestRunner
                                 placeRes.y[c] = (int)approximate[i].y[c];
                                 placeRes.placed[c] = true;
                             }
-                        }
+                        }*/
 
                         IStatisticResult<double> placemetStatistics;
                         statistic.PlacementStatistic(d, placeRes, out placemetStatistics);

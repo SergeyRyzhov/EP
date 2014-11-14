@@ -7,13 +7,31 @@ using System;
 
 namespace DetailPlacer.Algorithm
 {
+
+    /* public class PrePlacer : IGlobalPlacer
+     {
+        /* public void Place(Design design, PlacementGlobal approximate, out PlacementGlobal result)
+         {
+             result = new PlacementGlobal(design);
+             foreach (var component in design.components)
+             {
+                 result.placed[component] = approximate.placed[component];
+                 result.x[component] = (int)approximate.x[component];
+                 result.y[component] = (int)approximate.y[component];
+             }
+         }*
+         public void Place(Design design, out PlacementGlobal result)
+         {
+             throw new NotImplementedException();
+         }
+     }*/
     public class CrossReductPlacer : IDetailPlacer
     {
         protected readonly IPositionSearcher m_positionSearcher;
 
         public CrossReductPlacer()
         {
-            m_positionSearcher = new SpiralPositionSearcher();
+            m_positionSearcher = new SpiralPositionSearcher(40);
         }
 
 
@@ -101,7 +119,7 @@ namespace DetailPlacer.Algorithm
         public virtual void PlaceComponent(Mask helper, Design design, PlacementGlobal approximate, Component current, PlacementDetail result)
         {
             int[] x = new int[m_positionSearcher.PositionAmount];
-            int[] y = new int[m_positionSearcher.PositionAmount];  
+            int[] y = new int[m_positionSearcher.PositionAmount];
             if (m_positionSearcher.AlvailablePositions(helper, current, (int)(approximate.x[current]), (int)approximate.y[current], x, y))
             {
                 var bestMetric = double.MaxValue;
@@ -121,15 +139,14 @@ namespace DetailPlacer.Algorithm
                 }
                 result.x[current] = x[bestCoordInd];
                 result.y[current] = y[bestCoordInd];
-               
 
-                helper.PlaceComponent(current, x[bestCoordInd], y[bestCoordInd]); 
+                helper.PlaceComponent(current, x[bestCoordInd], y[bestCoordInd]);
                 result.placed[current] = true;
 
             }
             else
             {
-                
+
                 result.x[current] = (int)Math.Round(approximate.x[current]);
                 result.y[current] = (int)Math.Round(approximate.y[current]);
                 helper.PlaceComponent(current, result.x[current], result.y[current]);
@@ -150,7 +167,7 @@ namespace DetailPlacer.Algorithm
 
             CulcValuesInRegions(design, approximate, result, regsInComp, valuesInRegions, ref compsToUpdate);
             Mask helper = new Mask(design, result);
-            helper.BuildUp(); 
+            helper.BuildUp();
 
             do
             {
@@ -168,18 +185,18 @@ namespace DetailPlacer.Algorithm
 
             foreach (var comp in design.components)
             {
-                if(result.placed[comp])continue;
+                if (result.placed[comp]) continue;
                 result.x[comp] = (int)Math.Round(approximate.x[comp]);
                 result.y[comp] = (int)Math.Round(approximate.y[comp]);
-                result.placed[comp] = true;
-                try
-                {
-                  helper.PlaceComponent(comp, result.x[comp], result.y[comp]);
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    result.placed[comp] = false;
-                }
+                var x = result.x[comp];
+                var y = result.y[comp];
+                var w = comp.sizex;
+                var h = comp.sizey;
+                bool inField = x >= design.field.beginx && (x + w) <= (design.field.beginx + design.field.cellsx);
+                inField &= y >= design.field.beginy && (y + h) <= (design.field.beginy + design.field.cellsy);
+
+                result.placed[comp] = inField;
+                //helper.PlaceComponent(comp, result.x[comp], result.y[comp]);
             }
 
         }
