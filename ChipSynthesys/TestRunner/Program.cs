@@ -1,24 +1,21 @@
-﻿using System;
+﻿using ChipSynthesys.Common.Classes;
+using ChipSynthesys.Common.Generators;
+using ChipSynthesys.Draw;
+using ChipSynthesys.Statistic.Interfaces;
+using ChipSynthesys.Statistic.Statistics;
+using DetailPlacer.Algorithm;
+using DetailPlacer.Algorithm.CompontsOrderer;
+using DetailPlacer.Algorithm.PositionSearcher;
+using DetailPlacer.Algorithm.PositionSorter;
+using DetailPlacer.Algorithm.PositionSorter.PositionComparer;
+using PlaceModel;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-
-using ChipSynthesys.Common.Classes;
-using ChipSynthesys.Common.Generators;
-using ChipSynthesys.Draw;
-using ChipSynthesys.Statistic.Interfaces;
-using ChipSynthesys.Statistic.Statistics;
-
-using DetailPlacer.Algorithm;
-using DetailPlacer.Algorithm.CompontsOrderer;
-using DetailPlacer.Algorithm.PositionSearcher;
-using DetailPlacer.Algorithm.PositionSorter;
-using DetailPlacer.Algorithm.PositionSorter.PositionComparer;
-
-using PlaceModel;
 
 namespace TestRunner
 {
@@ -107,6 +104,13 @@ namespace TestRunner
                 return;
             }
 
+            if (args.Length >= 2 && args[0].ToLower() == "-n")
+            {
+                MakeFrame(args);
+
+                return;
+            }
+
             if (args.Length == 2 && args[0].ToLower() == "-p")
             {
                 ParseBookshelf(args);
@@ -161,7 +165,7 @@ namespace TestRunner
                     typeof(CrossReductPlacer),
                     typeof(CrossComponentVariant2),
                     typeof(CrossCompPlacer),
-                    typeof(ForceDirectedDetailPlacer), 
+                    typeof(ForceDirectedDetailPlacer),
                 };
 
             foreach (Type otherPlacerType in otherPlacers)
@@ -174,7 +178,6 @@ namespace TestRunner
                     {
                         continue;
                     }
-
 
                     for (int i = 0; i < design.Length; i++)
                     {
@@ -212,7 +215,6 @@ namespace TestRunner
                         st.Stop();
                         Console.WriteLine(@"Время выполнения {0} - {1}", placer, st.Elapsed);
                     }
-
                 }
             }
         }
@@ -259,6 +261,31 @@ namespace TestRunner
                     bitmap.Save(file);
                 }
             }
+        }
+
+        private static void MakeFrame(string[] args)
+        {
+            string fileName = args[1];
+            int index = fileName.LastIndexOf('\\');
+            string taskName = fileName.Substring(index + 1);
+            ChipTask task = ChipTask.Load(fileName);
+            Console.WriteLine(@"Task was drawed");
+            int w = task.Design.field.cellsx + 100;
+            int h = task.Design.field.cellsy + 100;
+
+            var bitmap = new Bitmap(w, h);
+            using (Graphics canvas = Graphics.FromImage(bitmap))
+            {
+                IDrawer drawer = new DrawerImplNets();
+                drawer.Draw(
+                    task.Design,
+                    task.Approximate,
+                    new Size(w, h),
+                    canvas);
+            }
+
+            string file = string.Format("{0}.png", taskName);
+            bitmap.Save(file);
         }
 
         private static void ParseBookshelf(string[] args)

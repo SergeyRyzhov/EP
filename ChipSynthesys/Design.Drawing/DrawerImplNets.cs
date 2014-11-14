@@ -26,8 +26,8 @@ namespace ChipSynthesys.Draw
 
             foreach (Net net in design.nets)
             {
-                this.DrawNet(design, c => (float) placement.x[c] - design.field.beginx,
-                    c => (float) placement.y[c] - design.field.beginy, canvas, net, scaling);
+                this.DrawNet(design, c => (float)placement.x[c] - design.field.beginx,
+                    c => (float)placement.y[c] - design.field.beginy, canvas, net, scaling);
             }
         }
 
@@ -49,13 +49,19 @@ namespace ChipSynthesys.Draw
             const bool drawSpline = true;
             if (drawSpline)
             {
-                const float beta = 0.75f;
-                const float step = 0.01f;
-                canvas.DrawBSpline(
-                    NetPen,
-                    net.items.Select(c => new PointF((xGetter(c) + c.sizex / 2) * scaling, (yGetter(c) + c.sizey / 2) * scaling)).ToArray(),
-                    beta,
-                    step);
+                const float beta = 0.99f;
+                float step = 1f / scaling;
+                step = step < 0.1f ? 0.1f : step;
+                PointF[] points =
+                    net.items.Select(c =>
+                    {
+                        int halfWidth = c.sizex / 2;
+                        int halfHeight = c.sizey / 2;
+                        return new PointF((xGetter(c) + halfWidth) * scaling, (yGetter(c) + halfHeight) * scaling);
+                    })
+                        .ToArray();
+                //canvas.DrawBSpline(NetPen, points, beta, step);
+                canvas.DrawCurve(NetPen, points);
                 return;
             }
 
