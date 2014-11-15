@@ -2,8 +2,6 @@
 using ChipSynthesys.Statistic.Common;
 using ChipSynthesys.Statistic.Interfaces;
 using PlaceModel;
-using System;
-using System.Linq;
 
 
 namespace ChipSynthesys.Statistic.Rows

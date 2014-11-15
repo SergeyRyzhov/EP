@@ -1,8 +1,3 @@
-using ChipSynthesys.Common;
-using PlaceModel;
-using System;
-using System.Collections.Generic;
-
 namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
    /* public abstract class PositionSearcherBase : IPositionSearcher

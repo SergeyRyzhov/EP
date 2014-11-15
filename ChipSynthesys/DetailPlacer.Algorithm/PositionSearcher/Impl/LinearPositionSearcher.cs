@@ -1,7 +1,3 @@
-using ChipSynthesys.Common;
-using PlaceModel;
-using System;
-
 namespace DetailPlacer.Algorithm.PositionSearcher.Impl
 {
     /*public class LinearPositionSearcher : PositionSearcherBase
