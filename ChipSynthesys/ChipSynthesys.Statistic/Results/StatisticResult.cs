@@ -1,4 +1,5 @@
-﻿using ChipSynthesys.Statistic.Interfaces;
+﻿using System.Diagnostics;
+using ChipSynthesys.Statistic.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +15,7 @@ namespace ChipSynthesys.Statistic.Results
 
         internal void Add(ISatisticRow<double> row)
         {
-            System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+            Stopwatch timer = new Stopwatch();
             timer.Start();
             Add(row.Key, row.Compute());
             timer.Stop();

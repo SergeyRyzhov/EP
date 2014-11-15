@@ -31,7 +31,7 @@ namespace DetailPlacer.Algorithm
 
         public CrossReductPlacer()
         {
-            m_positionSearcher = new SpiralPositionSearcher(40);
+            m_positionSearcher = new SpiralPositionSearcher();
         }
 
 

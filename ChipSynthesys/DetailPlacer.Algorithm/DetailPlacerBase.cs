@@ -1,5 +1,6 @@
 ﻿using DetailPlacer.Algorithm.CompontsOrderer;
 using DetailPlacer.Algorithm.PositionSearcher;
+using DetailPlacer.Algorithm.PositionSearcher.Impl;
 using DetailPlacer.Algorithm.PositionSorter;
 using DetailPlacer.Algorithm.PositionSorter.Impl;
 using DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl;
@@ -138,7 +139,7 @@ namespace DetailPlacer.Algorithm
     public class DetailPlacerImpl : DetailPlacerBase
     {
         public DetailPlacerImpl()
-            : base(new CompontsOrderer.Impl.CompontsOrderer(), new PositionSearcher.Impl.SpiralPositionSearcher(), new PositionsSorter(new NetsPositionComparer()))
+            : base(new CompontsOrderer.Impl.CompontsOrderer(), new SpiralPositionSearcher(), new PositionsSorter(new NetsPositionComparer()))
         {
         }
 

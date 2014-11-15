@@ -1,4 +1,5 @@
-﻿using ChipSynthesys.Common.Generators;
+﻿using System.Text;
+using ChipSynthesys.Common.Generators;
 using ChipSynthesys.Draw;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PlaceModel;
@@ -53,7 +54,7 @@ namespace ChipSynthesys.UnitTests.Common
             }
             foreach (var net in design.nets)
             {
-                var s = new System.Text.StringBuilder();
+                var s = new StringBuilder();
                 s.Append(net.id);
                 s.Append(": ");
 

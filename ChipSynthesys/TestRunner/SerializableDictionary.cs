@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace TestRunner
@@ -7,12 +9,12 @@ namespace TestRunner
     public class SerializableDictionary<TKey, TValue>
         : Dictionary<TKey, TValue>, IXmlSerializable
     {
-        public System.Xml.Schema.XmlSchema GetSchema()
+        public XmlSchema GetSchema()
         {
             return null;
         }
 
-        public void ReadXml(System.Xml.XmlReader reader)
+        public void ReadXml(XmlReader reader)
         {
             XmlSerializer keySerializer = new XmlSerializer(typeof(TKey));
             XmlSerializer valueSerializer = new XmlSerializer(typeof(TValue));
@@ -23,7 +25,7 @@ namespace TestRunner
             if (wasEmpty)
                 return;
 
-            while (reader.NodeType != System.Xml.XmlNodeType.EndElement)
+            while (reader.NodeType != XmlNodeType.EndElement)
             {
                 reader.ReadStartElement("item");
 
@@ -43,12 +45,12 @@ namespace TestRunner
             reader.ReadEndElement();
         }
 
-        public void WriteXml(System.Xml.XmlWriter writer)
+        public void WriteXml(XmlWriter writer)
         {
             var keySerializer = new XmlSerializer(typeof(TKey));
             var valueSerializer = new XmlSerializer(typeof(TValue));
 
-            foreach (TKey key in this.Keys)
+            foreach (TKey key in Keys)
             {
                 writer.WriteStartElement("item");
 

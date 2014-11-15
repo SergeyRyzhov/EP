@@ -15,7 +15,7 @@ namespace ChipSynthesys.Draw
 
         public DrawerImplNets()
         {
-            this.NetPen = new Pen(Color.FromArgb(48, Color.DarkBlue), 1.25f);
+            NetPen = new Pen(Color.FromArgb(48, Color.DarkBlue), 1.25f);
         }
 
         public override void Draw(Design design, PlacementGlobal placement, Size size, Graphics canvas)
@@ -26,7 +26,7 @@ namespace ChipSynthesys.Draw
 
             foreach (Net net in design.nets)
             {
-                this.DrawNet(design, c => (float)placement.x[c] - design.field.beginx,
+                DrawNet(design, c => (float)placement.x[c] - design.field.beginx,
                     c => (float)placement.y[c] - design.field.beginy, canvas, net, scaling);
             }
         }
@@ -39,7 +39,7 @@ namespace ChipSynthesys.Draw
 
             foreach (Net net in design.nets)
             {
-                this.DrawNet(design, c => (float)placement.x[c] - design.field.beginx,
+                DrawNet(design, c => (float)placement.x[c] - design.field.beginx,
                     c => (float)placement.y[c] - design.field.beginy, canvas, net, scaling);
             }
         }
@@ -96,7 +96,7 @@ namespace ChipSynthesys.Draw
             averageOy = averageOy / net.items.Length * scaling;
             averageOx = averageOx / net.items.Length * scaling;
 
-            canvas.DrawLine(this.NetPen, xMin, (int)averageOy, xMax, (int)averageOy);
+            canvas.DrawLine(NetPen, xMin, (int)averageOy, xMax, (int)averageOy);
 
             foreach (Component comp in net.items)
             {
@@ -106,9 +106,9 @@ namespace ChipSynthesys.Draw
                 float x = (xGetter(comp) + halfSizeOx) * scaling;
                 float y = (yGetter(comp) + halfSizeOy) * scaling;
 
-                canvas.DrawLine(this.NetPen, x, y, (float)x, (float)averageOy);
+                canvas.DrawLine(NetPen, x, y, (float)x, (float)averageOy);
 
-                this.MarkComponent(canvas, xGetter, yGetter, comp, scaling, 0, 0);
+                MarkComponent(canvas, xGetter, yGetter, comp, scaling, 0, 0);
             }
         }
 
@@ -124,14 +124,14 @@ namespace ChipSynthesys.Draw
             float x = (xGetter(component) - offsetOx) * scaling;
             float y = (yGetter(component) - offsetOy) * scaling;
 
-            int half = this.ComponentMarkRadius / 2;
+            int half = ComponentMarkRadius / 2;
 
             canvas.FillEllipse(
-                this.ComponentMarkBrush,
+                ComponentMarkBrush,
                 x - half,
                 y - half,
-                this.ComponentMarkRadius,
-                this.ComponentMarkRadius);
+                ComponentMarkRadius,
+                ComponentMarkRadius);
         }
     }
 }

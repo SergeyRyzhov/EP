@@ -14,7 +14,7 @@ namespace TestRunner
     {
         public HeuristicsModel()
         {
-            this.Heuristics = new SerializableDictionary<string, string>();
+            Heuristics = new SerializableDictionary<string, string>();
         }
 
         public HeuristicsModel(
@@ -23,7 +23,7 @@ namespace TestRunner
             IPositionComparer positionComparer, 
             IPositionsSorter positionsSorter)
         {
-            this.Heuristics = new SerializableDictionary<string, string>
+            Heuristics = new SerializableDictionary<string, string>
                                   {
                                       {
                                           "Сортировка компонент", 
@@ -46,7 +46,7 @@ namespace TestRunner
 
         public HeuristicsModel(IDetailPlacer placer)
         {
-            this.Heuristics = new SerializableDictionary<string, string> { { "Размещатель", placer.ToString() } };
+            Heuristics = new SerializableDictionary<string, string> { { "Размещатель", placer.ToString() } };
         }
 
         public SerializableDictionary<string, string> Heuristics { get; set; }

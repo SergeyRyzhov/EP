@@ -22,14 +22,14 @@ namespace ChipSynthesys.Draw
 
         protected DrawerBase()
         {
-            this.ComponentBrush = new SolidBrush(Color.DarkGray);
-            this.UnplacedComponentBrush = new SolidBrush(Color.Black);
-            this.ComponentMarkBrush = new SolidBrush(Color.Black);
-            this.ComponentPenBorderDepth = 1;
-            this.ComponentMarkRadius = 1;
+            ComponentBrush = new SolidBrush(Color.DarkGray);
+            UnplacedComponentBrush = new SolidBrush(Color.Black);
+            ComponentMarkBrush = new SolidBrush(Color.Black);
+            ComponentPenBorderDepth = 1;
+            ComponentMarkRadius = 1;
             const int componentPenThickness = 1;
-            this.ComponentPen = new Pen(Color.Green, componentPenThickness);
-            this.UnplacedComponentPen = new Pen(Color.Red, componentPenThickness);
+            ComponentPen = new Pen(Color.Green, componentPenThickness);
+            UnplacedComponentPen = new Pen(Color.Red, componentPenThickness);
         }
 
         public abstract void Draw(Design design, PlacementGlobal placement, Size size, Graphics canvas);
