@@ -12,8 +12,12 @@ namespace ChipSynthesys.Statistic.Statistics
         public IStatisticResult Compute(Design design, PlacementGlobal global, PlacementDetail detail)
         {
             var statisticResult = new StatisticResult();
+            statisticResult.ComponentsAmount = design.components.Length;
+            statisticResult.NetsAmount = design.nets.Length;
             statisticResult.PlacedAmount = new Result<int>(design.components.Count(c => global.placed[c]));
             statisticResult.ManhattanMetrik = new Result<double>(CriterionHelper.ComputeMetrik(design, global));
+            statisticResult.InterserctionsAmount = new Result<int>(CriterionHelper.CountOfCrossings(design, detail));
+            statisticResult.AreaOfInterserctions = new Result<double>(CriterionHelper.AreaOfCrossing(design, detail));
             //statisticResult.Interserctions = new Result<Interserction[]>();
 //            sr
 

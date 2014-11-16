@@ -4,6 +4,8 @@ namespace ChipSynthesys.Statistic.Interfaces
 {
     public interface IStatisticResult
     {
+        int ComponentsAmount { get; }
+        int NetsAmount { get; }
         Result<int> PlacedAmount { get; }
         Result<double> ManhattanMetrik { get; }
         Result<double> AreaOfInterserctions { get; }

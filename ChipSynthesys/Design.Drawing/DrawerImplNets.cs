@@ -49,9 +49,10 @@ namespace ChipSynthesys.Draw
             const bool drawSpline = true;
             if (drawSpline)
             {
-                const float beta = 0.99f;
+                const float beta = 0.85f;
                 float step = 1f / scaling;
                 step = step < 0.1f ? 0.1f : step;
+                step = step > 1f ? 1f : step;
                 PointF[] points =
                     net.items.Select(c =>
                     {

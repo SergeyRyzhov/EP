@@ -17,24 +17,16 @@ namespace ChipSynthesys.Statistic.Models
         {
         }
 
+        public int ComponentsAmount { get; internal set; }
+        public int NetsAmount { get; internal set; }
         public Result<int> PlacedAmount { get; internal set; }
         public Result<double> ManhattanMetrik { get; internal set; }
 
         public Result<double> AreaOfInterserctions
-        {
-            get
-            {
-                var res = new Result<double>();
-                return res;
-            }
-        }
+        { get; internal set; }
 
         public Result<int> InterserctionsAmount
-        {
-            get { var res = new Result<int>();
-                return res;
-            }
-        }
+        { get; internal set; }
 
         public Result<Interserction[]> Interserctions { get; internal set; }
         public ComponentsMetrik<double> Distance { get; internal set; }

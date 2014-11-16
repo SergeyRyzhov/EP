@@ -14,21 +14,42 @@ namespace ChipSynthesys.Statistic
                 var w = package.Workbook;
                 var common = w.Worksheets.Add("Common");
 
-                var commonPage = GetCommonPage(result);
+                var commonPage = GetCommonPage("",result);
                 common.Cells.LoadFromDataTable(commonPage,true);
 
                 package.Save();
             }
         }
 
-        private static DataTable GetCommonPage(IStatisticResult result)
+        private static DataTable GetCommonPage(string taskName, IStatisticResult result)
         {
             var table = new DataTable("common");
 
-            table.Columns.Add("Характеристика");
+           /* table.Columns.Add("Характеристика");
             table.Columns.Add("До");
-            table.Columns.Add("После");
+            table.Columns.Add("После");*/
 
+            table.Columns.Add("A");
+            table.Columns.Add("B");
+            table.Columns.Add("C");
+            table.Rows.Add(new object[]
+            {
+                "Задача", taskName
+            });
+
+            table.Rows.Add(new object[]
+            {
+                "Количество компонент", result.ComponentsAmount
+            });
+            table.Rows.Add(new object[]
+            {
+                "Количество цепей", result.NetsAmount
+            });
+
+            table.Rows.Add(new object[]
+            {
+                "Характеристика", "До","После"
+            });
             table.Rows.Add(new object[]
             {
                 "Размещено", result.PlacedAmount.Before,
