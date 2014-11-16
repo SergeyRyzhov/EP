@@ -34,4 +34,11 @@ namespace ChipSynthesys.Statistic.Models
             return GetEnumerator();
         }
     }
+
+    public class ChartPair<TA,TO>
+    {
+        public TO Ordinate { get; set; }
+        public TA Abscissa { get; set; }
+
+    }
 }

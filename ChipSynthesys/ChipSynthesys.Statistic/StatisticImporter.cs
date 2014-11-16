@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.IO;
+using System.Linq;
 using ChipSynthesys.Statistic.Interfaces;
 using OfficeOpenXml;
 
@@ -14,8 +15,8 @@ namespace ChipSynthesys.Statistic
                 var w = package.Workbook;
                 var common = w.Worksheets.Add("Common");
 
-                var commonPage = GetCommonPage("",result);
-                common.Cells.LoadFromDataTable(commonPage,true);
+                var commonPage = GetCommonPage("", result);
+                common.Cells.LoadFromDataTable(commonPage, false);
 
                 package.Save();
             }
@@ -25,51 +26,52 @@ namespace ChipSynthesys.Statistic
         {
             var table = new DataTable("common");
 
-           /* table.Columns.Add("Характеристика");
+            /* table.Columns.Add("Характеристика");
             table.Columns.Add("До");
             table.Columns.Add("После");*/
 
-            table.Columns.Add("A");
-            table.Columns.Add("B");
-            table.Columns.Add("C");
-            table.Rows.Add(new object[]
+            for (int i = 0; i < result.SquareDistance.Length; i++)
             {
+                table.Columns.Add(string.Format("Column{0}", i));
+
+            }
+
+            table.Rows.Add(
                 "Задача", taskName
-            });
+                );
 
-            table.Rows.Add(new object[]
-            {
+            table.Rows.Add(
                 "Количество компонент", result.ComponentsAmount
-            });
-            table.Rows.Add(new object[]
-            {
+                );
+            table.Rows.Add(
                 "Количество цепей", result.NetsAmount
-            });
+                );
 
-            table.Rows.Add(new object[]
-            {
-                "Характеристика", "До","После"
-            });
-            table.Rows.Add(new object[]
-            {
+            table.Rows.Add(
+                "Характеристика", "До", "После"
+                );
+            table.Rows.Add(
                 "Размещено", result.PlacedAmount.Before,
                 result.PlacedAmount.After
-            });
-            table.Rows.Add(new object[]
-            {
+                );
+            table.Rows.Add(
                 "Манхеттенская метрика", result.ManhattanMetrik.Before,
                 result.ManhattanMetrik.After
-            });
-            table.Rows.Add(new object[]
-            {
+                );
+            table.Rows.Add(
                 "Количество пересечений", result.InterserctionsAmount.Before,
                 result.InterserctionsAmount.After
-            });
-            table.Rows.Add(new object[]
-            {
+                );
+            table.Rows.Add(
                 "Суммарная площадь пересечений", result.AreaOfInterserctions.Before,
                 result.AreaOfInterserctions.After
-            });
+                );
+
+            table.Rows.Add("Данные для диаграмм");
+
+            table.Rows.Add(result.SquareDistance.Select(d => d.Abscissa).Cast<object>().ToArray());
+            table.Rows.Add(result.SquareDistance.Select(d => d.Ordinate).Cast<object>().ToArray());
+
             return table;
         }
     }

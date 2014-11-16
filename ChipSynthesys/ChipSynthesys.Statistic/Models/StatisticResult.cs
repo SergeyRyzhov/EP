@@ -30,5 +30,7 @@ namespace ChipSynthesys.Statistic.Models
 
         public Result<Interserction[]> Interserctions { get; internal set; }
         public ComponentsMetrik<double> Distance { get; internal set; }
+
+        public ChartPair<int, double>[] SquareDistance { get; internal set; }
     }
 }

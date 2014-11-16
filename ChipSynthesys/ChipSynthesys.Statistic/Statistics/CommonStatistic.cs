@@ -50,6 +50,37 @@ namespace ChipSynthesys.Statistic.Statistics
                 statisticResult.AreaOfInterserctions.After = CriterionHelper.AreaOfCrossing(design, detail);
             }
 
+            statisticResult.Distance = new ComponentsMetrik<double>();
+
+            var distance =
+                new Func<Component, PlacementGlobal, PlacementDetail, double>(
+                    (c, g, d) => Math.Sqrt((g.x[c] - d.x[c])*(g.x[c] - d.x[c]) + (g.y[c] - d.y[c])*(g.y[c] - d.y[c])));
+            foreach (var component in design.components)
+            {
+                statisticResult.Distance[component] = distance(component, global, detail);
+                
+            }
+
+            var squeres = new int[design.components.Length];
+            for (int i = 0; i < design.components.Length; i++)
+            {
+                var component = design.components[i];
+                squeres[i] = component.sizex*component.sizey;
+            }
+
+
+            statisticResult.SquareDistance = squeres.Distinct().OrderBy(s=>s).Where(s => s > 0).Select(i => new ChartPair<int, double>()
+            {
+                Abscissa = i,
+                Ordinate = design.components.Where(co => co.sizex * co.sizey == i).Average(c =>
+                {
+                    double d = statisticResult.Distance[c];
+                    if(d>0) Console.WriteLine(d);
+                    return d;
+                })
+            }).ToArray();
+            
+
             return statisticResult;
         }
     }

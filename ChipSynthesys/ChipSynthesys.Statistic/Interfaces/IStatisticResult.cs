@@ -12,6 +12,7 @@ namespace ChipSynthesys.Statistic.Interfaces
         Result<int> InterserctionsAmount { get; }
         Result<Interserction[]> Interserctions { get; }
         ComponentsMetrik<double> Distance { get; }
+        ChartPair<int,double>[] SquareDistance { get; }
 //        ComponentsMetrik<double> DistanceFromNetCenter { get; }
         string ToString();
     }

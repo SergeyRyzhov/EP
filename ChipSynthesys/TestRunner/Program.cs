@@ -66,7 +66,7 @@ namespace TestRunner
             out Bitmap[] bitmaps)
         {
             string[] files = Directory.GetFiles(path);
-            const int scale = 1;
+            const int scale = 20;
 
             var designList = new List<Design>();
             var solutionList = new List<PlacementGlobal>();
@@ -208,7 +208,7 @@ namespace TestRunner
                             a.y[c] = placeRes.y[c];
 
                         }
-                        var t = new ChipTask(d, a) { Height = sizes[i].Height, Width = sizes[i].Width };
+                        var t = new ChipTask(d, a) { Height = 50/*sizes[i].Height*/, Width = 50/*sizes[i].Width*/ };
 
                         t.Save(Path.Combine(resultDirectory, string.Format("TestData {0}.bin", testCount)));
 
