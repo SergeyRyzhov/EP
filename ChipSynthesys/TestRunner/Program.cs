@@ -66,7 +66,7 @@ namespace TestRunner
             out Bitmap[] bitmaps)
         {
             string[] files = Directory.GetFiles(path);
-            const int scale = 20;
+            const int scale = 1;
 
             var designList = new List<Design>();
             var solutionList = new List<PlacementGlobal>();

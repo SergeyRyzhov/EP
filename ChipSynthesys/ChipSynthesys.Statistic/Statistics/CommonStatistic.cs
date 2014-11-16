@@ -16,8 +16,8 @@ namespace ChipSynthesys.Statistic.Statistics
             statisticResult.NetsAmount = design.nets.Length;
             statisticResult.PlacedAmount = new Result<int>(design.components.Count(c => global.placed[c]));
             statisticResult.ManhattanMetrik = new Result<double>(CriterionHelper.ComputeMetrik(design, global));
-            statisticResult.InterserctionsAmount = new Result<int>(CriterionHelper.CountOfCrossings(design, detail));
-            statisticResult.AreaOfInterserctions = new Result<double>(CriterionHelper.AreaOfCrossing(design, detail));
+            statisticResult.InterserctionsAmount = new Result<int>(CriterionHelper.CountOfCrossings(design, global));
+            statisticResult.AreaOfInterserctions = new Result<double>(CriterionHelper.AreaOfCrossing(design, global));
             //statisticResult.Interserctions = new Result<Interserction[]>();
 //            sr
 
@@ -40,6 +40,14 @@ namespace ChipSynthesys.Statistic.Statistics
             if (statisticResult.ManhattanMetrik != null)
             {
                 statisticResult.ManhattanMetrik.After = CriterionHelper.ComputeMetrik(design, detail);
+            }
+            if (statisticResult.InterserctionsAmount != null)
+            {
+                statisticResult.InterserctionsAmount.After = CriterionHelper.CountOfCrossings(design, detail);
+            }
+            if (statisticResult.AreaOfInterserctions != null)
+            {
+                statisticResult.AreaOfInterserctions.After = CriterionHelper.AreaOfCrossing(design, detail);
             }
 
             return statisticResult;
