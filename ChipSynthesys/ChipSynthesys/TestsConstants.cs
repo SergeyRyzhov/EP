@@ -2,6 +2,6 @@
 {
     public static class TestsConstants
     {
-        public static int SearchSize = 16;
+        public static int SearchSize = 4;
     }
 }
