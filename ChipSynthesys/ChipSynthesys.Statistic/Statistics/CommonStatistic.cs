@@ -1,65 +1,44 @@
-﻿using ChipSynthesys.Statistic.Common;
+﻿using System;
+using System.Linq;
+using ChipSynthesys.Common.Classes;
 using ChipSynthesys.Statistic.Interfaces;
-using ChipSynthesys.Statistic.Results;
-using ChipSynthesys.Statistic.Rows;
+using ChipSynthesys.Statistic.Models;
 using PlaceModel;
 
 namespace ChipSynthesys.Statistic.Statistics
 {
-    public class CommonStatistic : IStatistic<double, double>
+    public class CommonStatistic
     {
-        public static string Name
-        {
-            get { return StatisticNames.Common; }
-        }
-
-        string IStatistic<double, double>.Name
-        {
-            get { return Name; }
-        }
-
-        public void PlacementStatistic(Design design, PlacementGlobal placement, out IStatisticResult<double> result)
+        public IStatisticResult Compute(Design design, PlacementGlobal global, PlacementDetail detail)
         {
             var statisticResult = new StatisticResult();
+            statisticResult.PlacedAmount = new Result<int>(design.components.Count(c => global.placed[c]));
+            statisticResult.ManhattanMetrik = new Result<double>(CriterionHelper.ComputeMetrik(design, global));
+            //statisticResult.Interserctions = new Result<Interserction[]>();
+//            sr
 
-            statisticResult.Add(new PlacedRow { Design = design, GlobalPlacement = placement });
-            var detail = new PlacementDetail(design);
-            foreach (var component in design.components)
+            return statisticResult;
+        }
+
+        public IStatisticResult Update(IStatisticResult current, Design design, PlacementGlobal global, PlacementDetail detail)
+        {
+            var statisticResult = current as StatisticResult;
+            if (statisticResult == null)
             {
-                detail.placed[component] = placement.placed[component];
-                detail.x[component] = (int)placement.x[component];
-                detail.y[component] = (int)placement.y[component];
-                placement.placed[component] = true;
+                throw new NotSupportedException();
             }
 
-            statisticResult.Add(new ManhattanMetrikRow { Design = design, GlobalPlacement = placement });
-            statisticResult.Add(new AreaOfIntersectionsRow { Design = design, DetailPlacement = detail });
-            statisticResult.Add(new CountOfCrossingsRow { Design = design, DetailPlacement = detail });
-            foreach (var component in design.components)
+            if (statisticResult.PlacedAmount != null)
             {
-                placement.placed[component] = detail.placed[component];
+                statisticResult.PlacedAmount.After = design.components.Count(c => detail.placed[c]);
             }
-            result = statisticResult;
-        }
 
-        public void PlacementStatistic(Design design, PlacementDetail placement, out IStatisticResult<double> result)
-        {
-            var statisticResult = new StatisticResult();
+            if (statisticResult.ManhattanMetrik != null)
+            {
+                statisticResult.ManhattanMetrik.After = CriterionHelper.ComputeMetrik(design, detail);
+            }
 
-            statisticResult.Add(new PlacedRow { Design = design, DetailPlacement = placement });
-            statisticResult.Add(new ManhattanMetrikRow { Design = design, DetailPlacement = placement });
-            statisticResult.Add(new AreaOfIntersectionsRow { Design = design, DetailPlacement = placement });
-            statisticResult.Add(new CountOfCrossingsRow { Design = design, DetailPlacement = placement });
-           
-            result = statisticResult;
-        }
-
-        public void DesignStatistic(Design design, out IStatisticResult<double> result)
-        {
-            var statisticResult = new StatisticResult();
-            statisticResult.Add(new ComponentAmountRow { Design = design });
-
-            result = statisticResult;
+            return statisticResult;
         }
     }
 }

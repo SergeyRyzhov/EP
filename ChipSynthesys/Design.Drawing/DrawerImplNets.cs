@@ -60,8 +60,8 @@ namespace ChipSynthesys.Draw
                         return new PointF((xGetter(c) + halfWidth) * scaling, (yGetter(c) + halfHeight) * scaling);
                     })
                         .ToArray();
-                //canvas.DrawBSpline(NetPen, points, beta, step);
-                canvas.DrawCurve(NetPen, points);
+                canvas.DrawBSpline(NetPen, points, beta, step);
+                //canvas.DrawCurve(NetPen, points);
                 return;
             }
 

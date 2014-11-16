@@ -4,7 +4,7 @@ using ChipSynthesys.Statistic.Interfaces;
 
 namespace TestRunner
 {
-    [Serializable]
+    /*[Serializable]
     public class PlacementStatisticModel : XmlModel
     {
         public PlacementStatisticModel()
@@ -22,5 +22,5 @@ namespace TestRunner
         }
 
         public SerializableDictionary<string, double> PlacementStatistic { get; set; }
-    }
+    }*/
 }

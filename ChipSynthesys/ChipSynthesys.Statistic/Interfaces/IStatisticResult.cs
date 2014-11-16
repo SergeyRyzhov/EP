@@ -1,40 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using ChipSynthesys.Statistic.Models;
 
 namespace ChipSynthesys.Statistic.Interfaces
 {
-    public interface IStatisticResult<T>
+    public interface IStatisticResult
     {
-        Dictionary<string, T> Results { get; }
-
+        Result<int> PlacedAmount { get; }
+        Result<double> ManhattanMetrik { get; }
+        Result<double> AreaOfInterserctions { get; }
+        Result<int> InterserctionsAmount { get; }
+        Result<Interserction[]> Interserctions { get; }
+        ComponentsMetrik<double> Distance { get; }
+//        ComponentsMetrik<double> DistanceFromNetCenter { get; }
         string ToString();
     }
-
-
-    /* public interface IStatisticResult
-     {
-         double ManhattanMetrik { get; }
-         double AreaOfInterserctions { get; }
-         double InterserctionsAmount { get; }
-         double Interserctions { get; }
-
-         Dictionary<string> Results { get; }
-
-         string ToString();
-
-         class Interserction
-         {
-             public Interserction(int firstComponentIndex, int secondComponentIndex)
-             {
-                FirstComponentIndex = firstComponentIndex;
-                SecondComponentIndex= secondComponentIndex;
-             }
-
-             public int FirstComponentIndex { get; private set; }
-
-             public int SecondComponentIndex { get; private set; }
-
-             public double Area { get; set; }
-         }
-     }*/
-
 }

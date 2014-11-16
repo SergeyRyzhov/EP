@@ -8,8 +8,8 @@ namespace ChipSynthesys.Common.Classes
     [Serializable]
     public class ChipTaskResult : ChipTask
     {
-        public ChipTaskResult(Design design, PlacementGlobal approximate, PlacementDetail detail)
-            : base(design, approximate)
+        public ChipTaskResult(Design design, PlacementGlobal global, PlacementDetail detail)
+            : base(design, global)
         {
             Detail = detail;
         }

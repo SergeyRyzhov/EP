@@ -13,7 +13,7 @@ namespace ChipSynthesys.UnitTests.Custom
     [TestClass]
     public class CustomTests
     {
-        [TestMethod]
+        /*[TestMethod]
         public void GenarateDesignTest()
         {
             IGenerator random = new RandomGenerator();
@@ -29,9 +29,9 @@ namespace ChipSynthesys.UnitTests.Custom
             Console.WriteLine(designResult);
 
             Design.Save(design, "test.xml");
-        }
+        }*/
 
-        [TestMethod]
+       /*[TestMethod]
         public void RandomStatisticTest()
         {
             Console.WriteLine("Случайный с размещением");
@@ -75,7 +75,7 @@ namespace ChipSynthesys.UnitTests.Custom
                 }
                 Console.WriteLine(s.ToString());
             }
-        }
+        }*/
 
         [TestMethod]
         public void RandomTest()

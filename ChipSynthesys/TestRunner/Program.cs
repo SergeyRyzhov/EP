@@ -1,6 +1,7 @@
 ﻿using ChipSynthesys.Common.Classes;
 using ChipSynthesys.Common.Generators;
 using ChipSynthesys.Draw;
+using ChipSynthesys.Statistic;
 using ChipSynthesys.Statistic.Interfaces;
 using ChipSynthesys.Statistic.Statistics;
 using DetailPlacer.Algorithm;
@@ -148,7 +149,7 @@ namespace TestRunner
             //    RunCommonTests(design, statistic, resultDirectory, approximate, sizes, bitmaps, testCount);
             //}
 
-            for (int i = 0; i < design.Length; i++)
+            /*for (int i = 0; i < design.Length; i++)
             {
                 IStatisticResult<double> designStatistics;
                 statistic.DesignStatistic(design[i], out designStatistics);
@@ -158,7 +159,7 @@ namespace TestRunner
             for (int i = 0; i < design.Length; i++)
             {
                 SaveTestResults(resultDirectory, i + 1, 0, design[i], approximate[i], sizes[i], bitmaps[i]);
-            }
+            }*/
 
             Type[] otherPlacers =
                 {
@@ -191,19 +192,16 @@ namespace TestRunner
 
                         placer.Place(d, approximate[i], out placeRes);
 
-                        /*foreach (Component c in d.components)
-                        {
-                            if (!placeRes.placed[c])
-                            {
-                                placeRes.x[c] = (int)approximate[i].x[c];
-                                placeRes.y[c] = (int)approximate[i].y[c];
-                                placeRes.placed[c] = true;
-                            }
-                        }*/
+                        var statisticResult = statistic.Compute(d, approximate[i], placeRes);
+                        statisticResult = statistic.Update(statisticResult, d, approximate[i], placeRes);
 
-                        IStatisticResult<double> placemetStatistics;
-                        statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
-                        SaveTestResults(
+                        string fileName = Path.Combine(resultDirectory, string.Format("TestResult {0}.xlsx", testCount));
+                        StatisticImporter.SaveToFile(fileName, statisticResult);
+
+
+                        //IStatisticResult<double> placemetStatistics;
+                        //statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
+                        /*SaveTestResults(
                             resultDirectory,
                             i + 1,
                             testCount,
@@ -211,7 +209,7 @@ namespace TestRunner
                             placeRes,
                             placemetStatistics,
                             sizes[i],
-                            bitmaps[i]);
+                            bitmaps[i]);*/
                         st.Stop();
                         Console.WriteLine(@"Время выполнения {0} - {1}", placer, st.Elapsed);
                     }
@@ -355,7 +353,7 @@ namespace TestRunner
                     typeof(IPositionsSorter).IsAssignableFrom(t) && (!t.IsInterface) && (!t.IsAbstract) && t.IsPublic)
                     .ToArray();
 
-            for (int i = 0; i < design.Length; i++)
+            /*for (int i = 0; i < design.Length; i++)
             {
                 IStatisticResult<double> designStatistics;
                 statistic.DesignStatistic(design[i], out designStatistics);
@@ -365,7 +363,7 @@ namespace TestRunner
             for (int i = 0; i < design.Length; i++)
             {
                 SaveTestResults(resultDirectory, i + 1, 0, design[i], approximate[i], sizes[i], bitmaps[i]);
-            }
+            }*/
 
             {
                 foreach (Type comOrderType in componentsOrders)
@@ -458,17 +456,17 @@ namespace TestRunner
                     }
                 }
 
-                IStatisticResult<double> placemetStatistics;
+                /*IStatisticResult<double> placemetStatistics;
                 statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
-                SaveTestResults(resultDirectory, i + 1, testCount, d, placeRes, placemetStatistics, sizes[i], bitmaps[i]);
+                SaveTestResults(resultDirectory, i + 1, testCount, d, placeRes, placemetStatistics, sizes[i], bitmaps[i]);*/
             }
         }
 
-        private static void SaveDesignsInfo(string path, int designNum, IStatisticResult<double> designStatistic)
+        /*private static void SaveDesignsInfo(string path, int designNum, IStatisticResult<double> designStatistic)
         {
             var s = new DesignStatisticModel(designStatistic);
             s.Save(string.Format("{0}Design {1} Statistics.xml", path, designNum));
-        }
+        }*/
 
         private static void SaveTestInfo(
             string path,
@@ -488,7 +486,7 @@ namespace TestRunner
             s.Save(string.Format("{0}Heuristics {1}.xml", path, testNum));
         }
 
-        private static void SaveTestResults(
+        /*private static void SaveTestResults(
             string path,
             int designNum,
             int testNum,
@@ -519,9 +517,9 @@ namespace TestRunner
             var t = new ChipTask(design, global) { Height = 30, Width = 30 };
 
             t.Save(string.Format("{0}PlacementResult on design {2} in {1} test.bin", path, testNum, designNum));
-        }
+        }*/
 
-        private static void SaveTestResults(
+        /*private static void SaveTestResults(
             string path,
             int designNum,
             int testNum,
@@ -543,6 +541,6 @@ namespace TestRunner
             statistic.PlacementStatistic(design, resultPlacement, out placemetStatistics);
             var s = new PlacementStatisticModel(placemetStatistics);
             s.Save(string.Format("{0}PlacementStatistics on design {2} in {1} test.xml", path, testNum, designNum));
-        }
+        }*/
     }
 }
