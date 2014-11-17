@@ -18,6 +18,21 @@ namespace ChipSynthesys.Statistic
                 var commonPage = GetCommonPage("", result);
                 common.Cells.LoadFromDataTable(commonPage, false);
 
+
+                var charts = w.Worksheets.Add("Charts");
+
+                OfficeOpenXml.Drawing.Chart.ExcelChart ec = charts.Drawings.AddChart(
+                    "Расстояния",
+                    OfficeOpenXml.Drawing.Chart.eChartType.ColumnClustered);
+                //common.a
+                /*ec.Series.Add(
+                    new ExcelNamedRange("ox", common, common, "A1:A20"),
+                    new ExcelNamedRange("ox", common, common, "A1:A20"));*/
+
+                ec.SetPosition(1, 0, 3, 0);
+                ec.SetSize(500, 200);
+
+
                 package.Save();
             }
         }
@@ -36,36 +51,22 @@ namespace ChipSynthesys.Statistic
 
             }
 
-            table.Rows.Add(
-                "Задача", taskName
-                );
+            table.Rows.Add("Задача", taskName);
 
-            table.Rows.Add(
-                "Количество компонент", result.ComponentsAmount
-                );
-            table.Rows.Add(
-                "Количество цепей", result.NetsAmount
-                );
+            table.Rows.Add("Количество компонент", result.ComponentsAmount);
+            table.Rows.Add("Количество цепей", result.NetsAmount);
 
+            table.Rows.Add("Характеристика", "До", "После");
+            table.Rows.Add("Размещено", result.PlacedAmount.Before, result.PlacedAmount.After);
+            table.Rows.Add("Манхеттенская метрика", result.ManhattanMetrik.Before, result.ManhattanMetrik.After);
             table.Rows.Add(
-                "Характеристика", "До", "После"
-                );
+                "Количество пересечений",
+                result.InterserctionsAmount.Before,
+                result.InterserctionsAmount.After);
             table.Rows.Add(
-                "Размещено", result.PlacedAmount.Before,
-                result.PlacedAmount.After
-                );
-            table.Rows.Add(
-                "Манхеттенская метрика", result.ManhattanMetrik.Before,
-                result.ManhattanMetrik.After
-                );
-            table.Rows.Add(
-                "Количество пересечений", result.InterserctionsAmount.Before,
-                result.InterserctionsAmount.After
-                );
-            table.Rows.Add(
-                "Суммарная площадь пересечений", result.AreaOfInterserctions.Before,
-                result.AreaOfInterserctions.After
-                );
+                "Суммарная площадь пересечений",
+                result.AreaOfInterserctions.Before,
+                result.AreaOfInterserctions.After);
 
             table.Rows.Add("Данные для диаграмм");
 
