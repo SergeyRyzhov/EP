@@ -14,24 +14,24 @@ namespace ChipSynthesys.Statistic
             {
                 var w = package.Workbook;
                 var common = w.Worksheets.Add("Common");
-
                 var commonPage = GetCommonPage("", result);
+
                 common.Cells.LoadFromDataTable(commonPage, false);
 
-
                 var charts = w.Worksheets.Add("Charts");
+
+                var chartData = GetChartData(result);
+                charts.Cells.LoadFromDataTable(chartData, false);
 
                 OfficeOpenXml.Drawing.Chart.ExcelChart ec = charts.Drawings.AddChart(
                     "Расстояния",
                     OfficeOpenXml.Drawing.Chart.eChartType.ColumnClustered);
-                //common.a
-                /*ec.Series.Add(
-                    new ExcelNamedRange("ox", common, common, "A1:A20"),
-                    new ExcelNamedRange("ox", common, common, "A1:A20"));*/
+                ec.Series.Add(
+                    new ExcelNamedRange("ox", charts, charts, "A2:W2"),
+                    new ExcelNamedRange("oy", charts, charts, "A1:W1"));
 
-                ec.SetPosition(1, 0, 3, 0);
+                ec.SetPosition(2, 0, 2, 0);
                 ec.SetSize(500, 200);
-
 
                 package.Save();
             }
@@ -41,15 +41,9 @@ namespace ChipSynthesys.Statistic
         {
             var table = new DataTable("common");
 
-            /* table.Columns.Add("Характеристика");
+            table.Columns.Add("Характеристика");
             table.Columns.Add("До");
-            table.Columns.Add("После");*/
-
-            for (int i = 0; i < result.SquareDistance.Length; i++)
-            {
-                table.Columns.Add(string.Format("Column{0}", i));
-
-            }
+            table.Columns.Add("После");
 
             table.Rows.Add("Задача", taskName);
 
@@ -58,21 +52,29 @@ namespace ChipSynthesys.Statistic
 
             table.Rows.Add("Характеристика", "До", "После");
             table.Rows.Add("Размещено", result.PlacedAmount.Before, result.PlacedAmount.After);
-            table.Rows.Add("Манхеттенская метрика", result.ManhattanMetrik.Before, result.ManhattanMetrik.After);
+            table.Rows.Add("Манхеттенская метрика", result.ManhattanMetric.Before, result.ManhattanMetric.After);
             table.Rows.Add(
                 "Количество пересечений",
-                result.InterserctionsAmount.Before,
-                result.InterserctionsAmount.After);
+                result.IntersectionsAmount.Before,
+                result.IntersectionsAmount.After);
             table.Rows.Add(
                 "Суммарная площадь пересечений",
-                result.AreaOfInterserctions.Before,
-                result.AreaOfInterserctions.After);
+                result.AreaOfIntersections.Before,
+                result.AreaOfIntersections.After);
 
-            table.Rows.Add("Данные для диаграмм");
+            return table;
+        }
 
-            table.Rows.Add(result.SquareDistance.Select(d => d.Abscissa).Cast<object>().ToArray());
-            table.Rows.Add(result.SquareDistance.Select(d => d.Ordinate).Cast<object>().ToArray());
+        private static DataTable GetChartData(IStatisticResult result)
+        {
+            var table = new DataTable("common");
+            for (int i = 0; i < result.DistanceChart.Length; i++)
+            {
+                table.Columns.Add(string.Format("Column{0}", i));
+            }
 
+            table.Rows.Add(result.DistanceChart.Select(d => d.Abscissa).Cast<object>().ToArray());
+            table.Rows.Add(result.DistanceChart.Select(d => (int)d.Ordinate).Cast<object>().ToArray());
             return table;
         }
     }

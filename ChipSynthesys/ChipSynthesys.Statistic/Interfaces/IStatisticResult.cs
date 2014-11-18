@@ -10,19 +10,22 @@ namespace ChipSynthesys.Statistic.Interfaces
 
         Result<int> PlacedAmount { get; }
 
-        Result<double> ManhattanMetrik { get; }
+        Result<double> ManhattanMetric { get; }
 
-        Result<double> AreaOfInterserctions { get; }
+        Result<double> AreaOfIntersections { get; }
 
-        Result<int> InterserctionsAmount { get; }
+        Result<int> IntersectionsAmount { get; }
 
-        Result<Interserction[]> Interserctions { get; }
+        Result<Interserction[]> Intersections { get; }
 
         ComponentsMetrik<double> Distance { get; }
 
-        ChartPair<int, double>[] SquareDistance { get; }
+        ChartPair<int, double>[] DistanceChart { get; }
 
-        //        ComponentsMetrik<double> DistanceFromNetCenter { get; }
+        ComponentsMetrik<double> DistanceFromNetCenter { get; }
+
+        ChartPair<int, double>[] DistanceFromNetCenterChart { get; }
+
         string ToString();
     }
 }

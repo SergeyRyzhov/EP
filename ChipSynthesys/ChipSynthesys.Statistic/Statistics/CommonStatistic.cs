@@ -15,11 +15,9 @@ namespace ChipSynthesys.Statistic.Statistics
             statisticResult.ComponentsAmount = design.components.Length;
             statisticResult.NetsAmount = design.nets.Length;
             statisticResult.PlacedAmount = new Result<int>(design.components.Count(c => global.placed[c]));
-            statisticResult.ManhattanMetrik = new Result<double>(CriterionHelper.ComputeMetrik(design, global));
-            statisticResult.InterserctionsAmount = new Result<int>(CriterionHelper.CountOfCrossings(design, global));
-            statisticResult.AreaOfInterserctions = new Result<double>(CriterionHelper.AreaOfCrossing(design, global));
-            //statisticResult.Interserctions = new Result<Interserction[]>();
-            //            sr
+            statisticResult.ManhattanMetric = new Result<double>(CriterionHelper.ComputeMetrik(design, global));
+            statisticResult.IntersectionsAmount = new Result<int>(CriterionHelper.CountOfCrossings(design, global));
+            statisticResult.AreaOfIntersections = new Result<double>(CriterionHelper.AreaOfCrossing(design, global));
 
             return statisticResult;
         }
@@ -37,19 +35,19 @@ namespace ChipSynthesys.Statistic.Statistics
                 statisticResult.PlacedAmount.After = design.components.Count(c => detail.placed[c]);
             }
 
-            if (statisticResult.ManhattanMetrik != null)
+            if (statisticResult.ManhattanMetric != null)
             {
-                statisticResult.ManhattanMetrik.After = CriterionHelper.ComputeMetrik(design, detail);
+                statisticResult.ManhattanMetric.After = CriterionHelper.ComputeMetrik(design, detail);
             }
 
-            if (statisticResult.InterserctionsAmount != null)
+            if (statisticResult.IntersectionsAmount != null)
             {
-                statisticResult.InterserctionsAmount.After = CriterionHelper.CountOfCrossings(design, detail);
+                statisticResult.IntersectionsAmount.After = CriterionHelper.CountOfCrossings(design, detail);
             }
 
-            if (statisticResult.AreaOfInterserctions != null)
+            if (statisticResult.AreaOfIntersections != null)
             {
-                statisticResult.AreaOfInterserctions.After = CriterionHelper.AreaOfCrossing(design, detail);
+                statisticResult.AreaOfIntersections.After = CriterionHelper.AreaOfCrossing(design, detail);
             }
 
             statisticResult.Distance = new ComponentsMetrik<double>();
@@ -71,7 +69,7 @@ namespace ChipSynthesys.Statistic.Statistics
             }
 
 
-            statisticResult.SquareDistance =
+            statisticResult.DistanceChart =
                 squires.Distinct()
                     .OrderBy(s => -s)
                     .Where(s => s > 0)
