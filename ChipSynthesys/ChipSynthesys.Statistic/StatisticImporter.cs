@@ -74,7 +74,7 @@ namespace ChipSynthesys.Statistic
             }
 
             table.Rows.Add(result.DistanceChart.Select(d => d.Abscissa).Cast<object>().ToArray());
-            table.Rows.Add(result.DistanceChart.Select(d => (int)d.Ordinate).Cast<object>().ToArray());
+            table.Rows.Add(result.DistanceChart.Select(d => d.Ordinate).Cast<object>().ToArray());
             return table;
         }
     }
