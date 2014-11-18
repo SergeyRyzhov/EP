@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.IO;
 using System.Linq;
 using ChipSynthesys.Statistic.Interfaces;
@@ -11,6 +12,25 @@ namespace ChipSynthesys.Statistic
     {
         public static void SaveToFile(string fileName, IStatisticResult result)
         {
+            string oldSuffix = ".old";
+            int oldCounter = 0;
+            if (File.Exists(fileName))
+            {
+                var oldFile = fileName;
+                while (File.Exists(oldFile))
+                {
+                    var lastOldIndex = oldFile.LastIndexOf(".old", StringComparison.InvariantCultureIgnoreCase);
+                    var lastDotIndex = oldFile.LastIndexOf('.');
+                    lastDotIndex = lastDotIndex < 0 ? oldFile.Length - 1 : lastDotIndex;
+                    lastOldIndex = lastOldIndex < 0 ? lastDotIndex : lastOldIndex;
+
+                    oldFile = oldFile.Substring(0, lastOldIndex) + oldSuffix + oldFile.Substring(lastDotIndex);
+                    //string.Concat(fileName, oldSuffix);
+                    oldSuffix = string.Format(".old{0}", ++oldCounter);
+                }
+                File.Move(fileName, oldFile);
+            }
+
             using (var package = new ExcelPackage(new FileInfo(fileName)))
             {
                 var w = package.Workbook;
@@ -23,6 +43,7 @@ namespace ChipSynthesys.Statistic
 
                 var chartData = GetChartData(result);
                 var r = charts.Cells.LoadFromDataTable(chartData, false);
+                
                 r.Style.Numberformat.Format = "#,##0.0";
                 var index = r.End.Address.IndexOfAny(new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
                 string letter = r.End.Address.Substring(0, index);
