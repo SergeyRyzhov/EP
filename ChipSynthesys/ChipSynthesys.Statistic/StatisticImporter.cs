@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using ChipSynthesys.Statistic.Interfaces;
 using OfficeOpenXml;
+using OfficeOpenXml.Drawing.Chart;
 
 namespace ChipSynthesys.Statistic
 {
@@ -21,14 +22,13 @@ namespace ChipSynthesys.Statistic
                 var charts = w.Worksheets.Add("Charts");
 
                 var chartData = GetChartData(result);
-                charts.Cells.LoadFromDataTable(chartData, false);
+                var r = charts.Cells.LoadFromDataTable(chartData, false);
+                r.Style.Numberformat.Format = "#,##0.0";
+                var index = r.End.Address.IndexOfAny(new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
+                string letter = r.End.Address.Substring(0, index);
 
-                OfficeOpenXml.Drawing.Chart.ExcelChart ec = charts.Drawings.AddChart(
-                    "Расстояния",
-                    OfficeOpenXml.Drawing.Chart.eChartType.ColumnClustered);
-                ec.Series.Add(
-                    new ExcelNamedRange("ox", charts, charts, "A2:W2"),
-                    new ExcelNamedRange("oy", charts, charts, "A1:W1"));
+                ExcelChart ec = charts.Drawings.AddChart("Расстояния", eChartType.ColumnClustered);
+                ec.Series.Add(string.Format("A2:{0}2", letter), string.Format("A1:{0}1", letter));
 
                 ec.SetPosition(2, 0, 2, 0);
                 ec.SetSize(500, 200);
