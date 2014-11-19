@@ -75,7 +75,7 @@ namespace DetailPlacer.Algorithm
                 }
 
                 if (enumerator > 1)
-                {
+                {   
                     Component bestComp = GetComponentWithMaxSquare(compInCell[indCell], result);
                     if (bestComp != null)
                     {
@@ -88,13 +88,16 @@ namespace DetailPlacer.Algorithm
                         result.placed[bestComp] = true;
 
                         ValueCell[indCell] = -1;
-                        compInCell[indCell].Clear();
+                        //compInCell[indCell].Clear();
 
                         fixcomp++;
 
                     }
                     else
-                    { ValueCell[indCell] = -1; compInCell[indCell].Clear(); }
+                    { 
+                        ValueCell[indCell] = -1;
+                       // compInCell[indCell].Clear(); 
+                    }
 
                 }
             } while (fixcomp != design.components.Count() && enumerator != 0);
