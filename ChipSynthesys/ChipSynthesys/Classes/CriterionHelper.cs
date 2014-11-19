@@ -51,11 +51,15 @@ namespace ChipSynthesys.Common.Classes
 
             foreach (var n in design.nets)
             {
-                var first = n.items.Where(cc => placement.placed[cc]).Select((com, i) => new { Com = com, I = i }).FirstOrDefault();
+                var first =
+                    n.items//.Where(cc => placement.placed[cc])
+                        .Select((com, i) => new { Com = com, I = i })
+                        .FirstOrDefault();
                 if (first == null)
                 {
                     continue;
                 }
+
                 var c = first.Com;
 
                 var l = placement.x[c];
@@ -65,10 +69,10 @@ namespace ChipSynthesys.Common.Classes
                 for (var i = first.I + 1; i < n.items.Length; i++)
                 {
                     c = n.items[i];
-                    if (!placement.placed[c])
+                    /*if (!placement.placed[c])
                     {
                         continue;
-                    }
+                    }*/
 
                     l = Math.Min(l, placement.x[c]);
                     r = Math.Max(r, placement.x[c] + c.sizex);

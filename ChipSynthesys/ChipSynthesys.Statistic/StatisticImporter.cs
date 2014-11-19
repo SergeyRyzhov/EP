@@ -10,7 +10,11 @@ namespace ChipSynthesys.Statistic
 {
     public class StatisticImporter
     {
-        public static void SaveToFile(string fileName, IStatisticResult result)
+        public static void SaveToFile(
+            string fileName,
+            IStatisticResult result,
+            string taskName = default(string),
+            string methodName = default(string))
         {
             string oldSuffix = ".old";
             int oldCounter = 0;
@@ -28,6 +32,7 @@ namespace ChipSynthesys.Statistic
                     //string.Concat(fileName, oldSuffix);
                     oldSuffix = string.Format(".old{0}", ++oldCounter);
                 }
+
                 File.Move(fileName, oldFile);
             }
 
@@ -35,7 +40,7 @@ namespace ChipSynthesys.Statistic
             {
                 var w = package.Workbook;
                 var common = w.Worksheets.Add("Common");
-                var commonPage = GetCommonPage("", result);
+                var commonPage = GetCommonPage(taskName, methodName, result);
 
                 common.Cells.LoadFromDataTable(commonPage, false);
 
@@ -43,7 +48,7 @@ namespace ChipSynthesys.Statistic
 
                 var chartData = GetChartData(result);
                 var r = charts.Cells.LoadFromDataTable(chartData, false);
-                
+
                 r.Style.Numberformat.Format = "#,##0.0";
                 var index = r.End.Address.IndexOfAny(new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
                 string letter = r.End.Address.Substring(0, index);
@@ -58,7 +63,7 @@ namespace ChipSynthesys.Statistic
             }
         }
 
-        private static DataTable GetCommonPage(string taskName, IStatisticResult result)
+        private static DataTable GetCommonPage(string taskName, string methodName, IStatisticResult result)
         {
             var table = new DataTable("common");
 
@@ -67,6 +72,7 @@ namespace ChipSynthesys.Statistic
             table.Columns.Add("После");
 
             table.Rows.Add("Задача", taskName);
+            table.Rows.Add("Метод", methodName);
 
             table.Rows.Add("Количество компонент", result.ComponentsAmount);
             table.Rows.Add("Количество цепей", result.NetsAmount);

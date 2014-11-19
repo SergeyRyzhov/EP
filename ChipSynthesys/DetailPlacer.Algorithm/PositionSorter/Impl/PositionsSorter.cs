@@ -10,10 +10,10 @@ namespace DetailPlacer.Algorithm.PositionSorter.Impl
     {
         public override string ToString()
         {
-            return "Сортировка пузырьком всех позиций";
+            return "Bubble sort with" + m_positionComparer.ToString();
         }
 
-        private readonly IPositionComparer m_positionComparer;
+        internal readonly IPositionComparer m_positionComparer;
 
         public PositionsSorter(IPositionComparer positionComparer)
         {

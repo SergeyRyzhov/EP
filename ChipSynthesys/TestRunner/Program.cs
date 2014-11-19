@@ -1,13 +1,20 @@
-﻿using ChipSynthesys.Common.Classes;
+﻿using System.Globalization;
+
+using ChipSynthesys.Common.Classes;
 using ChipSynthesys.Common.Generators;
 using ChipSynthesys.Draw;
 using ChipSynthesys.Statistic;
 using ChipSynthesys.Statistic.Statistics;
 using DetailPlacer.Algorithm;
 using DetailPlacer.Algorithm.CompontsOrderer;
+using DetailPlacer.Algorithm.CompontsOrderer.Impl;
 using DetailPlacer.Algorithm.PositionSearcher;
+using DetailPlacer.Algorithm.PositionSearcher.Impl;
 using DetailPlacer.Algorithm.PositionSorter;
+using DetailPlacer.Algorithm.PositionSorter.Impl;
 using DetailPlacer.Algorithm.PositionSorter.PositionComparer;
+using DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl;
+
 using PlaceModel;
 using System;
 using System.Collections.Generic;
@@ -143,16 +150,13 @@ namespace TestRunner
             var masType = new Type[] { };
 
             //пока не используются
-            //if (false)
-            //{
-            //    RunCommonTests(design, statistic, resultDirectory, approximate, sizes, bitmaps, testCount);
-            //}
-
+            RunCommonTests(design, statistic, resultDirectory, approximate, sizes, bitmaps, ref testCount);
+            
             Type[] otherPlacers =
                 {
                     typeof(CrossReductPlacer),
                     typeof(CrossComponentVariant2),
-                    typeof(CrossCompPlacer),
+                    //typeof(CrossCompPlacer),
                     typeof(ForceDirectedDetailPlacer),
                 };
 
@@ -189,7 +193,7 @@ namespace TestRunner
                         statisticResult = statistic.Update(statisticResult, d, approximate[i], placeRes);
 
                         string fileName = Path.Combine(resultDirectory, string.Format("TestResult {0}.xlsx", testCount));
-                        StatisticImporter.SaveToFile(fileName, statisticResult);
+                        StatisticImporter.SaveToFile(fileName, statisticResult, i.ToString(CultureInfo.InvariantCulture), placer.ToString());
 
                         string imageAfter = Path.Combine(resultDirectory, string.Format("TestResult {0}.png", testCount));
                         DrawerHelper.SimpleDraw(
@@ -213,7 +217,7 @@ namespace TestRunner
                         t.Save(Path.Combine(resultDirectory, string.Format("TestData {0}.bin", testCount)));
 
                         st.Stop();
-                        Console.WriteLine(@"Время выполнения {0} - {1}", placer, st.Elapsed);
+                        Console.WriteLine(@"Time for {0} - {1}", placer, st.Elapsed);
                     }
                 }
             }
@@ -328,7 +332,7 @@ namespace TestRunner
             PlacementGlobal[] approximate,
             Size[] sizes,
             Bitmap[] bitmaps,
-            int testCount)
+            ref int testCount)
         {
             var masType = new Type[0];
             Type typeToReflect = typeof(DetailPlacerBase);
@@ -391,7 +395,7 @@ namespace TestRunner
                                                 approximate,
                                                 sizes,
                                                 bitmaps,
-                                                ++testCount,
+                                                ref testCount,
                                                 compOrder,
                                                 posSearcher,
                                                 posSorter,
@@ -413,7 +417,7 @@ namespace TestRunner
             PlacementGlobal[] approximate,
             Size[] sizes,
             Bitmap[] bitmaps,
-            int testCount,
+            ref int testCount,
             ICompontsOrderer compOrder,
             IPositionSearcher posSearcher,
             IPositionsSorter posSorter,
@@ -421,28 +425,51 @@ namespace TestRunner
         {
             var placer = new DetailPlacerImpl(compOrder, posSearcher, posSorter);
 
-            SaveTestInfo(resultDirectory, testCount, compOrder, posSearcher, posComparer, posSorter);
-
             for (int i = 0; i < design.Length; i++)
             {
-                Design d = design[i];
-                PlacementDetail placeRes;
-
                 var st = new Stopwatch();
                 st.Start();
+                Design d = design[i];
+                PlacementDetail placeRes;
+                testCount ++;
+                string imageBefore = Path.Combine(resultDirectory, string.Format("TestData {0}.png", testCount));
+                DrawerHelper.SimpleDraw(
+                    design[i],
+                    approximate[i],
+                    sizes[i],
+                    bitmaps[i], imageBefore);
 
                 placer.Place(d, approximate[i], out placeRes);
-                st.Stop();
-                Console.WriteLine(@"Время выполнения {0} - {1}", placer, st.Elapsed);
-                foreach (Component c in d.components)
+
+                var statisticResult = statistic.Compute(d, approximate[i], placeRes);
+                statisticResult = statistic.Update(statisticResult, d, approximate[i], placeRes);
+
+                string fileName = Path.Combine(resultDirectory, string.Format("TestResult {0}.xlsx", testCount));
+                StatisticImporter.SaveToFile(fileName, statisticResult, i.ToString(CultureInfo.InvariantCulture), placer.ToString());
+
+                string imageAfter = Path.Combine(resultDirectory, string.Format("TestResult {0}.png", testCount));
+                DrawerHelper.SimpleDraw(
+                    design[i],
+                    placeRes,
+                    sizes[i],
+                    bitmaps[i], imageAfter);
+
+
+                var a = new PlacementGlobal(d);
+
+                foreach (var c in d.components)
                 {
-                    if (!placeRes.placed[c])
-                    {
-                        placeRes.x[c] = (int)approximate[i].x[c];
-                        placeRes.y[c] = (int)approximate[i].y[c];
-                        placeRes.placed[c] = true;
-                    }
+                    a.placed[c] = placeRes.placed[c];
+                    a.x[c] = placeRes.x[c];
+                    a.y[c] = placeRes.y[c];
+
                 }
+                var t = new ChipTask(d, a) { Height = 50/*sizes[i].Height*/, Width = 50/*sizes[i].Width*/ };
+
+                t.Save(Path.Combine(resultDirectory, string.Format("TestData {0}.bin", testCount)));
+
+                st.Stop();
+                Console.WriteLine(@"Time for {0} - {1}", placer, st.Elapsed);
             }
         }
 
