@@ -150,10 +150,11 @@ namespace TestRunner
             var masType = new Type[] { };
 
             //пока не используются
-            RunCommonTests(design, statistic, resultDirectory, approximate, sizes, bitmaps, ref testCount);
+            //RunCommonTests(design, statistic, resultDirectory, approximate, sizes, bitmaps, ref testCount);
             
             Type[] otherPlacers =
                 {
+                    typeof(CombinePlacer),
                     typeof(CrossReductPlacer),
                     typeof(CrossComponentVariant2),
                     //typeof(CrossCompPlacer),

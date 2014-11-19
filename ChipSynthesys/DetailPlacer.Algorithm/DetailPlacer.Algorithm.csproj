@@ -35,7 +35,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="APlacer.cs" />
+    <Compile Include="CombinePlacer.cs" />
     <Compile Include="CompontsOrderer\Impl\CompontsOrderer.cs" />
     <Compile Include="CompontsOrderer\Impl\NetAreaCompontsOrderer.cs" />
     <Compile Include="CriterionPositionSearcher\CriterionPositionSearcher.cs" />
