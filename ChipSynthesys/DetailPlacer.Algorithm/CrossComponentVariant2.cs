@@ -89,7 +89,7 @@ namespace DetailPlacer.Algorithm
 
                         ValueCell[indCell] = -1;
                         //compInCell[indCell].Clear();
-
+                        //привет
                         fixcomp++;
 
                     }
