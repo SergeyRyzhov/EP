@@ -154,11 +154,11 @@ namespace TestRunner
             
             Type[] otherPlacers =
                 {
-                    typeof(CombinePlacer),
-                    typeof(CrossReductPlacer),
+                    //typeof(CombinePlacer),
+                    //typeof(CrossReductPlacer),
                     typeof(CrossComponentVariant2),
                     //typeof(CrossCompPlacer),
-                    typeof(ForceDirectedDetailPlacer),
+                    //typeof(ForceDirectedDetailPlacer),
                 };
 
             foreach (Type otherPlacerType in otherPlacers)
