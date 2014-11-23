@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using ChipSynthesys.Common.Classes;
 using PlaceModel;
 using Point = DetailPlacer.Algorithm.CriterionPositionSearcher.Point;
@@ -13,27 +17,32 @@ namespace DetailPlacer.Algorithm
 
         public void Place(Design design, PlacementGlobal approximate, out PlacementDetail result)
         {
-            const int forceDepth = 3;
+            const int forceDepth = 1;
+            //const int forceDepth = 100;
             m_forceDepth = forceDepth; //todo parameter
 
-            result = new PlacementDetail(design);
+            //result = new PlacementDetail(design);
+
+            // comment for sequence version
+            PlacementDetail localResultDetail = new PlacementDetail(design);
 
             var cm = int.MaxValue;
             var ca = int.MaxValue;
             var workPlacement = new PlacementDetail(design);
 
-            foreach (Component c in design.components)
-            {
+
+            Parallel.ForEach(design.components, c => {
                 workPlacement.x[c] = (int)Math.Round(approximate.x[c]);
                 workPlacement.y[c] = (int)Math.Round(approximate.y[c]);
                 workPlacement.placed[c] = true;
 
-                result.x[c] = workPlacement.x[c];
-                result.y[c] = workPlacement.y[c];
-                result.placed[c] = workPlacement.placed[c];
-            }
+                localResultDetail.x[c] = workPlacement.x[c];
+                localResultDetail.y[c] = workPlacement.y[c];
+                localResultDetail.placed[c] = workPlacement.placed[c];
+            });
 
-            int maxIteration = design.components.Length * 3; //todo parameter
+            //int maxIteration = design.components.Length * 3; //todo parameter
+            int maxIteration = 100;
             //DrawerHelper.SimpleDraw(design, workPlacement, new Size(600, 600), new Bitmap(600, 600), string.Format("FD {0:##}.png", maxIteration));
             while (Iteration(design, workPlacement) && maxIteration > 0)
             {
@@ -41,17 +50,31 @@ namespace DetailPlacer.Algorithm
                 //DrawerHelper.SimpleDraw(design, workPlacement, new Size(600, 600), new Bitmap(600, 600), string.Format("FD {0:##}.png", maxIteration));
                 var m = CriterionHelper.ComputeMetrik(design, workPlacement);
                 var a = CriterionHelper.AreaOfCrossing(design, workPlacement);
+
+
                 if (m < cm || a < ca)
                 {
                     m_forceDepth = forceDepth;
                     cm = m;
                     ca = a;
+
+					
+                    Parallel.ForEach(design.components, c =>
+                    {
+                        localResultDetail.x[c] = workPlacement.x[c];
+                        localResultDetail.y[c] = workPlacement.y[c];
+                        localResultDetail.placed[c] = workPlacement.placed[c];
+                    });
+					
+
+                    /*
                     foreach (Component c in design.components)
                     {
                         result.x[c] = workPlacement.x[c];
                         result.y[c] = workPlacement.y[c];
                         result.placed[c] = workPlacement.placed[c];
                     }
+                    */   
                 }
                 else
                 {
@@ -59,14 +82,17 @@ namespace DetailPlacer.Algorithm
                         break;
                     m_forceDepth++;
                 }
-
             }
+            // comment for sequence version
+            result = localResultDetail;
         }
 
         public bool Iteration(Design design, PlacementDetail result)
         {
             var noChanges = true;
-            foreach (Component c in design.components)
+            CriterionHelper.MarkPosition(design, result, design.components[0], 0, 0);
+            
+            Parallel.ForEach(design.components, c =>
             {
                 int x = result.x[c];
                 int y = result.y[c];
@@ -74,27 +100,41 @@ namespace DetailPlacer.Algorithm
                 Point[] directions = GenerateForces(c, x, y).ToArray();
                 var dd = new SortedDictionary<DirectionInfo, int>(new DirectionComparer());
 
+
+                bool infoInitialized = false;
                 for (int i = 0; i < directions.Length; i++)
                 {
                     int cx = directions[i].X;
                     int cy = directions[i].Y;
 
-                    if (cx < 0 || cy < 0 || cx > design.field.cellsx - c.sizex || cy > design.field.cellsy - c.sizey)
+                    if (cx < design.field.beginx || cy < design.field.beginy || cx > design.field.cellsx - c.sizex || cy > design.field.cellsy - c.sizey)
                         continue;
 
-                    var directionInfo = new DirectionInfo(i)
-                    {
-                        Mark = CriterionHelper.MarkPosition(design, result, c, cx, cy),
-                        Area = CriterionHelper.AreaOfCrossing(design, result, c, cx, cy)
-                    };
+
+                    DirectionInfo directionInfo = null;
+                
+                        directionInfo = new DirectionInfo(i)
+                        {
+                            Mark = CriterionHelper.MarkPosition(design, result, c, cx, cy),
+                            Area = CriterionHelper.AreaOfCrossing(design, result, c, cx, cy)
+                        };
+
+                   
+
                     dd.Add(directionInfo, i);
+                    infoInitialized = true;
 
                 }
-                var indx = dd.Values.First();
-                noChanges = noChanges && x == directions[indx].X && y == directions[indx].Y;
-                result.x[c] = directions[indx].X;
-                result.y[c] = directions[indx].Y;
-            }
+
+                if (infoInitialized)
+                {
+                    var indx = dd.Values.First();
+                    noChanges = noChanges && x == directions[indx].X && y == directions[indx].Y;
+                    result.x[c] = directions[indx].X;
+                    result.y[c] = directions[indx].Y;
+                }
+            });
+
             return !noChanges;
         }
 
