@@ -6,7 +6,7 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
     {
         public override string ToString()
         {
-            return "Жадный выбор позиций со строго меньшими или большим координатами";
+            return "Greedy";
         }
 
         public bool Better(Design design, PlacementGlobal approximate, PlacementDetail placement, Component current, int firstX, int firstY, int secondX, int secondY)

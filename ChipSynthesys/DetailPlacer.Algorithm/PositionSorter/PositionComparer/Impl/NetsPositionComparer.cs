@@ -7,7 +7,7 @@ namespace DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl
     {
         public override string ToString()
         {
-            return "Частичный критерий";
+            return "Net comparer";
         }
 
         public bool Better(Design design, PlacementGlobal approximate, PlacementDetail placement, Component current, int firstX, int firstY, int secondX,

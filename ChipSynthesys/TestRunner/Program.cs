@@ -1,14 +1,20 @@
-﻿using ChipSynthesys.Common.Classes;
+﻿using System.Globalization;
+
+using ChipSynthesys.Common.Classes;
 using ChipSynthesys.Common.Generators;
 using ChipSynthesys.Draw;
 using ChipSynthesys.Statistic;
-using ChipSynthesys.Statistic.Interfaces;
 using ChipSynthesys.Statistic.Statistics;
 using DetailPlacer.Algorithm;
 using DetailPlacer.Algorithm.CompontsOrderer;
+using DetailPlacer.Algorithm.CompontsOrderer.Impl;
 using DetailPlacer.Algorithm.PositionSearcher;
+using DetailPlacer.Algorithm.PositionSearcher.Impl;
 using DetailPlacer.Algorithm.PositionSorter;
+using DetailPlacer.Algorithm.PositionSorter.Impl;
 using DetailPlacer.Algorithm.PositionSorter.PositionComparer;
+using DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl;
+
 using PlaceModel;
 using System;
 using System.Collections.Generic;
@@ -144,28 +150,14 @@ namespace TestRunner
             var masType = new Type[] { };
 
             //пока не используются
-            //if (false)
-            //{
-            //    RunCommonTests(design, statistic, resultDirectory, approximate, sizes, bitmaps, testCount);
-            //}
-
-            /*for (int i = 0; i < design.Length; i++)
-            {
-                IStatisticResult<double> designStatistics;
-                statistic.DesignStatistic(design[i], out designStatistics);
-                SaveDesignsInfo(resultDirectory, i + 1, designStatistics);
-            }
-
-            for (int i = 0; i < design.Length; i++)
-            {
-                SaveTestResults(resultDirectory, i + 1, 0, design[i], approximate[i], sizes[i], bitmaps[i]);
-            }*/
-
+            //RunCommonTests(design, statistic, resultDirectory, approximate, sizes, bitmaps, ref testCount);
+            
             Type[] otherPlacers =
                 {
+                    typeof(CombinePlacer),
                     typeof(CrossReductPlacer),
                     typeof(CrossComponentVariant2),
-                    typeof(CrossCompPlacer),
+                    //typeof(CrossCompPlacer),
                     typeof(ForceDirectedDetailPlacer),
                 };
 
@@ -188,7 +180,13 @@ namespace TestRunner
                         PlacementDetail placeRes;
 
                         testCount++;
-                        SaveTestInfo(resultDirectory, testCount, placer);
+
+                        string imageBefore = Path.Combine(resultDirectory, string.Format("TestData {0}.png", testCount));
+                        DrawerHelper.SimpleDraw(
+                            design[i],
+                            approximate[i],
+                            sizes[i],
+                            bitmaps[i], imageBefore);
 
                         placer.Place(d, approximate[i], out placeRes);
 
@@ -196,22 +194,31 @@ namespace TestRunner
                         statisticResult = statistic.Update(statisticResult, d, approximate[i], placeRes);
 
                         string fileName = Path.Combine(resultDirectory, string.Format("TestResult {0}.xlsx", testCount));
-                        StatisticImporter.SaveToFile(fileName, statisticResult);
+                        StatisticImporter.SaveToFile(fileName, statisticResult, i.ToString(CultureInfo.InvariantCulture), placer.ToString());
 
-
-                        //IStatisticResult<double> placemetStatistics;
-                        //statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
-                        /*SaveTestResults(
-                            resultDirectory,
-                            i + 1,
-                            testCount,
-                            d,
+                        string imageAfter = Path.Combine(resultDirectory, string.Format("TestResult {0}.png", testCount));
+                        DrawerHelper.SimpleDraw(
+                            design[i],
                             placeRes,
-                            placemetStatistics,
                             sizes[i],
-                            bitmaps[i]);*/
+                            bitmaps[i], imageAfter);
+
+
+                        var a = new PlacementGlobal(d);
+
+                        foreach (var c in d.components)
+                        {
+                            a.placed[c] = placeRes.placed[c];
+                            a.x[c] = placeRes.x[c];
+                            a.y[c] = placeRes.y[c];
+
+                        }
+                        var t = new ChipTask(d, a) { Height = 50/*sizes[i].Height*/, Width = 50/*sizes[i].Width*/ };
+
+                        t.Save(Path.Combine(resultDirectory, string.Format("TestData {0}.bin", testCount)));
+
                         st.Stop();
-                        Console.WriteLine(@"Время выполнения {0} - {1}", placer, st.Elapsed);
+                        Console.WriteLine(@"Time for {0} - {1}", placer, st.Elapsed);
                     }
                 }
             }
@@ -326,7 +333,7 @@ namespace TestRunner
             PlacementGlobal[] approximate,
             Size[] sizes,
             Bitmap[] bitmaps,
-            int testCount)
+            ref int testCount)
         {
             var masType = new Type[0];
             Type typeToReflect = typeof(DetailPlacerBase);
@@ -353,61 +360,47 @@ namespace TestRunner
                     typeof(IPositionsSorter).IsAssignableFrom(t) && (!t.IsInterface) && (!t.IsAbstract) && t.IsPublic)
                     .ToArray();
 
-            /*for (int i = 0; i < design.Length; i++)
+            foreach (Type comOrderType in componentsOrders)
             {
-                IStatisticResult<double> designStatistics;
-                statistic.DesignStatistic(design[i], out designStatistics);
-                SaveDesignsInfo(resultDirectory, i + 1, designStatistics);
-            }
-
-            for (int i = 0; i < design.Length; i++)
-            {
-                SaveTestResults(resultDirectory, i + 1, 0, design[i], approximate[i], sizes[i], bitmaps[i]);
-            }*/
-
-            {
-                foreach (Type comOrderType in componentsOrders)
+                ConstructorInfo comOrder = comOrderType.GetConstructor(masType);
+                if (comOrder != null)
                 {
-                    ConstructorInfo comOrder = comOrderType.GetConstructor(masType);
-                    if (comOrder != null)
+                    var compOrder = comOrder.Invoke(null) as ICompontsOrderer;
+
+                    foreach (Type posSerchType in positionSearchers)
                     {
-                        var compOrder = comOrder.Invoke(null) as ICompontsOrderer;
-
-                        foreach (Type posSerchType in positionSearchers)
+                        ConstructorInfo posSerch = posSerchType.GetConstructor(masType);
+                        if (posSerch != null)
                         {
-                            ConstructorInfo posSerch = posSerchType.GetConstructor(masType);
-                            if (posSerch != null)
+                            var posSearcher = posSerch.Invoke(null) as IPositionSearcher;
+
+                            foreach (Type posSortType in positionSorters)
                             {
-                                var posSearcher = posSerch.Invoke(null) as IPositionSearcher;
-
-                                foreach (Type posSortType in positionSorters)
+                                foreach (Type posCompType in positionComparers)
                                 {
-                                    foreach (Type posCompType in positionComparers)
+                                    ConstructorInfo posComp = posCompType.GetConstructor(masType);
+                                    if (posComp != null)
                                     {
-                                        ConstructorInfo posComp = posCompType.GetConstructor(masType);
-                                        if (posComp != null)
+                                        var posComparer = posComp.Invoke(null) as IPositionComparer;
+                                        ConstructorInfo posSort =
+                                            posSortType.GetConstructor(new[] { typeof(IPositionComparer) });
+                                        if (posSort != null)
                                         {
-                                            var posComparer = posComp.Invoke(null) as IPositionComparer;
-                                            ConstructorInfo posSort =
-                                                posSortType.GetConstructor(new[] { typeof(IPositionComparer) });
-                                            if (posSort != null)
-                                            {
-                                                var posSorter =
-                                                    posSort.Invoke(new object[] { posComparer }) as IPositionsSorter;
+                                            var posSorter =
+                                                posSort.Invoke(new object[] { posComparer }) as IPositionsSorter;
 
-                                                TestPlacer(
-                                                    design,
-                                                    statistic,
-                                                    resultDirectory,
-                                                    approximate,
-                                                    sizes,
-                                                    bitmaps,
-                                                    ++testCount,
-                                                    compOrder,
-                                                    posSearcher,
-                                                    posSorter,
-                                                    posComparer);
-                                            }
+                                            TestPlacer(
+                                                design,
+                                                statistic,
+                                                resultDirectory,
+                                                approximate,
+                                                sizes,
+                                                bitmaps,
+                                                ref testCount,
+                                                compOrder,
+                                                posSearcher,
+                                                posSorter,
+                                                posComparer);
                                         }
                                     }
                                 }
@@ -425,7 +418,7 @@ namespace TestRunner
             PlacementGlobal[] approximate,
             Size[] sizes,
             Bitmap[] bitmaps,
-            int testCount,
+            ref int testCount,
             ICompontsOrderer compOrder,
             IPositionSearcher posSearcher,
             IPositionsSorter posSorter,
@@ -433,40 +426,53 @@ namespace TestRunner
         {
             var placer = new DetailPlacerImpl(compOrder, posSearcher, posSorter);
 
-            SaveTestInfo(resultDirectory, testCount, compOrder, posSearcher, posComparer, posSorter);
-
             for (int i = 0; i < design.Length; i++)
             {
-                Design d = design[i];
-                PlacementDetail placeRes;
-
                 var st = new Stopwatch();
                 st.Start();
+                Design d = design[i];
+                PlacementDetail placeRes;
+                testCount ++;
+                string imageBefore = Path.Combine(resultDirectory, string.Format("TestData {0}.png", testCount));
+                DrawerHelper.SimpleDraw(
+                    design[i],
+                    approximate[i],
+                    sizes[i],
+                    bitmaps[i], imageBefore);
 
                 placer.Place(d, approximate[i], out placeRes);
-                st.Stop();
-                Console.WriteLine(@"Время выполнения {0} - {1}", placer, st.Elapsed);
-                foreach (Component c in d.components)
-                {
-                    if (!placeRes.placed[c])
-                    {
-                        placeRes.x[c] = (int)approximate[i].x[c];
-                        placeRes.y[c] = (int)approximate[i].y[c];
-                        placeRes.placed[c] = true;
-                    }
-                }
 
-                /*IStatisticResult<double> placemetStatistics;
-                statistic.PlacementStatistic(d, placeRes, out placemetStatistics);
-                SaveTestResults(resultDirectory, i + 1, testCount, d, placeRes, placemetStatistics, sizes[i], bitmaps[i]);*/
+                var statisticResult = statistic.Compute(d, approximate[i], placeRes);
+                statisticResult = statistic.Update(statisticResult, d, approximate[i], placeRes);
+
+                string fileName = Path.Combine(resultDirectory, string.Format("TestResult {0}.xlsx", testCount));
+                StatisticImporter.SaveToFile(fileName, statisticResult, i.ToString(CultureInfo.InvariantCulture), placer.ToString());
+
+                string imageAfter = Path.Combine(resultDirectory, string.Format("TestResult {0}.png", testCount));
+                DrawerHelper.SimpleDraw(
+                    design[i],
+                    placeRes,
+                    sizes[i],
+                    bitmaps[i], imageAfter);
+
+
+                var a = new PlacementGlobal(d);
+
+                foreach (var c in d.components)
+                {
+                    a.placed[c] = placeRes.placed[c];
+                    a.x[c] = placeRes.x[c];
+                    a.y[c] = placeRes.y[c];
+
+                }
+                var t = new ChipTask(d, a) { Height = 50/*sizes[i].Height*/, Width = 50/*sizes[i].Width*/ };
+
+                t.Save(Path.Combine(resultDirectory, string.Format("TestData {0}.bin", testCount)));
+
+                st.Stop();
+                Console.WriteLine(@"Time for {0} - {1}", placer, st.Elapsed);
             }
         }
-
-        /*private static void SaveDesignsInfo(string path, int designNum, IStatisticResult<double> designStatistic)
-        {
-            var s = new DesignStatisticModel(designStatistic);
-            s.Save(string.Format("{0}Design {1} Statistics.xml", path, designNum));
-        }*/
 
         private static void SaveTestInfo(
             string path,
@@ -485,62 +491,5 @@ namespace TestRunner
             var s = new HeuristicsModel(placer);
             s.Save(string.Format("{0}Heuristics {1}.xml", path, testNum));
         }
-
-        /*private static void SaveTestResults(
-            string path,
-            int designNum,
-            int testNum,
-            Design design,
-            PlacementDetail resultPlacement,
-            IStatisticResult<double> placementStatistic,
-            Size size,
-            Bitmap bitmap)
-        {
-            DrawerHelper.SimpleDraw(
-                design,
-                resultPlacement,
-                size,
-                bitmap,
-                string.Format("{0}Result for design {2} on exp {1}.png", path, testNum, designNum));
-
-            var s = new PlacementStatisticModel(placementStatistic);
-            s.Save(string.Format("{0}PlacementStatistics on design {2} in {1} test.xml", path, testNum, designNum));
-
-            var global = new PlacementGlobal(design);
-            foreach (Component c in design.components)
-            {
-                global.x[c] = resultPlacement.x[c];
-                global.y[c] = resultPlacement.y[c];
-                global.placed[c] = resultPlacement.placed[c];
-            }
-
-            var t = new ChipTask(design, global) { Height = 30, Width = 30 };
-
-            t.Save(string.Format("{0}PlacementResult on design {2} in {1} test.bin", path, testNum, designNum));
-        }*/
-
-        /*private static void SaveTestResults(
-            string path,
-            int designNum,
-            int testNum,
-            Design design,
-            PlacementGlobal resultPlacement,
-            Size size,
-            Bitmap bitmap)
-        {
-            DrawerHelper.SimpleDraw(
-                design,
-                resultPlacement,
-                size,
-                bitmap,
-                string.Format("{0}Result for design {2} on exp {1}.png", path, testNum, designNum));
-
-            var statistic = new CommonStatistic();
-            IStatisticResult<double> placemetStatistics;
-
-            statistic.PlacementStatistic(design, resultPlacement, out placemetStatistics);
-            var s = new PlacementStatisticModel(placemetStatistics);
-            s.Save(string.Format("{0}PlacementStatistics on design {2} in {1} test.xml", path, testNum, designNum));
-        }*/
     }
 }

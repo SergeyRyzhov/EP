@@ -85,7 +85,7 @@ namespace DetailPlacer.Algorithm.CompontsOrderer.Impl
 
         public override string ToString()
         {
-            return "Частичный критерий";
+            return "Net and area orderer";
         }
 
         public void SortComponents(Design design, PlacementGlobal approximate, PlacementDetail result, Component[] unplacedComponents,

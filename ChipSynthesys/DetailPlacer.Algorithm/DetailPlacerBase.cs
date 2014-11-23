@@ -1,4 +1,6 @@
-﻿using DetailPlacer.Algorithm.CompontsOrderer;
+﻿using System.Text;
+
+using DetailPlacer.Algorithm.CompontsOrderer;
 using DetailPlacer.Algorithm.PositionSearcher;
 using DetailPlacer.Algorithm.PositionSearcher.Impl;
 using DetailPlacer.Algorithm.PositionSorter;
@@ -22,9 +24,11 @@ namespace DetailPlacer.Algorithm
     /// </summary>
     public abstract class DetailPlacerBase : IDetailPlacer
     {
-        private readonly ICompontsOrderer m_compontsOrderer;
-        private readonly IPositionSearcher m_positionSearcher;
-        private readonly IPositionsSorter m_positionsSorter;
+        internal readonly ICompontsOrderer m_compontsOrderer;
+
+        internal readonly IPositionSearcher m_positionSearcher;
+
+        internal readonly IPositionsSorter m_positionsSorter;
 
         protected DetailPlacerBase(ICompontsOrderer compontsOrderer, IPositionSearcher positionSearcher, IPositionsSorter positionsSorter)
         {
@@ -38,10 +42,10 @@ namespace DetailPlacer.Algorithm
             result = new PlacementDetail(design);
             foreach (Component component in design.components)
             {
-//                result.x[component] = (int)approximate.x[component];
-//                result.y[component] = (int)approximate.y[component];
+                                result.x[component] = (int)approximate.x[component];
+                                result.y[component] = (int)approximate.y[component];
             }
-            Mask helper = new Mask(design,result);
+            Mask helper = new Mask(design, result);
             helper.BuildUp();
             var notPalced = new List<Component>();
             Component[] unplacedComponents;
@@ -93,6 +97,7 @@ namespace DetailPlacer.Algorithm
             }
             else
             {
+                helper.PlaceComponent(current, result.x[current], result.y[current]);
                 result.placed[current] = true;
                 placed = false;
             }
@@ -139,13 +144,25 @@ namespace DetailPlacer.Algorithm
     public class DetailPlacerImpl : DetailPlacerBase
     {
         public DetailPlacerImpl()
-            : base(new CompontsOrderer.Impl.CompontsOrderer(), new SpiralPositionSearcher(), new PositionsSorter(new NetsPositionComparer()))
+            : base(
+                new CompontsOrderer.Impl.CompontsOrderer(),
+                new SpiralPositionSearcher(),
+                new PositionsSorter(new NetsPositionComparer()))
         {
         }
 
         public DetailPlacerImpl(ICompontsOrderer compontsOrderer, IPositionSearcher positionSearcher, IPositionsSorter positionsSorter)
             : base(compontsOrderer, positionSearcher, positionsSorter)
         {
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(m_compontsOrderer.ToString());
+            sb.AppendLine(m_positionSearcher.ToString());
+            sb.AppendLine(m_positionsSorter.ToString());
+            return sb.ToString();
         }
     }
 }

@@ -165,6 +165,8 @@ namespace DetailPlacer.Algorithm
             for (var c = 0; c < design.components.Length; c++)
                 regsInComp[c] = new List<int>();
 
+            PlaceInField(design, approximate);
+
             CulcValuesInRegions(design, approximate, result, regsInComp, valuesInRegions, ref compsToUpdate);
             Mask helper = new Mask(design, result);
             helper.BuildUp();
@@ -188,17 +190,36 @@ namespace DetailPlacer.Algorithm
                 if (result.placed[comp]) continue;
                 result.x[comp] = (int)Math.Round(approximate.x[comp]);
                 result.y[comp] = (int)Math.Round(approximate.y[comp]);
-                var x = result.x[comp];
-                var y = result.y[comp];
-                var w = comp.sizex;
-                var h = comp.sizey;
-                bool inField = x >= design.field.beginx && (x + w) <= (design.field.beginx + design.field.cellsx);
-                inField &= y >= design.field.beginy && (y + h) <= (design.field.beginy + design.field.cellsy);
-
-                result.placed[comp] = inField;
-                //helper.PlaceComponent(comp, result.x[comp], result.y[comp]);
+                result.placed[comp] = true;
+                
             }
 
+        }
+
+        private void PlaceInField(Design design, PlacementGlobal approximate)
+        {
+            var beginX = design.field.beginx;
+            var beginY = design.field.beginy;
+            var cellsX = design.field.cellsx;
+            var cellsY = design.field.cellsy;
+            var endX = beginX + cellsX;
+            var endY = beginY + cellsY;
+            foreach (var comp in design.components)
+            {
+                var x = approximate.x[comp];
+                var y = approximate.y[comp];
+                var w = comp.sizex;
+                var h = comp.sizey;
+
+                if (x + w <= beginX) x = beginX;
+                if (y + h <= beginY) y = beginY;
+                if (x >= endX) x = endX - w;
+                if (y >= endY) y = endY - h;
+
+                approximate.x[comp] = x;
+                approximate.y[comp] = y;
+
+            }
         }
     }
 }

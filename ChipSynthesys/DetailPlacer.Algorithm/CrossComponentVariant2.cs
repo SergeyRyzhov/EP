@@ -64,18 +64,19 @@ namespace DetailPlacer.Algorithm
 
             do
             {
-                enumerator = 0;
+                enumerator = 1;
                 for (int i = 0; i < QtCells; i++)
                 {
-                    if (ValueCell[i] > enumerator && ValueCell[i] > 1)
+                    int value = ValueCell[i];
+                    if (value > enumerator)
                     {
-                        enumerator = ValueCell[i];
+                        enumerator = value;
                         indCell = i;
                     }
                 }
 
                 if (enumerator > 1)
-                {
+                {   
                     Component bestComp = GetComponentWithMaxSquare(compInCell[indCell], result);
                     if (bestComp != null)
                     {
@@ -86,18 +87,13 @@ namespace DetailPlacer.Algorithm
                         result.x[bestComp] = XCellCoord[bestCoord];
                         result.y[bestComp] = YCellCoord[bestCoord];
                         result.placed[bestComp] = true;
-
-                        ValueCell[indCell] = -1;
-                        compInCell[indCell].Clear();
-
                         fixcomp++;
-
                     }
-                    else
-                    { ValueCell[indCell] = -1; compInCell[indCell].Clear(); }
+
+                    ValueCell[indCell] = -1;
 
                 }
-            } while (fixcomp != design.components.Count() && enumerator != 0);
+            } while (fixcomp != design.components.Count() && enumerator != 1);
 
 
             foreach (Component comp in design.components)

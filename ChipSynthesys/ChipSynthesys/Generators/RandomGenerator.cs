@@ -11,7 +11,14 @@ namespace ChipSynthesys.Common.Generators
     /// </summary>
     public class RandomGenerator : IGenerator
     {
-        public void NextDesign(int components, int nets, int maxNetSize, int percent, int maxSizeX, int maxSizeY, out Design design)
+        public void NextDesign(
+            int components,
+            int nets,
+            int maxNetSize,
+            int percent,
+            int maxSizeX,
+            int maxSizeY,
+            out Design design)
         {
             var fullness = 0;
             var rnd = new Random();
@@ -35,7 +42,13 @@ namespace ChipSynthesys.Common.Generators
             design = new Design(new Field(0, 0, cells, cells), c, n);
         }
 
-        public void NextDesign(int components, int nets, IRandom<int> maxNetSize, int percent, IRandom<int> maxSizeX, IRandom<int> maxSizeY,
+        public void NextDesign(
+            int components,
+            int nets,
+            IRandom<int> maxNetSize,
+            int percent,
+            IRandom<int> maxSizeX,
+            IRandom<int> maxSizeY,
             out Design design)
         {
             int fullness = 0;
@@ -63,8 +76,17 @@ namespace ChipSynthesys.Common.Generators
             design = new Design(new Field(0, 0, cells, cells), c, n);
         }
 
-        public void NextDesignWithPlacement(int components, int nets, int maxNetSize, int percent,
-            int maxSizeX, int maxSizeY, int width, int height, out Design design, out PlacementGlobal placement)
+        public void NextDesignWithPlacement(
+            int components,
+            int nets,
+            int maxNetSize,
+            int percent,
+            int maxSizeX,
+            int maxSizeY,
+            int width,
+            int height,
+            out Design design,
+            out PlacementGlobal placement)
         {
             var xCoord = new List<ValuePair<int>>();
             var yCoord = new List<ValuePair<int>>();
@@ -74,14 +96,15 @@ namespace ChipSynthesys.Common.Generators
             var r = new Random();
 
             int fullnesArea = width * height * percent / 100;
-            int count = width * height * percent / 100;//components * percent / 100;
+            int count = width * height * percent / 100; //components * percent / 100;
             // учесть можно ли вообще разбить область на такое кол-во элементов
 
             do
             {
                 int idx = r.Next(compCount);
                 Split(xCoord, yCoord, idx, ref compCount);
-            } while (compCount != count); //?? когда останавливать деление? учесть maxSizex maxSizey
+            }
+            while (compCount != count); //?? когда останавливать деление? учесть maxSizex maxSizey
 
             // удалить часть элементов
             while (compCount != components)
@@ -114,18 +137,30 @@ namespace ChipSynthesys.Common.Generators
             {
                 placement.x[com] = xCoord[ind].A;
                 placement.y[com] = yCoord[ind].A;
-                placement.placed[com] = true;
+                placement.placed[com] = false;
                 ind++;
             }
         }
 
-        public void NextDesignWithPlacement(int components, int nets, IRandom<int> maxNetSize, int percent, IRandom<int> maxSizeX,
-            IRandom<int> maxSizeY, int width, int height, out Design design, out PlacementGlobal placement)
+        public void NextDesignWithPlacement(
+            int components,
+            int nets,
+            IRandom<int> maxNetSize,
+            int percent,
+            IRandom<int> maxSizeX,
+            IRandom<int> maxSizeY,
+            int width,
+            int height,
+            out Design design,
+            out PlacementGlobal placement)
         {
             throw new NotImplementedException();
         }
 
-        protected virtual void Split(List<ValuePair<int>> xCoord, List<ValuePair<int>> yCoord, int indx,
+        protected virtual void Split(
+            List<ValuePair<int>> xCoord,
+            List<ValuePair<int>> yCoord,
+            int indx,
             ref int compCount)
         {
             if ((xCoord[indx].B - xCoord[indx].A == 1) && (yCoord[indx].B - yCoord[indx].A == 1)) return;
