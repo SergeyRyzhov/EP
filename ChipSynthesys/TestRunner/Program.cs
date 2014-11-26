@@ -130,7 +130,7 @@ namespace TestRunner
             Size[] sizes;
             Bitmap[] bitmaps;
 
-            string resultDirectory = args.Length > 0 ? args[0] + @"\Tests\" : @"D:\TestResults\";
+            string resultDirectory = args.Length > 0 ? args[0] + @"\Tests\" : @".\Tests\";
             Directory.CreateDirectory(resultDirectory);
 
             if (ReadInput(args, out design, out approximate, out sizes, out bitmaps))
@@ -151,7 +151,7 @@ namespace TestRunner
 
             //пока не используются
             //RunCommonTests(design, statistic, resultDirectory, approximate, sizes, bitmaps, ref testCount);
-            
+
             Type[] otherPlacers =
                 {
                     typeof(CombinePlacer),
@@ -163,19 +163,20 @@ namespace TestRunner
 
             foreach (Type otherPlacerType in otherPlacers)
             {
-                try
+
+
+                ConstructorInfo info = otherPlacerType.GetConstructor(masType);
+                if (info != null)
                 {
-
-                    ConstructorInfo info = otherPlacerType.GetConstructor(masType);
-                    if (info != null)
+                    var placer = info.Invoke(null) as IDetailPlacer;
+                    if (placer == null)
                     {
-                        var placer = info.Invoke(null) as IDetailPlacer;
-                        if (placer == null)
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
 
-                        for (int i = 0; i < design.Length; i++)
+                    for (int i = 0; i < design.Length; i++)
+                    {
+                        try
                         {
                             var st = new Stopwatch();
                             st.Start();
@@ -220,20 +221,22 @@ namespace TestRunner
                                 a.y[c] = placeRes.y[c];
 
                             }
-                            var t = new ChipTask(d, a) {Height = 50 /*sizes[i].Height*/, Width = 50 /*sizes[i].Width*/};
+                            var t = new ChipTask(d, a) { Height = 50 /*sizes[i].Height*/, Width = 50 /*sizes[i].Width*/};
 
                             t.Save(Path.Combine(resultDirectory, string.Format("TestData {0}.bin", testCount)));
 
                             st.Stop();
                             Console.WriteLine(@"Time for {0} - {1}", placer, st.Elapsed);
+
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                            Console.WriteLine(e.StackTrace);
                         }
                     }
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(e.StackTrace);
-                }
+
             }
         }
 
@@ -445,7 +448,7 @@ namespace TestRunner
                 st.Start();
                 Design d = design[i];
                 PlacementDetail placeRes;
-                testCount ++;
+                testCount++;
                 string imageBefore = Path.Combine(resultDirectory, string.Format("TestData {0}.png", testCount));
                 DrawerHelper.SimpleDraw(
                     design[i],
