@@ -157,14 +157,10 @@ namespace TestRunner
                     }
                 }
             }
-            
 
             var result = new ChipTask(design, placement);
-            result.Height = 50;
-            result.Width = 50;
             return result;
         }
-
 
         private static string[] GetExampleFiles(string auxFile)
         {
@@ -217,6 +213,7 @@ namespace TestRunner
                     int sx = int.Parse(lineData[1]);
                     int sy = int.Parse(lineData[2]);
                     components.Add(id, sx, sy);
+
                     //line = nodesStream.ReadLine();
                 }
             }
