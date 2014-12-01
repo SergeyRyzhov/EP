@@ -43,7 +43,7 @@ namespace ChipSynthesys.UnitTests.Common
             }
             foreach (var item in design.components)
             {
-                var name = string.Format("component {0}.png", item.id);
+                var name = string.Format(@"component {0}.png", item.id);
                 placement.placed[item] = true;
                 DrawDisign(design, placement, size, bitmap, name);
                 placement.placed[item] = false;
@@ -56,12 +56,12 @@ namespace ChipSynthesys.UnitTests.Common
             {
                 var s = new StringBuilder();
                 s.Append(net.id);
-                s.Append(": ");
+                s.Append(@": ");
 
                 foreach (var component in net.items)
                 {
                     s.Append(component.id);
-                    s.Append(", ");
+                    s.Append(@", ");
                 }
                 Console.WriteLine(s.ToString());
             }

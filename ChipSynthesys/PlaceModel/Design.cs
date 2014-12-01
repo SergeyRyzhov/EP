@@ -92,7 +92,7 @@ namespace PlaceModel
         /// </summary>
         public Design(Design parent, Field subfield, IEnumerable<Component> components)
         {
-            if (parent == null) throw new Exception("Для подобласти обязательно должен быть определен родительский объект!");
+            if (parent == null) throw new Exception(@"Для подобласти обязательно должен быть определен родительский объект!");
             this.parent = parent;
             field = subfield;
             this.components = components.ToArray<Component>();

@@ -135,7 +135,7 @@
 //            {
 //                for (int j = 0; j < m.Height; j++)
 //                {
-//                    Console.Write("{0} ", (int)m[i,j]);
+//                    Console.Write(@"{0} ", (int)m[i,j]);
 //                }
 //                Console.WriteLine();
 //            }

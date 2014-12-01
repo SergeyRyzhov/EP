@@ -10,7 +10,13 @@
 
         public static int ImageWidth = 1024;
 
+        public static int MaxImageHeight = 2048;
+
+        public static int MaxImageWidth = 2048;
+
         public static int TestTasksCount = 1;
+
+        public static int ForceDirectedMaxIteration = 30;
 
     }
 }

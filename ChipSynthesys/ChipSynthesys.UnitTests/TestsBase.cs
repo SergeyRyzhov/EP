@@ -6,7 +6,7 @@ namespace ChipSynthesys.UnitTests
     {
         protected virtual string TestFilePath(string fileName)
         {
-            return string.Format("..\\..\\{0}", fileName);
+            return string.Format(@"..\\..\\{0}", fileName);
         }
 
         protected virtual Design TestDesign()

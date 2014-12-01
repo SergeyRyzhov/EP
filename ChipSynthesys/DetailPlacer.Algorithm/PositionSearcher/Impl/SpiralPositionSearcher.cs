@@ -24,7 +24,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher.Impl
         {
             if (resX.Length != PositionAmount || resY.Length != PositionAmount)
             {
-                throw new InvalidOperationException(string.Format("Incorrect input {0}", PositionAmount));
+                throw new InvalidOperationException(string.Format(@"Incorrect input {0}", PositionAmount));
             }
 
             int amount = 0;

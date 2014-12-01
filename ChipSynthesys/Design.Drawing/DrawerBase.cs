@@ -23,7 +23,7 @@ namespace ChipSynthesys.Draw
         protected DrawerBase()
         {
             ComponentBrush = new SolidBrush(Color.DarkGray);
-            UnplacedComponentBrush = new SolidBrush(Color.Black);
+            UnplacedComponentBrush = new SolidBrush(Color.DarkGray);
             ComponentMarkBrush = new SolidBrush(Color.Black);
             ComponentPenBorderDepth = 1;
             ComponentMarkRadius = 1;
@@ -100,8 +100,8 @@ namespace ChipSynthesys.Draw
             int border = 0; //ComponentPenBorderDepth;
             int bottomBorder = 0;//border + (int)ComponentPen.Width -1 ;
 
-            canvas.FillRectangle(ComponentBrush, x + border, y + border, width - bottomBorder, height - bottomBorder);
-            canvas.DrawRectangle(ComponentPen, x, y, width, height);
+            canvas.FillRectangle(UnplacedComponentBrush, x + border, y + border, width - bottomBorder, height - bottomBorder);
+            canvas.DrawRectangle(UnplacedComponentPen, x, y, width, height);
         }
     }
 }

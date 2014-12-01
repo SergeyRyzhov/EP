@@ -21,18 +21,18 @@ namespace ChipSynthesys.UnitTests.PlaceModel
 
         private static void test(string name, bool result)
         {
-            Console.Write("\n{0}\t", name);
-            Console.Write("{0}", (result) ? "OK" : "ERROR");
+            Console.Write(@"\n{0}\t", name);
+            Console.Write(@"{0}", (result) ? "OK" : "ERROR");
             Assert.IsTrue(result);
         }
 
         private static void run_PlaceModel()
         {
-            log("\nPlaceModel tests start");
-            test("Design.Nets(Component)", DesignNetsComponent());
-            test("Design.Save & Load", DesignSaveLoad());
-            test("Placement\t", Placement());
-            log("\nPlaceModel tests final\n");
+            log(@"\nPlaceModel tests start");
+            test(@"Design.Nets(Component)", DesignNetsComponent());
+            test(@"Design.Save & Load", DesignSaveLoad());
+            test(@"Placement\t", Placement());
+            log(@"\nPlaceModel tests final\n");
         }
 
         private static bool DesignNetsComponent()
@@ -73,7 +73,7 @@ namespace ChipSynthesys.UnitTests.PlaceModel
         private static bool DesignSaveLoad()
         {
             Design.Save(Micro(), "micro.xml");
-            return MicroCheck(Design.Load("micro.xml"));
+            return MicroCheck(Design.Load(@"micro.xml"));
         }
 
         private static bool Placement()

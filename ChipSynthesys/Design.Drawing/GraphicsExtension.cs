@@ -45,13 +45,13 @@ namespace ChipSynthesys.Draw
         internal static void DrawBSpline(this Graphics graphics, Pen pen, PointF[] points, float beta, float step)
         {
             if (points == null)
-                throw new ArgumentNullException("The point array must not be null.");
+                throw new ArgumentNullException(@"The point array must not be null.");
 
             if (beta < 0 || beta > 1)
-                throw new ArgumentException("The bundling strength must be >= 0 and <= 1.");
+                throw new ArgumentException(@"The bundling strength must be >= 0 and <= 1.");
 
             if (step <= 0 || step > 1)
-                throw new ArgumentException("The step must be > 0 and <= 1.");
+                throw new ArgumentException(@"The step must be > 0 and <= 1.");
 
             if (points.Length <= 1)
                 return;

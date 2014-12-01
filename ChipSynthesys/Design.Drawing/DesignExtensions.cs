@@ -22,6 +22,14 @@ namespace ChipSynthesys.Draw
             height *= scale;
             width *= scale;
 
+            scaleHeight = height > TestsConstants.MaxImageHeight ? TestsConstants.MaxImageHeight / height : 1;
+            scaleWidth = width > TestsConstants.MaxImageWidth ? TestsConstants.MaxImageWidth / width : 1;
+
+            scale = Math.Min(scaleHeight, scaleWidth);
+
+            height *= scale;
+            width *= scale;
+
             return new Size((int)width, (int)height);
         }
     }

@@ -11,7 +11,7 @@ namespace ChipSynthesys.UnitTests.PlaceModel
         /*[TestMethod]
         public void SaveAndLoadChipTask()
         {
-            var path = TestFilePath("SaveAndLoadChipTask.bin");
+            var path = TestFilePath(@"SaveAndLoadChipTask.bin");
 
             var design = TestDesign();
             var placementGlobal = new PlacementGlobal(design);
@@ -31,7 +31,7 @@ namespace ChipSynthesys.UnitTests.PlaceModel
         /*[TestMethod]
         public void SaveAndLoadChipTaskResult()
         {
-            var path = TestFilePath("SaveAndLoadChipTaskResult.bin");
+            var path = TestFilePath(@"SaveAndLoadChipTaskResult.bin");
 
             var design = TestDesign();
             var placementGlobal = new PlacementGlobal(design);

@@ -26,7 +26,7 @@ namespace PlaceModel
 
         public override string ToString()
         {
-            return string.Format("Net id={0} items={1}", id, items.Length);
+            return string.Format(@"Net id={0} items={1}", id, items.Length);
         }
 
         /// <summary>

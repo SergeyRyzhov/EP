@@ -28,23 +28,23 @@ namespace DetailPlacer.Algorithm.PositionSearcher
 
         public void PrintMask()
         {
-            Console.WriteLine("Horizontal mask");
+            Console.WriteLine(@"Horizontal mask");
             for (int row = 0; row < Height; row++)
             {
                 for (int col = 0; col < Width; col++)
                 {
-                    Console.Write("{0} ", m_hMask[row][col]);
+                    Console.Write(@"{0} ", m_hMask[row][col]);
                 }
                 Console.WriteLine();
             }
 
-            Console.WriteLine("Vertical mask"); 
+            Console.WriteLine(@"Vertical mask"); 
             
             for (int row = 0; row < Height; row++)
             {
                 for (int col = 0; col < Width; col++)
                 {
-                    Console.Write("{0} ", m_vMask[col][row]);
+                    Console.Write(@"{0} ", m_vMask[col][row]);
                 }
                 Console.WriteLine();
             }
@@ -56,7 +56,7 @@ namespace DetailPlacer.Algorithm.PositionSearcher
 
         public int BuildUp()
         {
-            //Console.WriteLine("Build up mask");
+            //Console.WriteLine(@"Build up mask");
             var height = Height = m_design.field.cellsy;
             var width = Width = m_design.field.cellsx;
 

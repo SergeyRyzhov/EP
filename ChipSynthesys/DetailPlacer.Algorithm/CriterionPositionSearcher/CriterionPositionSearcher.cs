@@ -72,7 +72,7 @@ namespace DetailPlacer.Algorithm.CriterionPositionSearcher
         {
             if (m_points == null)
             {
-                throw new Exception("Сперва необходимо вызвать метод Build. ");
+                throw new Exception(@"Сперва необходимо вызвать метод Build. ");
             }
 
             var sorted = m_points.ToList();

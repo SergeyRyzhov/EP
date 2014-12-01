@@ -26,7 +26,7 @@ namespace ChipSynthesys.UnitTests.Draw
                 drawer.Draw(design, placement, size, canvas);
             }
 
-            bitmap.Save(TestFile("BitmapDrawingTest"));
+            bitmap.Save(TestFile(@"BitmapDrawingTest"));
         }
 
         [TestMethod]
@@ -45,7 +45,7 @@ namespace ChipSynthesys.UnitTests.Draw
                 drawer.Draw(design, placement, size, canvas);
             }
 
-            bitmap.Save(TestFile("BitmapDrawingNetTest"));
+            bitmap.Save(TestFile(@"BitmapDrawingNetTest"));
         }
 
         [TestMethod]
@@ -65,7 +65,7 @@ namespace ChipSynthesys.UnitTests.Draw
                 drawer.DrawRect(design, placement, size, canvas, 1, 1, design.field.cellsx - 2, design.field.cellsy - 2);
             }
 
-            bitmap.Save(TestFile("BitmapDrawingZoomTest"));
+            bitmap.Save(TestFile(@"BitmapDrawingZoomTest"));
 
             using (Graphics canvas = Graphics.FromImage(bitmap))
             {
@@ -73,7 +73,7 @@ namespace ChipSynthesys.UnitTests.Draw
                 canvas.Clear(Color.Empty);
                 drawer.Draw(design, placement, size, canvas);
             }
-            bitmap.Save(TestFile("BitmapDrawingZoomTestAllArea"));
+            bitmap.Save(TestFile(@"BitmapDrawingZoomTestAllArea"));
         }
 
 
@@ -103,7 +103,7 @@ namespace ChipSynthesys.UnitTests.Draw
 
         private static string TestFile(string name)
         {
-            return string.Format("..\\..\\{0}.png", name);
+            return string.Format(@"..\\..\\{0}.png", name);
         }
 
         private static void GenerateTestDesign2(out Design design, out PlacementGlobal placement)
@@ -160,7 +160,7 @@ namespace ChipSynthesys.UnitTests.Draw
                                 dh);
                         }
 
-                        var file = string.Format("ZoomDraw-{0}-{1}.png", x, y);
+                        var file = string.Format(@"ZoomDraw-{0}-{1}.png", x, y);
                         bitmap.Save(file);
                     }
                 }    

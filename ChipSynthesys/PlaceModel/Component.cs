@@ -33,7 +33,7 @@ namespace PlaceModel
 
         public override string ToString()
         {
-            return string.Format("Component {0}", id);
+            return string.Format(@"Component {0}", id);
         }
 
         /// <summary>

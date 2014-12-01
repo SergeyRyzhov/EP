@@ -13,19 +13,19 @@ namespace TestRunner
         public ChipTask Parse(string directory)
         {
             string[] files = Directory.GetFiles(directory);
-            string auxFile = files.FirstOrDefault(f => f.EndsWith(".aux", StringComparison.InvariantCultureIgnoreCase));
+            string auxFile = files.FirstOrDefault(f => f.EndsWith(@".aux", StringComparison.InvariantCultureIgnoreCase));
             if (auxFile == null)
             {
-                throw new InvalidOperationException("Attempt to parse incorrect example");
+                throw new InvalidOperationException(@"Attempt to parse incorrect example");
             }
 
             string[] exampleFiles = GetExampleFiles(auxFile);
 
-            string nodesFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(".nodes")) ?? "");
-            string netsFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(".nets")) ?? "");
-            string wtsFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(".wts")) ?? "");
-            string plFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(".pl")) ?? "");
-            string sclFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(".scl")) ?? "");
+            string nodesFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(@".nodes")) ?? "");
+            string netsFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(@".nets")) ?? "");
+            string wtsFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(@".wts")) ?? "");
+            string plFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(@".pl")) ?? "");
+            string sclFile = Path.Combine(directory, exampleFiles.FirstOrDefault(s => s.EndsWith(@".scl")) ?? "");
             string globalPlFile = Path.Combine(directory, "global.txt");
 
             int numTerminals;
@@ -41,24 +41,24 @@ namespace TestRunner
             {
                 while ((line = netsStream.ReadLine()) != null)
                 {
-                    if (line.StartsWith("#") || line.StartsWith("UCLA") || string.IsNullOrEmpty(line))
+                    if (line.StartsWith(@"#") || line.StartsWith(@"UCLA") || string.IsNullOrEmpty(line))
                     {
                         continue;
                     }
                     string[] lineData = line.Split(new[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (lineData.Contains("NumNets"))
+                    if (lineData.Contains(@"NumNets"))
                     {
                         numNets = int.Parse(lineData.Last());
                         continue;
                     }
 
-                    if (lineData.Contains("NumPins"))
+                    if (lineData.Contains(@"NumPins"))
                     {
                         numPins = int.Parse(lineData.Last());
                         continue;
                     }
 
-                    if (lineData.Contains("NetDegree"))
+                    if (lineData.Contains(@"NetDegree"))
                     {
                         int size = int.Parse(lineData.Last());
                         var items = new Component[size];
@@ -94,7 +94,7 @@ namespace TestRunner
                 Component[] e = components.Extract();
                 while ((line = plStream.ReadLine()) != null)
                 {
-                    if (line.StartsWith("#") || line.StartsWith("UCLA") || string.IsNullOrEmpty(line))
+                    if (line.StartsWith(@"#") || line.StartsWith(@"UCLA") || string.IsNullOrEmpty(line))
                     {
                         continue;
                     }
@@ -116,7 +116,7 @@ namespace TestRunner
             design = new Design(field, components, nets);
             if (design.components.Length != nodesSize)
             {
-                throw new InvalidOperationException("Invalid nodes file");
+                throw new InvalidOperationException(@"Invalid nodes file");
             }
 
             placement = new PlacementGlobal(design);
@@ -124,7 +124,7 @@ namespace TestRunner
             {
                 while ((line = plStream.ReadLine()) != null)
                 {
-                    if (line.StartsWith("#") || line.StartsWith("UCLA") || string.IsNullOrEmpty(line))
+                    if (line.StartsWith(@"#") || line.StartsWith(@"UCLA") || string.IsNullOrEmpty(line))
                     {
                         continue;
                     }
@@ -170,7 +170,7 @@ namespace TestRunner
             const string AuxHeader = "RowBasedPlacement";
             if (!exampleFiles.Contains(AuxHeader))
             {
-                throw new InvalidOperationException("Invalid aux file");
+                throw new InvalidOperationException(@"Invalid aux file");
             }
 
             return exampleFiles.Where(s => !string.Equals(AuxHeader, s)).ToArray();
@@ -192,17 +192,17 @@ namespace TestRunner
                 numTerminals = 0;
                 while ((line = nodesStream.ReadLine()) != null)
                 {
-                    if (line.StartsWith("#") || line.StartsWith("UCLA") || string.IsNullOrEmpty(line))
+                    if (line.StartsWith(@"#") || line.StartsWith(@"UCLA") || string.IsNullOrEmpty(line))
                     {
                         continue;
                     }
                     string[] lineData = line.Split(new[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (lineData.Contains("NumNodes"))
+                    if (lineData.Contains(@"NumNodes"))
                     {
                         nodesSize = int.Parse(lineData.Last());
                         continue;
                     }
-                    if (lineData.Contains("NumTerminals"))
+                    if (lineData.Contains(@"NumTerminals"))
                     {
                         numTerminals = int.Parse(lineData.Last());
                         continue;
@@ -238,24 +238,24 @@ namespace TestRunner
             StreamReader netsStream = GetStream(netsFile);
             while ((line = netsStream.ReadLine()) != null)
             {
-                if (line.StartsWith("#") || line.StartsWith("UCLA") || string.IsNullOrEmpty(line))
+                if (line.StartsWith(@"#") || line.StartsWith(@"UCLA") || string.IsNullOrEmpty(line))
                 {
                     continue;
                 }
                 string[] lineData = line.Split(new[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);
-                if (lineData.Contains("NumNets"))
+                if (lineData.Contains(@"NumNets"))
                 {
                     numNets = int.Parse(lineData.Last());
                     continue;
                 }
 
-                if (lineData.Contains("NumPins"))
+                if (lineData.Contains(@"NumPins"))
                 {
                     numPins = int.Parse(lineData.Last());
                     continue;
                 }
 
-                if (lineData.Contains("NetDegree"))
+                if (lineData.Contains(@"NetDegree"))
                 {
                     int size = int.Parse(lineData.Last());
                     var items = new Component[size];
@@ -281,7 +281,7 @@ namespace TestRunner
             var design = new Design(field, components, nets);
             if (design.components.Length != nodesSize)
             {
-                throw new InvalidOperationException("Invalid nodes file");
+                throw new InvalidOperationException(@"Invalid nodes file");
             }
             return design;
         }
@@ -293,7 +293,7 @@ namespace TestRunner
             StreamReader plStream = GetStream(plFile);
             while ((line = plStream.ReadLine()) != null)
             {
-                if (line.StartsWith("#") || line.StartsWith("UCLA") || string.IsNullOrEmpty(line))
+                if (line.StartsWith(@"#") || line.StartsWith(@"UCLA") || string.IsNullOrEmpty(line))
                 {
                     continue;
                 }

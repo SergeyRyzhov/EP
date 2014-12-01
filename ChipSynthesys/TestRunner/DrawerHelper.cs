@@ -28,7 +28,7 @@ namespace TestRunner
                 drawer.Draw(task.Design, task.CurrentPlacement, size, canvas);
             }
 
-            bitmap.Save(string.Format("{0}-detail{1}", name, ".png"), ImageFormat.Png);
+            bitmap.Save(string.Format(@"{0}-detail{1}", name, ".png"), ImageFormat.Png);
         }
 
         private static void DrawGlobal(ChipTask task, Size size, string name)
@@ -41,7 +41,7 @@ namespace TestRunner
                 drawer.Draw(task.Design, task.GlobalPlacement, size, canvas);
             }
 
-            bitmap.Save(string.Format("{0}-global{1}", name, ".png"), ImageFormat.Png);
+            bitmap.Save(string.Format(@"{0}-global{1}", name, ".png"), ImageFormat.Png);
         }
     }
 }

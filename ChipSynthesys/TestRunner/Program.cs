@@ -31,7 +31,7 @@ namespace TestRunner
             var tasks = new ChipTask[TestsConstants.TestTasksCount];
             for (int i = 0; i < TestsConstants.TestTasksCount; i++)
             {
-                tasks[i] = GenerateTestDesign(string.Format("Generated {0}", i + 1));
+                tasks[i] = GenerateTestDesign(string.Format(@"Generated {0}", i + 1));
             }
             return tasks;
         }
@@ -58,7 +58,7 @@ namespace TestRunner
             foreach (string fileName in files)
             {
                 string extension = Path.GetExtension(fileName);
-                if (extension != null && extension.Equals(".bin", StringComparison.InvariantCultureIgnoreCase))
+                if (extension != null && extension.Equals(@".bin", StringComparison.InvariantCultureIgnoreCase))
                 {
                     tasks.Add(ChipTask.Load(fileName));
                 }
@@ -106,10 +106,10 @@ namespace TestRunner
 
             Type[] otherPlacers =
                 {
-                    /*typeof(CombinePlacer),*/ typeof(CrossReductPlacer), typeof(CrossComponentVariant2),
-                    /*typeof(CrossCompPlacer), */typeof(ForceDirectedDetailPlacer)
+                    typeof(CombinePlacer), typeof(CrossReductPlacer), typeof(CrossComponentVariant2),
+                    /*typeof(CrossCompPlacer), typeof(ForceDirectedDetailPlacer)*/
                 };
-
+            //TestsConstants.ForceDirectedMaxIteration = int.Parse(args[1]);
             foreach (Type otherPlacerType in otherPlacers)
             {
                 ConstructorInfo info = otherPlacerType.GetConstructor(masType);
@@ -131,7 +131,7 @@ namespace TestRunner
 
                             testCount++;
 
-                            tasks[i].SimpleDraw(Path.Combine(path, string.Format("Before{0}", testCount)));
+                            tasks[i].SimpleDraw(Path.Combine(path, string.Format(@"Before{0}", testCount)));
 
                             PlacementGlobal taskPlacement;
                             if (tasks[i].CurrentPlacement == null)
@@ -158,7 +158,7 @@ namespace TestRunner
 
                             string fileName = Path.Combine(
                                 path,
-                                string.Format("TestResult {0}.xlsx", testCount));
+                                string.Format(@"TestResult {0}.xlsx", testCount));
                             StatisticImporter.SaveToFile(
                                 fileName,
                                 statisticResult,
@@ -167,9 +167,9 @@ namespace TestRunner
 
                             var task = tasks[i];//.Clone();
                             task.CurrentPlacement = placeRes;
-                            task.SimpleDraw(Path.Combine(path, string.Format("After", testCount)));
+                            task.SimpleDraw(Path.Combine(path, string.Format(@"After{0}", testCount)));
 
-                            task.Save(Path.Combine(path, string.Format("TestResult{0}.bin", testCount)));
+                            task.Save(Path.Combine(path, string.Format(@"TestResult{0}.bin", testCount)));
 
                             Console.WriteLine(@"Time for {0} - {1}", placer, stopwatch.Elapsed);
                         }
@@ -200,7 +200,7 @@ namespace TestRunner
                 drawer.Draw(task.Design, task.GlobalPlacement, new Size(w, h), canvas);
             }
 
-            string file = string.Format("{0}.png", taskName);
+            string file = string.Format(@"{0}.png", taskName);
             bitmap.Save(file);
         }
 
@@ -234,7 +234,7 @@ namespace TestRunner
                         drawer.DrawRect(task.Design, task.GlobalPlacement, new Size(size, size), canvas, x, y, dw, dh);
                     }
 
-                    string file = string.Format("{0}-{1}-{2}.png", taskName, x, y);
+                    string file = string.Format(@"{0}-{1}-{2}.png", taskName, x, y);
                     bitmap.Save(file);
                 }
             }
@@ -366,7 +366,7 @@ namespace TestRunner
                 Design d = design[i];
                 PlacementDetail placeRes;
                 testCount++;
-                string imageBefore = Path.Combine(resultDirectory, string.Format("TestData {0}.png", testCount));
+                string imageBefore = Path.Combine(resultDirectory, string.Format(@"TestData {0}.png", testCount));
                 //DrawerHelper.SimpleDraw(design[i], approximate[i], sizes[i], bitmaps[i], imageBefore);
 
                 placer.Place(d, approximate[i], out placeRes);
@@ -374,19 +374,19 @@ namespace TestRunner
                 //var statisticResult = statistic.Compute(d, approximate[i], placeRes);
                 //statisticResult = statistic.Update(statisticResult, d, approximate[i], placeRes);
 
-                string fileName = Path.Combine(resultDirectory, string.Format("TestResult {0}.xlsx", testCount));
+                string fileName = Path.Combine(resultDirectory, string.Format(@"TestResult {0}.xlsx", testCount));
                 /*StatisticImporter.SaveToFile(
                     fileName,
                     statisticResult,
                     i.ToString(CultureInfo.InvariantCulture),
                     placer.ToString());*/
 
-                string imageAfter = Path.Combine(resultDirectory, string.Format("TestResult {0}.png", testCount));
+                string imageAfter = Path.Combine(resultDirectory, string.Format(@"TestResult {0}.png", testCount));
                 // DrawerHelper.SimpleDraw(design[i], placeRes, sizes[i], bitmaps[i], imageAfter);
 
                 //var t = new ChipTask(d, approximate[i], placeRes);
 
-                // t.Save(Path.Combine(resultDirectory, string.Format("TestData {0}.bin", testCount)));
+                // t.Save(Path.Combine(resultDirectory, string.Format(@"TestData {0}.bin", testCount)));
 
                 st.Stop();
                 Console.WriteLine(@"Time for {0} - {1}", placer, st.Elapsed);

@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 namespace TestRunner
 {
-    [XmlRoot("dictionary")]
+    [XmlRoot(@"dictionary")]
     public class SerializableDictionary<TKey, TValue>
         : Dictionary<TKey, TValue>, IXmlSerializable
     {
@@ -27,13 +27,13 @@ namespace TestRunner
 
             while (reader.NodeType != XmlNodeType.EndElement)
             {
-                reader.ReadStartElement("item");
+                reader.ReadStartElement(@"item");
 
-                reader.ReadStartElement("key");
+                reader.ReadStartElement(@"key");
                 TKey key = (TKey)keySerializer.Deserialize(reader);
                 reader.ReadEndElement();
 
-                reader.ReadStartElement("value");
+                reader.ReadStartElement(@"value");
                 TValue value = (TValue)valueSerializer.Deserialize(reader);
                 reader.ReadEndElement();
 
@@ -52,13 +52,13 @@ namespace TestRunner
 
             foreach (TKey key in Keys)
             {
-                writer.WriteStartElement("item");
+                writer.WriteStartElement(@"item");
 
-                writer.WriteStartElement("key");
+                writer.WriteStartElement(@"key");
                 keySerializer.Serialize(writer, key);
                 writer.WriteEndElement();
 
-                writer.WriteStartElement("value");
+                writer.WriteStartElement(@"value");
                 TValue value = this[key];
                 valueSerializer.Serialize(writer, value);
                 writer.WriteEndElement();

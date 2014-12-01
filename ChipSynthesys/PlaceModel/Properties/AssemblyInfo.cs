@@ -4,14 +4,14 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется с помощью
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("PlaceModel")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PlaceModel")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyTitle(@"PlaceModel")]
+[assembly: AssemblyDescription(@"")]
+[assembly: AssemblyConfiguration(@"")]
+[assembly: AssemblyCompany(@"")]
+[assembly: AssemblyProduct(@"PlaceModel")]
+[assembly: AssemblyCopyright(@"Copyright ©  2014")]
+[assembly: AssemblyTrademark(@"")]
+[assembly: AssemblyCulture(@"")]
 
 // Параметр ComVisible со значением FALSE делает типы в сборке невидимыми
 // для COM-компонентов.  Если требуется обратиться к типу в этой сборке через
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-[assembly: Guid("901fc362-dbb2-4df4-8795-6b7edceaf177")]
+[assembly: Guid(@"901fc362-dbb2-4df4-8795-6b7edceaf177")]
 
 // Сведения о версии сборки состоят из следующих четырех значений:
 //
@@ -30,6 +30,6 @@ using System.Runtime.InteropServices;
 //
 // Можно задать все значения или принять номер построения и номер редакции по умолчанию,
 // используя "*", как показано ниже:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+// [assembly: AssemblyVersion(@"1.0.*")]
+[assembly: AssemblyVersion(@"1.0.0.0")]
+[assembly: AssemblyFileVersion(@"1.0.0.0")]

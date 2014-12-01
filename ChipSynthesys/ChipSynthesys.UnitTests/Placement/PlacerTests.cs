@@ -119,7 +119,7 @@ namespace ChipSynthesys.UnitTests.Placement
 
         private static string TestFile(string name)
         {
-            return string.Format("..\\..\\{0}.png", name);
+            return string.Format(@"..\\..\\{0}.png", name);
         }
     }
 }

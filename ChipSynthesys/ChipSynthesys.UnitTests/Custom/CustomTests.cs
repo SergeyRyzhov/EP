@@ -34,7 +34,7 @@ namespace ChipSynthesys.UnitTests.Custom
        /*[TestMethod]
         public void RandomStatisticTest()
         {
-            Console.WriteLine("Случайный с размещением");
+            Console.WriteLine(@"Случайный с размещением");
 
             var g = new RandomGenerator();
             Design d;
@@ -52,26 +52,26 @@ namespace ChipSynthesys.UnitTests.Custom
             Console.WriteLine(designResult);
             Console.WriteLine(placementResult);
 
-            Console.WriteLine("Размещение");
+            Console.WriteLine(@"Размещение");
 
             foreach (var c in d.components)
             {
-                string s = string.Format("{0} [{3}x{4}] - ({1},{2})", c.id, p.x[c], p.y[c], c.sizex, c.sizey);
+                string s = string.Format(@"{0} [{3}x{4}] - ({1},{2})", c.id, p.x[c], p.y[c], c.sizex, c.sizey);
                 Console.WriteLine(s);
             }
 
-            Console.WriteLine("Цепи");
+            Console.WriteLine(@"Цепи");
 
             foreach (var net in d.nets)
             {
                 var s = new StringBuilder();
                 s.Append(net.id);
-                s.Append(": ");
+                s.Append(@": ");
 
                 foreach (var component in net.items)
                 {
                     s.Append(component.id);
-                    s.Append(", ");
+                    s.Append(@", ");
                 }
                 Console.WriteLine(s.ToString());
             }
@@ -95,9 +95,9 @@ namespace ChipSynthesys.UnitTests.Custom
                     counters.B++;
                 }
             }
-            Console.WriteLine("Результат теста генератора с табличным распределением (1 - 30%, 2 -70%), 10000 испытаний: {0}.", counters);
+            Console.WriteLine(@"Результат теста генератора с табличным распределением (1 - 30%, 2 -70%), 10000 испытаний: {0}.", counters);
 
-            Console.WriteLine("Математическое ожидание: {0}.", low.MathematicalExpectation());
+            Console.WriteLine(@"Математическое ожидание: {0}.", low.MathematicalExpectation());
         }
     }
 }

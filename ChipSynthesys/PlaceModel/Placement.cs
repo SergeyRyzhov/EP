@@ -28,7 +28,7 @@ namespace PlaceModel
                 get { return vals[c.id]; }
                 set
                 {
-                    if (owner.editable[c.id] != owner.ids) throw new Exception(string.Format("Попытка изменения позиции для периферийного элемента {0}", c.id));
+                    if (owner.editable[c.id] != owner.ids) throw new Exception(string.Format(@"Попытка изменения позиции для периферийного элемента {0}", c.id));
                     vals[c.id] = value;
                 }
             }
