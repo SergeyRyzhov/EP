@@ -9,14 +9,15 @@ namespace ChipSynthesys.Common.Classes
     [Serializable]
     public class ChipTask
     {
-        public ChipTask(Design design, PlacementGlobal globalPlacement)
+        public ChipTask(string name, Design design, PlacementGlobal globalPlacement)
         {
+            Name = name;
             Design = design;
             this.GlobalPlacement = globalPlacement;
         }
 
-        public ChipTask(Design design, PlacementGlobal globalPlacement, PlacementDetail currentPlacement)
-            : this(design, globalPlacement)
+        public ChipTask(string name, Design design, PlacementGlobal globalPlacement, PlacementDetail currentPlacement)
+            : this(name, design, globalPlacement)
         {
             CurrentPlacement = currentPlacement;
         }
@@ -25,18 +26,26 @@ namespace ChipSynthesys.Common.Classes
         {
         }
 
+        public string Name { get; internal set; }
+
         public Design Design { get; internal set; }
 
         public PlacementGlobal GlobalPlacement { get; internal set; }
 
-        public PlacementDetail CurrentPlacement { get; internal set; }
+        public PlacementDetail CurrentPlacement { get; set; }
 
         public static ChipTask Load(string fileName)
         {
             using (var file = File.Open(fileName, FileMode.Open))
             {
                 var stg = new BinaryFormatter();
-                return stg.Deserialize(file) as ChipTask;
+                var chipTask = stg.Deserialize(file) as ChipTask;
+                if (chipTask != null)
+                {
+                    chipTask.Name = Path.GetFileNameWithoutExtension(fileName);
+                }
+
+                return chipTask;
             }
         }
 
@@ -47,6 +56,11 @@ namespace ChipSynthesys.Common.Classes
                 var stg = new BinaryFormatter();
                 stg.Serialize(file, this);
             }
+        }
+
+        public ChipTask Clone()
+        {
+            return this.MemberwiseClone() as ChipTask;
         }
     }
 }

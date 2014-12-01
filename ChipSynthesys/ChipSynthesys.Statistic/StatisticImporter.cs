@@ -53,11 +53,17 @@ namespace ChipSynthesys.Statistic
                 var index = r.End.Address.IndexOfAny(new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
                 string letter = r.End.Address.Substring(0, index);
 
-                ExcelChart ec = charts.Drawings.AddChart("Расстояния", eChartType.ColumnClustered);
-                ec.Series.Add(string.Format("A2:{0}2", letter), string.Format("A1:{0}1", letter));
+                ExcelChart distances = charts.Drawings.AddChart("Расстояния", eChartType.ColumnClustered);
+                distances.Series.Add(string.Format("A2:{0}2", letter), string.Format("A1:{0}1", letter));
 
-                ec.SetPosition(2, 0, 2, 0);
-                ec.SetSize(500, 200);
+                distances.SetPosition(2, 0, 2, 0);
+                distances.SetSize(500, 200);
+
+                ExcelChart globalDistances = charts.Drawings.AddChart("Глобальные расстояния", eChartType.ColumnClustered);
+                globalDistances.Series.Add(string.Format("A4:{0}4", letter), string.Format("A3:{0}3", letter));
+
+                globalDistances.SetPosition(13, 0, 2, 0);
+                globalDistances.SetSize(500, 200);
 
                 package.Save();
             }
@@ -71,8 +77,9 @@ namespace ChipSynthesys.Statistic
             table.Columns.Add("До");
             table.Columns.Add("После");
 
-            table.Rows.Add("Задача", taskName);
+            table.Rows.Add("Задача", result.Name);
             table.Rows.Add("Метод", methodName);
+            table.Rows.Add("Время", result.Time);
 
             table.Rows.Add("Количество компонент", result.ComponentsAmount);
             table.Rows.Add("Количество цепей", result.NetsAmount);
@@ -102,6 +109,8 @@ namespace ChipSynthesys.Statistic
 
             table.Rows.Add(result.DistanceChart.Select(d => d.Abscissa).Cast<object>().ToArray());
             table.Rows.Add(result.DistanceChart.Select(d => d.Ordinate).Cast<object>().ToArray());
+            table.Rows.Add(result.GlobalDistanceChart.Select(d => d.Abscissa).Cast<object>().ToArray());
+            table.Rows.Add(result.GlobalDistanceChart.Select(d => d.Ordinate).Cast<object>().ToArray());
             return table;
         }
     }

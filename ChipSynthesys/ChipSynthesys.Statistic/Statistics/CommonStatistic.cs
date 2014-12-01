@@ -9,9 +9,13 @@ namespace ChipSynthesys.Statistic.Statistics
 {
     public class CommonStatistic
     {
-        public IStatisticResult Compute(Design design, PlacementGlobal global, PlacementDetail detail)
+        public IStatisticResult Compute(ChipTask task)
         {
+            var design = task.Design;
+            var global = task.GlobalPlacement;
+
             var statisticResult = new StatisticResult();
+            statisticResult.Name = task.Name;
             statisticResult.ComponentsAmount = design.components.Length;
             statisticResult.NetsAmount = design.nets.Length;
             statisticResult.PlacedAmount = new Result<int>(design.components.Count(c => global.placed[c]));
@@ -22,35 +26,56 @@ namespace ChipSynthesys.Statistic.Statistics
             return statisticResult;
         }
 
-        public IStatisticResult Update(IStatisticResult current, Design design, PlacementGlobal global, PlacementDetail detail)
+        public IStatisticResult Update(IStatisticResult current, ChipTask task, PlacementDetail solution, TimeSpan time)
         {
+            var design = task.Design;
+            var global = task.GlobalPlacement;
+            PlacementGlobal taskPlacement;
+            if (task.CurrentPlacement == null)
+            {
+                taskPlacement = task.GlobalPlacement;
+            }
+            else
+            {
+                taskPlacement = new PlacementGlobal(task.Design);
+                foreach (var component in task.Design.components)
+                {
+                    taskPlacement.placed[component] = task.GlobalPlacement.placed[component];
+                    taskPlacement.x[component] = task.CurrentPlacement.x[component];
+                    taskPlacement.y[component] = task.CurrentPlacement.y[component];
+                }
+            }
+
             var statisticResult = current as StatisticResult;
             if (statisticResult == null)
             {
                 throw new NotSupportedException();
             }
 
+            statisticResult.Time = time;
+
             if (statisticResult.PlacedAmount != null)
             {
-                statisticResult.PlacedAmount.After = design.components.Count(c => detail.placed[c]);
+                statisticResult.PlacedAmount.After = design.components.Count(c => solution.placed[c]);
             }
 
             if (statisticResult.ManhattanMetric != null)
             {
-                statisticResult.ManhattanMetric.After = CriterionHelper.ComputeMetrik(design, detail);
+                statisticResult.ManhattanMetric.After = CriterionHelper.ComputeMetrik(design, solution);
             }
 
             if (statisticResult.IntersectionsAmount != null)
             {
-                statisticResult.IntersectionsAmount.After = CriterionHelper.CountOfCrossings(design, detail);
+                statisticResult.IntersectionsAmount.After = CriterionHelper.CountOfCrossings(design, solution);
             }
 
             if (statisticResult.AreaOfIntersections != null)
             {
-                statisticResult.AreaOfIntersections.After = CriterionHelper.AreaOfCrossing(design, detail);
+                statisticResult.AreaOfIntersections.After = CriterionHelper.AreaOfCrossing(design, solution);
             }
 
             statisticResult.Distance = new ComponentsMetrik<double>();
+            statisticResult.GlobalDistance = new ComponentsMetrik<double>();
 
             var distance =
                 new Func<Component, PlacementGlobal, PlacementDetail, double>(
@@ -58,7 +83,8 @@ namespace ChipSynthesys.Statistic.Statistics
                     Math.Sqrt((g.x[c] - d.x[c]) * (g.x[c] - d.x[c]) + (g.y[c] - d.y[c]) * (g.y[c] - d.y[c])));
             foreach (var component in design.components)
             {
-                statisticResult.Distance[component] = distance(component, global, detail);
+                statisticResult.Distance[component] = distance(component, taskPlacement, solution);
+                statisticResult.GlobalDistance[component] = distance(component, global, solution);
             }
 
             var squires = new int[design.components.Length];
@@ -67,7 +93,6 @@ namespace ChipSynthesys.Statistic.Statistics
                 var component = design.components[i];
                 squires[i] = component.sizex * component.sizey;
             }
-
 
             statisticResult.DistanceChart =
                 squires.Distinct()
@@ -81,6 +106,21 @@ namespace ChipSynthesys.Statistic.Statistics
                                 Ordinate =
                                     design.components.Where(co => co.sizex * co.sizey == i)
                                     .Average(c => statisticResult.Distance[c])
+                            })
+                    .ToArray();
+
+            statisticResult.GlobalDistanceChart =
+                squires.Distinct()
+                    .OrderBy(s => -s)
+                    .Where(s => s > 0)
+                    .Select(
+                        i =>
+                        new ChartPair<int, double>
+                            {
+                                Abscissa = i,
+                                Ordinate =
+                                    design.components.Where(co => co.sizex * co.sizey == i)
+                                    .Average(c => statisticResult.GlobalDistance[c])
                             })
                     .ToArray();
 

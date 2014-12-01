@@ -158,7 +158,7 @@ namespace TestRunner
                 }
             }
 
-            var result = new ChipTask(design, placement);
+            var result = new ChipTask(Path.GetDirectoryName(directory), design, placement);
             return result;
         }
 
@@ -221,10 +221,10 @@ namespace TestRunner
         }
 
         private Design ParseDesign(
-            string nodesFile,
-            string netsFile,
-            string wtsFile,
-            string sclFile,
+            string nodesFile, 
+            string netsFile, 
+            string wtsFile, 
+            string sclFile, 
             out int numTerminals)
         {
             int nodesSize;

@@ -35,6 +35,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DesignExtensions.cs" />
     <Compile Include="DrawerBase.cs" />
     <Compile Include="DrawerImpl.cs" />
     <Compile Include="DrawerImplNets.cs" />
@@ -45,6 +46,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ChipSynthesys\Common.csproj">
+      <Project>{0019c9dd-a444-41c9-a4fa-1970f25c5141}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PlaceModel\PlaceModel.csproj">
       <Project>{b772b461-d744-48cf-9578-754175a549d1}</Project>
       <Name>PlaceModel</Name>

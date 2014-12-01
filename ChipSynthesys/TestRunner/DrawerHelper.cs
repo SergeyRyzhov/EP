@@ -1,33 +1,47 @@
 ﻿using System.Drawing;
+using System.Drawing.Imaging;
+
+using ChipSynthesys.Common.Classes;
 using ChipSynthesys.Draw;
-using PlaceModel;
 
 namespace TestRunner
 {
-    public class DrawerHelper
+    public static class DrawerHelper
     {
-        public static void SimpleDraw(Design design, PlacementDetail resultPlacement, Size size, Bitmap bitmap, string fileName)
+        public static void SimpleDraw(this ChipTask task, string name)
         {
-            using (Graphics canvas = Graphics.FromImage(bitmap))
+            Size adjustSize = task.Design.AdjustSize();
+            DrawGlobal(task, adjustSize, name);
+            if (task.CurrentPlacement != null)
             {
-                IDrawer drawer = new DrawerImplNets();
-                canvas.Clear(Color.Empty);
-                drawer.Draw(design, resultPlacement, size, canvas);
+                DrawDetail(task, adjustSize, name);
             }
-
-            bitmap.Save(fileName);
         }
 
-        public static void SimpleDraw(Design design, PlacementGlobal resultPlacement, Size size, Bitmap bitmap, string fileName)
+        private static void DrawDetail(ChipTask task, Size size, string name)
         {
+            var bitmap = new Bitmap(size.Height, size.Width);
             using (Graphics canvas = Graphics.FromImage(bitmap))
             {
                 IDrawer drawer = new DrawerImplNets();
                 canvas.Clear(Color.Empty);
-                drawer.Draw(design, resultPlacement, size, canvas);
+                drawer.Draw(task.Design, task.CurrentPlacement, size, canvas);
             }
 
-            bitmap.Save(fileName);
+            bitmap.Save(string.Format("{0}-detail{1}", name, ".png"), ImageFormat.Png);
+        }
+
+        private static void DrawGlobal(ChipTask task, Size size, string name)
+        {
+            var bitmap = new Bitmap(size.Height, size.Width);
+            using (Graphics canvas = Graphics.FromImage(bitmap))
+            {
+                IDrawer drawer = new DrawerImplNets();
+                canvas.Clear(Color.Empty);
+                drawer.Draw(task.Design, task.GlobalPlacement, size, canvas);
+            }
+
+            bitmap.Save(string.Format("{0}-global{1}", name, ".png"), ImageFormat.Png);
         }
     }
 }

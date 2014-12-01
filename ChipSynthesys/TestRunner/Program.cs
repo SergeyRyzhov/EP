@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+using ChipSynthesys.Common;
 using ChipSynthesys.Common.Classes;
 using ChipSynthesys.Common.Generators;
 using ChipSynthesys.Draw;
@@ -25,28 +26,17 @@ namespace TestRunner
 {
     public class Program
     {
-        private static void GenerateTestData(
-            out Design[] design,
-            out PlacementGlobal[] approximate,
-            out Size[] sizes,
-            out Bitmap[] bitmaps)
+        private static ChipTask[] GenerateTestData()
         {
-            const int amount = 1;
-            design = new Design[amount];
-            approximate = new PlacementGlobal[amount];
-            sizes = new Size[amount];
-            bitmaps = new Bitmap[amount];
-            for (int i = 0; i < design.Length; i++)
+            var tasks = new ChipTask[TestsConstants.TestTasksCount];
+            for (int i = 0; i < TestsConstants.TestTasksCount; i++)
             {
-                GenerateTestDesign(out design[i], out approximate[i], out sizes[i], out bitmaps[i]);
+                tasks[i] = GenerateTestDesign(string.Format("Generated {0}", i + 1));
             }
+            return tasks;
         }
 
-        private static void GenerateTestDesign(
-            out Design design,
-            out PlacementGlobal placement,
-            out Size size,
-            out Bitmap bitmap)
+        private static ChipTask GenerateTestDesign(string name)
         {
             IGenerator generator = new DenseGenerator();
             const int n = 250; //число компонент
@@ -55,48 +45,26 @@ namespace TestRunner
             const int p = 70; //процент заполнения
             const int nets = 1000; //число сетей
             const int maxNetSize = 9; //длина цепей
+            Design design;
+            PlacementGlobal placement;
             generator.NextDesignWithPlacement(n, nets, maxNetSize, p, maxx, maxy, 0, 0, out design, out placement);
-
-            const int scale = 20; //масштаб здесь, внутри должен быть рассчитан по исходным данным
-            size = new Size(design.field.cellsx * scale, design.field.cellsy * scale);
-            bitmap = new Bitmap(size.Width, size.Height);
+            return new ChipTask(name, design, placement);
         }
 
-        private static void LoadFromDirectory(
-            string path,
-            out Design[] design,
-            out PlacementGlobal[] approximate,
-            out Size[] sizes,
-            out Bitmap[] bitmaps)
+        private static ChipTask[] LoadFromDirectory(string path)
         {
             string[] files = Directory.GetFiles(path);
-            const int scale = 20;
-
-            var designList = new List<Design>();
-            var solutionList = new List<PlacementGlobal>();
-            var sizeList = new List<Size>();
-            var bitmapList = new List<Bitmap>();
+            var tasks = new List<ChipTask>();
             foreach (string fileName in files)
             {
                 string extension = Path.GetExtension(fileName);
                 if (extension != null && extension.Equals(".bin", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    ChipTask task = ChipTask.Load(fileName);
-                    designList.Add(task.Design);
-                    solutionList.Add(task.GlobalPlacement);
-
-                    var size = new Size(50 * scale, 50 * scale);
-                    var bitmap = new Bitmap(size.Width, size.Height);
-
-                    sizeList.Add(size);
-                    bitmapList.Add(bitmap);
+                    tasks.Add(ChipTask.Load(fileName));
                 }
             }
 
-            design = designList.ToArray();
-            approximate = solutionList.ToArray();
-            sizes = sizeList.ToArray();
-            bitmaps = bitmapList.ToArray();
+            return tasks.ToArray();
         }
 
         private static void Main(string[] args)
@@ -122,36 +90,23 @@ namespace TestRunner
                 return;
             }
 
-            Design[] designs;
-            PlacementGlobal[] approximate;
-            Size[] sizes;
-            Bitmap[] bitmaps;
 
-            string resultDirectory = args.Length > 0 ? args[0] + @"\Tests\" : @".\Tests\";
-            Directory.CreateDirectory(resultDirectory);
+            string tasksDirectory = args.Length > 0 ? args[0] : @".\";
+            string path = tasksDirectory + @"Tests\";
+            Directory.CreateDirectory(path);
 
-            if (ReadInput(args, out designs, out approximate, out sizes, out bitmaps))
-            {
-                for (int i = 0; i < designs.Length; i++)
-                {
-                    Design design = designs[i];
-                    PlacementGlobal globalPlacement = approximate[i];
-
-                    var task = new ChipTask(design, globalPlacement);
-                    task.Save(string.Format("Generated {0}.bin", i));
-                }
-            }
+            ChipTask[] tasks = ReadInput(tasksDirectory);
 
             var statistic = new CommonStatistic();
             int testCount = 0;
             var masType = new Type[] { };
 
             //пока не используются
-            //RunCommonTests(design, statistic, resultDirectory, approximate, sizes, bitmaps, ref testCount);
+            //RunCommonTests(designs, statistic, resultDirectory, globalPlacements, sizes, bitmaps, ref testCount);
 
             Type[] otherPlacers =
                 {
-                    typeof(CombinePlacer), typeof(CrossReductPlacer), typeof(CrossComponentVariant2),
+                    /*typeof(CombinePlacer),*/ typeof(CrossReductPlacer), typeof(CrossComponentVariant2),
                     /*typeof(CrossCompPlacer), */typeof(ForceDirectedDetailPlacer)
                 };
 
@@ -166,29 +121,43 @@ namespace TestRunner
                         continue;
                     }
 
-                    for (int i = 0; i < designs.Length; i++)
+                    for (int i = 0; i < tasks.Length; i++)
                     {
                         try
                         {
-                            var stopwatch = new Stopwatch();
-                            stopwatch.Start();
-                            Design d = designs[i];
+
+                            Design d = tasks[i].Design;
                             PlacementDetail placeRes;
 
                             testCount++;
 
-                            string imageBefore = Path.Combine(
-                                resultDirectory,
-                                string.Format("TestData {0}.png", testCount));
-                            DrawerHelper.SimpleDraw(designs[i], approximate[i], sizes[i], bitmaps[i], imageBefore);
+                            tasks[i].SimpleDraw(Path.Combine(path, string.Format("Before{0}", testCount)));
 
-                            placer.Place(d, approximate[i], out placeRes);
+                            PlacementGlobal taskPlacement;
+                            if (tasks[i].CurrentPlacement == null)
+                            {
+                                taskPlacement = tasks[i].GlobalPlacement;
+                            }
+                            else
+                            {
+                                taskPlacement = new PlacementGlobal(tasks[i].Design);
+                                foreach (var component in tasks[i].Design.components)
+                                {
+                                    taskPlacement.placed[component] = tasks[i].GlobalPlacement.placed[component];
+                                    taskPlacement.x[component] = tasks[i].CurrentPlacement.x[component];
+                                    taskPlacement.y[component] = tasks[i].CurrentPlacement.y[component];
+                                }
+                            }
 
-                            var statisticResult = statistic.Compute(d, approximate[i], placeRes);
-                            statisticResult = statistic.Update(statisticResult, d, approximate[i], placeRes);
+                            var statisticResult = statistic.Compute(tasks[i]);
+                            var stopwatch = new Stopwatch();
+                            stopwatch.Start();
+                            placer.Place(d, taskPlacement, out placeRes);
+                            stopwatch.Stop();
+                            statisticResult = statistic.Update(statisticResult, tasks[i], placeRes, stopwatch.Elapsed);
 
                             string fileName = Path.Combine(
-                                resultDirectory,
+                                path,
                                 string.Format("TestResult {0}.xlsx", testCount));
                             StatisticImporter.SaveToFile(
                                 fileName,
@@ -196,15 +165,12 @@ namespace TestRunner
                                 i.ToString(CultureInfo.InvariantCulture),
                                 placer.ToString());
 
-                            string imageAfter = Path.Combine(
-                                resultDirectory,
-                                string.Format("TestResult {0}.png", testCount));
-                            DrawerHelper.SimpleDraw(designs[i], placeRes, sizes[i], bitmaps[i], imageAfter);
-                            var task = new ChipTask(d, approximate[i], placeRes);
+                            var task = tasks[i];//.Clone();
+                            task.CurrentPlacement = placeRes;
+                            task.SimpleDraw(Path.Combine(path, string.Format("After", testCount)));
 
-                            task.Save(Path.Combine(resultDirectory, string.Format("TestData {0}.bin", testCount)));
+                            task.Save(Path.Combine(path, string.Format("TestResult{0}.bin", testCount)));
 
-                            stopwatch.Stop();
                             Console.WriteLine(@"Time for {0} - {1}", placer, stopwatch.Elapsed);
                         }
                         catch (Exception e)
@@ -283,28 +249,16 @@ namespace TestRunner
             Console.WriteLine(@"Task was parsed. File {0} was created", fileName);
         }
 
-        private static bool ReadInput(
-            string[] args,
-            out Design[] design,
-            out PlacementGlobal[] approximate,
-            out Size[] sizes,
-            out Bitmap[] bitmaps)
+        private static ChipTask[] ReadInput(string taskDirectory)
         {
-            if (args.Length == 0)
+            ChipTask[] tasks = LoadFromDirectory(taskDirectory);
+
+            if (tasks.Length == 0)
             {
-                GenerateTestData(out design, out approximate, out sizes, out bitmaps);
-                return true;
+                tasks = GenerateTestData();
             }
 
-            LoadFromDirectory(args[0], out design, out approximate, out sizes, out bitmaps);
-
-            if (design.Length == 0)
-            {
-                GenerateTestData(out design, out approximate, out sizes, out bitmaps);
-                return true;
-            }
-
-            return false;
+            return tasks;
         }
 
         private static void RunCommonTests(
@@ -413,26 +367,26 @@ namespace TestRunner
                 PlacementDetail placeRes;
                 testCount++;
                 string imageBefore = Path.Combine(resultDirectory, string.Format("TestData {0}.png", testCount));
-                DrawerHelper.SimpleDraw(design[i], approximate[i], sizes[i], bitmaps[i], imageBefore);
+                //DrawerHelper.SimpleDraw(design[i], approximate[i], sizes[i], bitmaps[i], imageBefore);
 
                 placer.Place(d, approximate[i], out placeRes);
 
-                var statisticResult = statistic.Compute(d, approximate[i], placeRes);
-                statisticResult = statistic.Update(statisticResult, d, approximate[i], placeRes);
+                //var statisticResult = statistic.Compute(d, approximate[i], placeRes);
+                //statisticResult = statistic.Update(statisticResult, d, approximate[i], placeRes);
 
                 string fileName = Path.Combine(resultDirectory, string.Format("TestResult {0}.xlsx", testCount));
-                StatisticImporter.SaveToFile(
+                /*StatisticImporter.SaveToFile(
                     fileName,
                     statisticResult,
                     i.ToString(CultureInfo.InvariantCulture),
-                    placer.ToString());
+                    placer.ToString());*/
 
                 string imageAfter = Path.Combine(resultDirectory, string.Format("TestResult {0}.png", testCount));
-                DrawerHelper.SimpleDraw(design[i], placeRes, sizes[i], bitmaps[i], imageAfter);
+                // DrawerHelper.SimpleDraw(design[i], placeRes, sizes[i], bitmaps[i], imageAfter);
 
-                var t = new ChipTask(d, approximate[i], placeRes);
+                //var t = new ChipTask(d, approximate[i], placeRes);
 
-                t.Save(Path.Combine(resultDirectory, string.Format("TestData {0}.bin", testCount)));
+                // t.Save(Path.Combine(resultDirectory, string.Format("TestData {0}.bin", testCount)));
 
                 st.Stop();
                 Console.WriteLine(@"Time for {0} - {1}", placer, st.Elapsed);

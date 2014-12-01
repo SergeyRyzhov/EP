@@ -1,4 +1,6 @@
-﻿using ChipSynthesys.Statistic.Interfaces;
+﻿using System;
+
+using ChipSynthesys.Statistic.Interfaces;
 
 namespace ChipSynthesys.Statistic.Models
 {
@@ -20,6 +22,10 @@ namespace ChipSynthesys.Statistic.Models
         {
         }
 
+        public string Name { get; internal set; }
+
+        public TimeSpan Time { get; internal set; }
+
         public int ComponentsAmount { get; internal set; }
 
         public int NetsAmount { get; internal set; }
@@ -37,6 +43,10 @@ namespace ChipSynthesys.Statistic.Models
         public ComponentsMetrik<double> Distance { get; internal set; }
 
         public ChartPair<int, double>[] DistanceChart { get; internal set; }
+
+        public ComponentsMetrik<double> GlobalDistance { get; internal set; }
+
+        public ChartPair<int, double>[] GlobalDistanceChart { get; internal set; }
 
         public ComponentsMetrik<double> DistanceFromNetCenter { get; internal set; }
 
