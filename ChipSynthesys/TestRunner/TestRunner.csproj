@@ -43,14 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BookshelfParser.cs" />
-    <Compile Include="DesignStatisticModel.cs" />
     <Compile Include="DrawerHelper.cs" />
-    <Compile Include="HeuristicsModel.cs" />
-    <Compile Include="PlacementStatisticModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerializableDictionary.cs" />
-    <Compile Include="XmlModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
