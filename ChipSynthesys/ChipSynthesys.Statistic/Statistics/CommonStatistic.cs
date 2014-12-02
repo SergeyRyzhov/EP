@@ -81,9 +81,14 @@ namespace ChipSynthesys.Statistic.Statistics
                 new Func<Component, PlacementGlobal, PlacementDetail, double>(
                     (c, g, d) =>
                     Math.Sqrt((g.x[c] - d.x[c]) * (g.x[c] - d.x[c]) + (g.y[c] - d.y[c]) * (g.y[c] - d.y[c])));
+            var distance1 =
+                new Func<Component, PlacementGlobal, PlacementGlobal, double>(
+                    (c, g, d) =>
+                    Math.Sqrt((g.x[c] - d.x[c]) * (g.x[c] - d.x[c]) + (g.y[c] - d.y[c]) * (g.y[c] - d.y[c])));
+
             foreach (var component in design.components)
             {
-                statisticResult.Distance[component] = distance(component, taskPlacement, solution);
+                statisticResult.Distance[component] = distance1(component, global, taskPlacement);
                 statisticResult.GlobalDistance[component] = distance(component, global, solution);
             }
 
@@ -100,9 +105,9 @@ namespace ChipSynthesys.Statistic.Statistics
                     .Where(s => s > 0)
                     .Select(
                         i =>
-                        new ChartPair<int, double>
+                        new ChartPair<string, double>
                             {
-                                Abscissa = i,
+                                Abscissa = string.Format("{0} ({1})", i, design.components.Count(c => (c.sizex * c.sizey) == i)),
                                 Ordinate =
                                     design.components.Where(co => co.sizex * co.sizey == i)
                                     .Average(c => statisticResult.Distance[c])
@@ -115,9 +120,9 @@ namespace ChipSynthesys.Statistic.Statistics
                     .Where(s => s > 0)
                     .Select(
                         i =>
-                        new ChartPair<int, double>
+                        new ChartPair<string, double>
                             {
-                                Abscissa = i,
+                                Abscissa = string.Format("{0} ({1})", i, design.components.Count(c => (c.sizex * c.sizey) == i)),
                                 Ordinate =
                                     design.components.Where(co => co.sizex * co.sizey == i)
                                     .Average(c => statisticResult.GlobalDistance[c])

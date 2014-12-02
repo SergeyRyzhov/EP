@@ -56,7 +56,7 @@ namespace DetailPlacer.Algorithm
             int fixcomp = 0;
             List<List<Component>> compInCell = InitCompInCell(QtCells);
             CreateCells(design, out XCellCoord, out YCellCoord);
-            int[] ValueCell = CreatCompValueCells(QtCells);
+            int[] ValueCell = this.CreateCompValueCells(QtCells);
             result = new PlacementDetail(design);
             Mask helper = new Mask(design, result);
             helper.BuildUp();

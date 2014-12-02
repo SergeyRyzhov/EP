@@ -42,14 +42,14 @@ namespace ChipSynthesys.Statistic.Models
 
         public ComponentsMetrik<double> Distance { get; internal set; }
 
-        public ChartPair<int, double>[] DistanceChart { get; internal set; }
+        public ChartPair<string, double>[] DistanceChart { get; internal set; }
 
         public ComponentsMetrik<double> GlobalDistance { get; internal set; }
 
-        public ChartPair<int, double>[] GlobalDistanceChart { get; internal set; }
+        public ChartPair<string, double>[] GlobalDistanceChart { get; internal set; }
 
         public ComponentsMetrik<double> DistanceFromNetCenter { get; internal set; }
 
-        public ChartPair<int, double>[] DistanceFromNetCenterChart { get; internal set; }
+        public ChartPair<string, double>[] DistanceFromNetCenterChart { get; internal set; }
     }
 }

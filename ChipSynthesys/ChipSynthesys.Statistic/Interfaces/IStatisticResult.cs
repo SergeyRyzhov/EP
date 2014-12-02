@@ -26,15 +26,15 @@ namespace ChipSynthesys.Statistic.Interfaces
 
         ComponentsMetrik<double> Distance { get; }
 
-        ChartPair<int, double>[] DistanceChart { get; }
+        ChartPair<string, double>[] DistanceChart { get; }
 
         ComponentsMetrik<double> DistanceFromNetCenter { get; }
 
-        ChartPair<int, double>[] DistanceFromNetCenterChart { get; }
+        ChartPair<string, double>[] DistanceFromNetCenterChart { get; }
 
         ComponentsMetrik<double> GlobalDistance { get; }
 
-        ChartPair<int, double>[] GlobalDistanceChart { get; }
+        ChartPair<string, double>[] GlobalDistanceChart { get; }
 
         string ToString();
     }

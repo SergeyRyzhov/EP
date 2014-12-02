@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 using ChipSynthesys.Common;
 using ChipSynthesys.Common.Classes;
@@ -90,7 +91,6 @@ namespace TestRunner
                 return;
             }
 
-
             string tasksDirectory = args.Length > 0 ? args[0] : @".\";
             string path = tasksDirectory + @"Tests\";
             Directory.CreateDirectory(path);
@@ -104,82 +104,85 @@ namespace TestRunner
             //пока не используются
             //RunCommonTests(designs, statistic, resultDirectory, globalPlacements, sizes, bitmaps, ref testCount);
 
-            Type[] otherPlacers =
+            IDetailPlacer[] otherPlacers =
                 {
-                    typeof(CombinePlacer), typeof(CrossReductPlacer), typeof(CrossComponentVariant2),
-                    /*typeof(CrossCompPlacer), typeof(ForceDirectedDetailPlacer)*/
+                    //new ForceDirectedDetailPlacer(5),
+                   // new ForceDirectedDetailPlacer(20), new ForceDirectedDetailPlacer(25),
+                    new CombinePlacer(), 
+                    new CrossReductPlacer(), 
+                    new CrossComponentVariant2(),
+//                    new CrossCompPlacer(), 
                 };
-            //TestsConstants.ForceDirectedMaxIteration = int.Parse(args[1]);
-            foreach (Type otherPlacerType in otherPlacers)
+
+            for (int i = 0; i < otherPlacers.Length; i++)
             {
-                ConstructorInfo info = otherPlacerType.GetConstructor(masType);
-                if (info != null)
+                IDetailPlacer placer = otherPlacers[i];
+                var methodPath = Path.Combine(path, i + placer.GetType().ToString());
+                if (!Directory.Exists(methodPath))
                 {
-                    var placer = info.Invoke(null) as IDetailPlacer;
-                    if (placer == null)
+                    Directory.CreateDirectory(methodPath);
+                }
+
+                Parallel.ForEach(tasks, task => PlacementTask(task, methodPath, statistic, placer));
+                testCount += tasks.Length;
+            }
+        }
+
+        private static void PlacementTask(
+            ChipTask task,
+            string path,
+            CommonStatistic statistic,
+            IDetailPlacer placer)
+        {
+            try
+            {
+                Design d = task.Design;
+                PlacementDetail placeRes;
+
+                task.SimpleDraw(Path.Combine(path, string.Format(@"{0} Before", task.Name)));
+
+                PlacementGlobal taskPlacement;
+                if (task.CurrentPlacement == null)
+                {
+                    taskPlacement = task.GlobalPlacement;
+                }
+                else
+                {
+                    taskPlacement = new PlacementGlobal(task.Design);
+                    foreach (var component in task.Design.components)
                     {
-                        continue;
-                    }
-
-                    for (int i = 0; i < tasks.Length; i++)
-                    {
-                        try
-                        {
-
-                            Design d = tasks[i].Design;
-                            PlacementDetail placeRes;
-
-                            testCount++;
-
-                            tasks[i].SimpleDraw(Path.Combine(path, string.Format(@"Before{0}", testCount)));
-
-                            PlacementGlobal taskPlacement;
-                            if (tasks[i].CurrentPlacement == null)
-                            {
-                                taskPlacement = tasks[i].GlobalPlacement;
-                            }
-                            else
-                            {
-                                taskPlacement = new PlacementGlobal(tasks[i].Design);
-                                foreach (var component in tasks[i].Design.components)
-                                {
-                                    taskPlacement.placed[component] = tasks[i].GlobalPlacement.placed[component];
-                                    taskPlacement.x[component] = tasks[i].CurrentPlacement.x[component];
-                                    taskPlacement.y[component] = tasks[i].CurrentPlacement.y[component];
-                                }
-                            }
-
-                            var statisticResult = statistic.Compute(tasks[i]);
-                            var stopwatch = new Stopwatch();
-                            stopwatch.Start();
-                            placer.Place(d, taskPlacement, out placeRes);
-                            stopwatch.Stop();
-                            statisticResult = statistic.Update(statisticResult, tasks[i], placeRes, stopwatch.Elapsed);
-
-                            string fileName = Path.Combine(
-                                path,
-                                string.Format(@"TestResult {0}.xlsx", testCount));
-                            StatisticImporter.SaveToFile(
-                                fileName,
-                                statisticResult,
-                                i.ToString(CultureInfo.InvariantCulture),
-                                placer.ToString());
-
-                            var task = tasks[i];//.Clone();
-                            task.CurrentPlacement = placeRes;
-                            task.SimpleDraw(Path.Combine(path, string.Format(@"After{0}", testCount)));
-
-                            task.Save(Path.Combine(path, string.Format(@"TestResult{0}.bin", testCount)));
-
-                            Console.WriteLine(@"Time for {0} - {1}", placer, stopwatch.Elapsed);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e.Message);
-                            Console.WriteLine(e.StackTrace);
-                        }
+                        taskPlacement.placed[component] = task.GlobalPlacement.placed[component];
+                        taskPlacement.x[component] = task.CurrentPlacement.x[component];
+                        taskPlacement.y[component] = task.CurrentPlacement.y[component];
                     }
                 }
+
+                var statisticResult = statistic.Compute(task);
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                placer.Place(d, taskPlacement, out placeRes);
+                stopwatch.Stop();
+                statisticResult = statistic.Update(statisticResult, task, placeRes, stopwatch.Elapsed);
+
+                string fileName = Path.Combine(path, string.Format(@"{0} TestResult.xlsx", task.Name));
+                StatisticImporter.SaveToFile(
+                    fileName,
+                    statisticResult,
+                    task.Name,
+                    placer.ToString());
+
+                var chipTask = task.Clone();
+                chipTask.CurrentPlacement = placeRes;
+                chipTask.SimpleDraw(Path.Combine(path, string.Format(@"{0} After", task.Name)));
+
+                chipTask.Save(Path.Combine(path, string.Format(@"{0} Placed.bin", task.Name)));
+
+                Console.WriteLine(@"Time for {0} - {1}", placer, stopwatch.Elapsed);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
             }
         }
 

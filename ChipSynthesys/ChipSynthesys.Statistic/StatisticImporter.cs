@@ -53,17 +53,25 @@ namespace ChipSynthesys.Statistic
                 var index = r.End.Address.IndexOfAny(new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
                 string letter = r.End.Address.Substring(0, index);
 
-                ExcelChart distances = charts.Drawings.AddChart(@"Расстояния", eChartType.ColumnClustered);
+                ExcelChart distances = charts.Drawings.AddChart(@"До детального размещения", eChartType.ColumnClustered);
                 distances.Series.Add(string.Format(@"A2:{0}2", letter), string.Format(@"A1:{0}1", letter));
 
-                distances.SetPosition(2, 0, 2, 0);
-                distances.SetSize(500, 200);
+                distances.SetPosition(1, 0, 1, 0);
+                distances.SetSize(800, 200);
 
-                ExcelChart globalDistances = charts.Drawings.AddChart(@"Глобальные расстояния", eChartType.ColumnClustered);
+                distances.Title.Text = distances.Name;
+//                distances.XAxis.Title.Text = @"Площадь элементов";
+//                distances.YAxis.Title.Text = @"Расстояние от начальной позиции";
+
+                ExcelChart globalDistances = charts.Drawings.AddChart(@"После детального размещения", eChartType.ColumnClustered);
                 globalDistances.Series.Add(string.Format(@"A4:{0}4", letter), string.Format(@"A3:{0}3", letter));
 
-                globalDistances.SetPosition(13, 0, 2, 0);
-                globalDistances.SetSize(500, 200);
+                globalDistances.SetPosition(12, 0, 1, 0);
+                globalDistances.SetSize(800, 200);
+
+                globalDistances.Title.Text = globalDistances.Name;
+//                globalDistances.XAxis.Title.Text = @"Площадь элементов";
+//                globalDistances.YAxis.Title.Text = @"Расстояние от начальной позиции";
 
                 package.Save();
             }
