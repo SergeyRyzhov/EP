@@ -106,8 +106,8 @@ namespace TestRunner
 
             IDetailPlacer[] otherPlacers =
                 {
-                    //new ForceDirectedDetailPlacer(5),
-                   // new ForceDirectedDetailPlacer(20), new ForceDirectedDetailPlacer(25),
+//                    new ForceDirectedDetailPlacer(5),
+//                    new ForceDirectedDetailPlacer(20), new ForceDirectedDetailPlacer(25),
                     new CombinePlacer(), 
                     new CrossReductPlacer(), 
                     new CrossComponentVariant2(),

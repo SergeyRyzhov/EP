@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 using DetailPlacer.Algorithm.CompontsOrderer;
 using DetailPlacer.Algorithm.PositionSearcher;
@@ -6,35 +8,24 @@ using DetailPlacer.Algorithm.PositionSearcher.Impl;
 using DetailPlacer.Algorithm.PositionSorter;
 using DetailPlacer.Algorithm.PositionSorter.Impl;
 using DetailPlacer.Algorithm.PositionSorter.PositionComparer.Impl;
+
 using PlaceModel;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DetailPlacer.Algorithm
 {
-    /// <summary>
-    /// 1. метод для создания перечня
-    /// 2. *Упорядочивание (перестановка)
-    /// 3. Статегия для размещения 1 элемента
-    /// 3.1 *эвристика (тоже стратегию)
-    /// --пул для позиций(длина - параметр)
-    /// 3,2 *выбрать лучшую
-    /// **стратегия сравнения
-    /// 3,3 присвоение
-    /// </summary>
     public abstract class DetailPlacerBase : IDetailPlacer
     {
-        internal readonly ICompontsOrderer m_compontsOrderer;
+        internal readonly ICompontsOrderer ComponentsOrderer;
 
-        internal readonly IPositionSearcher m_positionSearcher;
+        internal readonly IPositionSearcher PositionSearcher;
 
-        internal readonly IPositionsSorter m_positionsSorter;
+        internal readonly IPositionsSorter PositionsSorter;
 
-        protected DetailPlacerBase(ICompontsOrderer compontsOrderer, IPositionSearcher positionSearcher, IPositionsSorter positionsSorter)
+        protected DetailPlacerBase(ICompontsOrderer componentsOrderer, IPositionSearcher positionSearcher, IPositionsSorter positionsSorter)
         {
-            m_compontsOrderer = compontsOrderer;
-            m_positionSearcher = positionSearcher;
-            m_positionsSorter = positionsSorter;
+            this.ComponentsOrderer = componentsOrderer;
+            this.PositionSearcher = positionSearcher;
+            this.PositionsSorter = positionsSorter;
         }
 
         public void Place(Design design, PlacementGlobal approximate, out PlacementDetail result)
@@ -42,33 +33,46 @@ namespace DetailPlacer.Algorithm
             result = new PlacementDetail(design);
             foreach (Component component in design.components)
             {
-                                result.x[component] = (int)approximate.x[component];
-                                result.y[component] = (int)approximate.y[component];
+                result.placed[component] = approximate.placed[component];
+                result.x[component] = (int)approximate.x[component];
+                result.y[component] = (int)approximate.y[component];
             }
-            Mask helper = new Mask(design, result);
+
+            var helper = new Mask(design, result);
             helper.BuildUp();
-            var notPalced = new List<Component>();
+            var notPlaced = new List<Component>();
             Component[] unplacedComponents;
             do
             {
-                UpdatePlaced(design, approximate, result, notPalced, out unplacedComponents);
+                UpdatePlaced(design, approximate, result, notPlaced, out unplacedComponents);
                 if (unplacedComponents.Length == 0)
+                {
                     break;
+                }
+
                 var perm = new int[unplacedComponents.Length];
-                m_compontsOrderer.SortComponents(design, approximate, result, unplacedComponents, ref perm);
+                this.ComponentsOrderer.SortComponents(design, approximate, result, unplacedComponents, ref perm);
 
-                ReorderArray(perm, ref unplacedComponents);
+                //ReorderArray(perm, ref unplacedComponents);
 
-                var current = unplacedComponents.FirstOrDefault();
+                Component current = null; //.FirstOrDefault();
+
+                if (perm.Length > 0 && unplacedComponents.Length > 0)
+                {
+                    current = unplacedComponents[perm[0]];
+                }
 
                 bool placed;
                 PlaceComponent(helper, design, approximate, current, result, out placed);
 
                 if (!placed)
-                    notPalced.Add(current);
-            } while (unplacedComponents.Length > 0);
+                {
+                    notPlaced.Add(current);
+                }
+            } 
+            while (unplacedComponents.Length > 0);
 
-            foreach (Component component in notPalced)
+            foreach (Component component in notPlaced)
             {
                 result.x[component] = (int)approximate.x[component];
                 result.y[component] = (int)approximate.y[component];
@@ -78,13 +82,13 @@ namespace DetailPlacer.Algorithm
 
         protected virtual void PlaceComponent(Mask helper, Design design, PlacementGlobal approximate, Component current, PlacementDetail result, out bool placed)
         {
-            int[] x = new int[m_positionSearcher.PositionAmount];
-            int[] y = new int[m_positionSearcher.PositionAmount];
+            int[] x = new int[this.PositionSearcher.PositionAmount];
+            int[] y = new int[this.PositionSearcher.PositionAmount];
 
-            if (m_positionSearcher.AlvailablePositions(helper, current, (int)(approximate.x[current]), (int)approximate.y[current], x, y))
+            if (this.PositionSearcher.AlvailablePositions(helper, current, (int)approximate.x[current], (int)approximate.y[current], x, y))
             {
                 var perm = new int[x.Length];
-                m_positionsSorter.SortPositions(design, approximate, result, current, x, y, ref perm);
+                this.PositionsSorter.SortPositions(design, approximate, result, current, x, y, ref perm);
 
                 ReorderArray(perm, ref x);
                 ReorderArray(perm, ref y);
@@ -151,17 +155,17 @@ namespace DetailPlacer.Algorithm
         {
         }
 
-        public DetailPlacerImpl(ICompontsOrderer compontsOrderer, IPositionSearcher positionSearcher, IPositionsSorter positionsSorter)
-            : base(compontsOrderer, positionSearcher, positionsSorter)
+        public DetailPlacerImpl(ICompontsOrderer componentsOrderer, IPositionSearcher positionSearcher, IPositionsSorter positionsSorter)
+            : base(componentsOrderer, positionSearcher, positionsSorter)
         {
         }
 
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine(m_compontsOrderer.ToString());
-            sb.AppendLine(m_positionSearcher.ToString());
-            sb.AppendLine(m_positionsSorter.ToString());
+            sb.AppendLine(this.ComponentsOrderer.ToString());
+            sb.AppendLine(this.PositionSearcher.ToString());
+            sb.AppendLine(this.PositionsSorter.ToString());
             return sb.ToString();
         }
     }

@@ -12,16 +12,30 @@ namespace ChipSynthesys.Statistic.Statistics
         public IStatisticResult Compute(ChipTask task)
         {
             var design = task.Design;
-            var global = task.GlobalPlacement;
+            PlacementGlobal taskPlacement;
+            if (task.CurrentPlacement == null)
+            {
+                taskPlacement = task.GlobalPlacement;
+            }
+            else
+            {
+                taskPlacement = new PlacementGlobal(task.Design);
+                foreach (var component in task.Design.components)
+                {
+                    taskPlacement.placed[component] = task.GlobalPlacement.placed[component];
+                    taskPlacement.x[component] = task.CurrentPlacement.x[component];
+                    taskPlacement.y[component] = task.CurrentPlacement.y[component];
+                }
+            }
 
             var statisticResult = new StatisticResult();
             statisticResult.Name = task.Name;
             statisticResult.ComponentsAmount = design.components.Length;
             statisticResult.NetsAmount = design.nets.Length;
-            statisticResult.PlacedAmount = new Result<int>(design.components.Count(c => global.placed[c]));
-            statisticResult.ManhattanMetric = new Result<double>(CriterionHelper.ComputeMetrik(design, global));
-            statisticResult.IntersectionsAmount = new Result<int>(CriterionHelper.CountOfCrossings(design, global));
-            statisticResult.AreaOfIntersections = new Result<double>(CriterionHelper.AreaOfCrossing(design, global));
+            statisticResult.PlacedAmount = new Result<int>(design.components.Count(c => taskPlacement.placed[c]));
+            statisticResult.ManhattanMetric = new Result<double>(CriterionHelper.ComputeMetrik(design, taskPlacement));
+            statisticResult.IntersectionsAmount = new Result<int>(CriterionHelper.CountOfCrossings(design, taskPlacement));
+            statisticResult.AreaOfIntersections = new Result<double>(CriterionHelper.AreaOfCrossing(design, taskPlacement));
 
             return statisticResult;
         }
